@@ -67,7 +67,7 @@ export interface ColorPreset {
   dressEdge?: string;
 }
 
-// 1. Áo ngoài (5 loại theo file PDF)
+// 1. Áo ngoài (5 loại theo file PDF & Figma)
 export const GARMENTS: Garment[] = [
   {
     id: 'nhat-binh',
@@ -80,11 +80,11 @@ export const GARMENTS: Garment[] = [
     collarType: 'Cổ chữ nhật xẻ giữa',
     suitableFor: 'Hậu phi, công chúa triều Nguyễn, ngày nay rất thịnh hành trong lễ ăn hỏi, tiệc cưới, chụp hình nghệ thuật truyền thống.',
     defaultColors: {
-      dress: '#B8262C',
-      dressBack: '#961E23',
-      dressEdge: '#E5A93C',
-      pants: '#FFFFFF',
-      lining: '#FDBA1D',
+      dress: '#1F3294', // Xanh lam hoàng gia chuẩn Figma nhật bình nữ.svg
+      dressBack: '#16246E',
+      dressEdge: '#2563EB',
+      pants: '#F7F4E9', // Chân váy kem sáng 3 chấm xanh
+      lining: '#2563EB', // Viền nẹp cổ chữ nhật xanh lam
     },
   },
   {
@@ -134,34 +134,52 @@ export const GARMENTS: Garment[] = [
     collarType: 'Cổ chéo giao vạt',
     suitableFor: 'Phong cách cổ phong đại việt, dạo phố cổ, tham quan di tích lịch sử và biểu diễn nghệ thuật.',
     defaultColors: {
-      dress: '#2C5E47',
-      dressBack: '#204735',
-      dressEdge: '#C5A059',
-      pants: '#222222',
-      lining: '#C8B27A',
+      dress: '#769CBE', // Xanh khói / xanh pastel chuẩn Figma giao lĩnh nam.svg
+      dressBack: '#5E82A2',
+      dressEdge: '#F4EFE6',
+      pants: '#F5F0E4', // Quần thụng trắng ngà
+      lining: '#F4EFE6', // Nẹp cổ chéo trắng kem
     },
   },
   {
     id: 'vien-linh',
-    name: 'Viên lĩnh',
+    name: 'Long Bào Đại Triều (Hoàng Bào)',
     gender: 'Nam & Nữ',
     playScore: 3,
     eventScore: 5,
-    description: 'Áo có đường viền cổ tròn cong khép kín ôm lấy chân cổ, cài cúc bên vai phải, vạt áo buông rộng phủ gối. Là quan phục hoặc thường phục cao cấp triều Lê - Nguyễn.',
-    distinction: 'Đường cổ áo tròn (Viên = tròn, Lĩnh = cổ áo) gài khuy sang bên phải, thường được thêu bổ tử trước ngực ở quan phục phẩm hàm.',
-    collarType: 'Cổ tròn gài vai',
-    suitableFor: 'Nam giới yêu thích phong cách nho nhã quý phái, các sự kiện triển lãm, lễ kỷ niệm truyền thống.',
+    description: 'Áo có đường viền cổ tròn khép kín ôm chân cổ, đính ngọc trai, thêu rồng uốn lượn chữ S, mây ngũ sắc, đai ngọc bích và gấu áo thêu thủy ba sóng nước ngũ sắc. Hoàng bào đại triều của bậc đế vương.',
+    distinction: 'Đường cổ áo tròn đính chuỗi hạt ngọc trai, thêu rồng vàng uốn chữ S, mây ngũ sắc, đai ngọc bích và sóng thủy ba hoàng gia.',
+    collarType: 'Cổ tròn hoàng bào',
+    suitableFor: 'Nam giới phong cách vương giả, quan lại hoàng tộc, các sự kiện triển lãm văn hóa và lễ hội cung đình.',
     defaultColors: {
-      dress: '#682F57',
-      dressBack: '#502343',
-      dressEdge: '#D1AC60',
-      pants: '#FFFFFF',
-      lining: '#F5EBDD',
+      dress: '#ECC348', // Vàng hoàng bào chuẩn Figma long bào đại triều.svg
+      dressBack: '#D4A82C',
+      dressEdge: '#FFE066',
+      pants: '#1A1A1A',
+      lining: '#DE8048', // Thân rồng cam đất
+    },
+  },
+  {
+    id: 'con-phuc',
+    name: 'Cổn Phục (Trang phục tế Nam Giao)',
+    gender: 'Nam',
+    playScore: 1,
+    eventScore: 5,
+    description: 'Đại lễ phục tối cao của bậc Thiên tử, Hoàng đế triều Nguyễn khi tế Giao. Gồm Thượng y màu huyền (đen), Hạ thường màu chu (đỏ), hai vai thêu vầng Nhật Nguyệt tỏa rạng, đội Mũ Miện chuỗi ngọc lưu châu và tay cầm ngọc hốt.',
+    distinction: 'Đại lễ phục tối thượng thiên tử: Thượng y màu đen, Hạ thường màu đỏ thẫm, hai vai thêu biểu tượng mặt trời (Nhật) và mặt trăng (Nguyệt), đai lưng khảm ngọc đỏ và tay cầm Hốt ngọc uy nghiêm.',
+    collarType: 'Cổ chéo đại lễ phục',
+    suitableFor: 'Đại lễ tế Trời Đất (tế Giao), lễ đăng quang, thiết triều long trọng nhất của bậc đế vương.',
+    defaultColors: {
+      dress: '#1A1A1A', // Thượng y màu đen tuyền chuẩn Figma cổn phục.svg
+      dressBack: '#111111',
+      dressEdge: '#7F1D1D',
+      pants: '#881337', // Hạ thường màu đỏ sẫm chu sắc
+      lining: '#7F1D1D', // Viền nẹp đỏ rượu
     },
   },
 ];
 
-// 2. Đồ đội đầu (5 loại theo file PDF)
+// 2. Đồ đội đầu
 export const HEADWEAR: Headwear[] = [
   {
     id: 'non-ba-tam',
@@ -176,6 +194,20 @@ export const HEADWEAR: Headwear[] = [
     gender: 'Nam / Quân lại',
     description: 'Loại nón chóp nhọn nhỏ có chỏm kim loại bằng đồng sáng bóng trên đỉnh, đặc trưng cho binh lính, lính lệ và các thị vệ nha môn thời phong kiến.',
     matchWith: 'Viên Lĩnh, Ngũ thân tay chẽn nam',
+  },
+  {
+    id: 'mu-phoc-dau',
+    name: 'Mũ phốc đầu (Cánh chuồn)',
+    gender: 'Nam / Quan lại - Hoàng tộc',
+    description: 'Mũ Ô Sa / Phốc đầu có hai cánh chuồn ngang hoặc vếch phía sau, đỉnh gắn hoa bạc đính ngọc, đặc trưng cho quan lại và hoàng tộc triều đình.',
+    matchWith: 'Áo Viên Lĩnh Hoàng Bào, Giao Lĩnh Nam',
+  },
+  {
+    id: 'mu-mien',
+    name: 'Mũ Miện (Miện lưu)',
+    gender: 'Nam / Hoàng đế',
+    description: 'Mũ Bình Thiên của Thiên tử với 12 chuỗi ngọc (thập nhị lưu) rủ trước sau, xâu các hạt ngọc ngũ sắc tượng trưng cho ngũ hành và thiên uy.',
+    matchWith: 'Áo Côn Phục, Viên Lĩnh Long Bào',
   },
   {
     id: 'non-la',
@@ -263,6 +295,12 @@ export const HANDHELD: Handheld[] = [
     name: 'Quạt',
     description: 'Chiếc quạt xếp nan tre phất giấy dó hoặc lụa tơ tằm, đề thơ thư pháp hoặc vẽ hoa sen, cử chỉ phẩy quạt toát lên vẻ phong lưu nhàn tản.',
     vibe: 'Phong lưu nho nhã',
+  },
+  {
+    id: 'hot-ngoc',
+    name: 'Hốt ngọc',
+    description: 'Thẻ bài bằng ngọc bích hoặc ngà voi của bậc đế vương, đại thần cầm chắp tay trước ngực khi thiết triều trang nghiêm.',
+    vibe: 'Đế vương quyền quý',
   },
 ];
 
@@ -366,5 +404,15 @@ export const COLOR_PRESETS: ColorPreset[] = [
     pants: '#D4AF37',     // Quần (vàng đồng nhẹ)
     dressBack: '#6E523A',
     dressEdge: '#D1AC60',
+  },
+  {
+    id: 'huyen-chu',
+    name: 'Huyền Y Chu Thường',
+    tagline: 'Sắc đen huyền bí & đỏ chu sa của bậc thiên tử',
+    lining: '#8D3435',
+    dress: '#1A1A1A',
+    pants: '#8B1A1A',
+    dressBack: '#111111',
+    dressEdge: '#DDB66B',
   },
 ];
