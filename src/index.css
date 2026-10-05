@@ -1,0 +1,428 @@
+@import "tailwindcss";
+
+/* ===== 1. THEME: đổi màu/chữ ở đây ===== */
+:root {
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #d97706;
+  --radius: 16px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Màu nhân vật: các nút chọn màu đổi các biến này */
+  --dress: #FDBA1D;       /* áo ngoài + tay áo */
+  --dress-back: #E2A00E;  /* tà sau */
+  --dress-edge: #E8A312;  /* viền thân áo */
+  --lining: #F9F1DC;      /* lớp lót trong / viền */
+  --pants: #FFFFFF;       /* quần */
+  --shoe: #FFFFFF;        /* thân giày */
+  --sole: #131313;        /* đế giày */
+  --skin: #FDBA90;
+}
+
+/* ===== 2. KHUNG CHUNG ===== */
+* { box-sizing: border-box; margin: 0; }
+html, body, #root { 
+  height: 100%; 
+  margin: 0; 
+  padding: 0; 
+}
+body { 
+  font-family: var(--font); 
+  background: var(--bg); 
+  color: var(--text); 
+  height: 100dvh; 
+  overflow: hidden; 
+}
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.topbar { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding: 8px 24px; 
+  background: var(--surface); 
+  border-bottom: 1px solid var(--border); 
+  flex-shrink: 0;
+  height: 52px;
+}
+.brand { 
+  font-weight: 700; 
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tabs { display: flex; gap: 4px; padding: 3px; background: #f1f5f9; border-radius: 999px; }
+.tabs button { border: 0; background: transparent; padding: 5px 18px; border-radius: 999px; color: var(--muted); font-size: 13.5px; font-weight: 500; transition: all 0.15s ease; }
+.tabs button.active { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+main { 
+  flex: 1; 
+  min-height: 0; 
+  padding: 12px 20px; 
+  display: flex;
+  flex-direction: column;
+}
+.page { display: none; height: 100%; min-height: 0; }
+.page.active { display: flex; flex-direction: column; }
+
+/* ===== 3. TRANG 1: chia 40% trái / 60% phải ===== */
+.split { 
+  display: grid; 
+  grid-template-columns: 40fr 60fr; 
+  gap: 16px; 
+  height: 100%; 
+  min-height: 0;
+  flex: 1;
+}
+.card { 
+  background: var(--surface); 
+  border: 1px solid var(--border); 
+  border-radius: var(--radius); 
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.stage-col { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  padding: 14px; 
+  min-height: 0; 
+  height: 100%;
+}
+.stage { 
+  flex: 1; 
+  min-height: 0; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  background: #eaedf2; 
+  border-radius: 12px; 
+  padding: 8px; 
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #d8dee8;
+}
+.model { 
+  position: relative; 
+  height: 100%; 
+  max-height: 100%;
+  aspect-ratio: 225 / 561; 
+  max-width: 100%; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.model.model-female {
+  aspect-ratio: 310 / 567;
+}
+.model > svg { 
+  width: auto; 
+  height: 100%; 
+  max-height: 100%;
+  max-width: 100%;
+  display: block; 
+  object-fit: contain;
+}
+
+/* Hover card (điểm nóng trên nhân vật). Toạ độ left/top tính theo % của ảnh */
+.hotspot { 
+  position: absolute; 
+  width: 18px; 
+  height: 18px; 
+  margin: -9px 0 0 -9px; 
+  padding: 0; 
+  border-radius: 50%; 
+  border: 2px solid var(--surface); 
+  background: var(--accent); 
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.25);
+  animation: pulse-hotspot 2.4s infinite;
+  z-index: 10;
+}
+@keyframes pulse-hotspot {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.hovercard { 
+  display: none; 
+  position: absolute; 
+  left: calc(100% + 10px); 
+  top: 50%; 
+  transform: translateY(-50%); 
+  width: 210px; 
+  padding: 10px 12px; 
+  text-align: left; 
+  font-size: 12px; 
+  line-height: 1.4; 
+  background: var(--surface); 
+  border: 1px solid var(--border); 
+  border-radius: 8px; 
+  box-shadow: 0 6px 20px rgba(0,0,0,.15); 
+  z-index: 25; 
+  color: var(--text);
+  pointer-events: none;
+}
+.hovercard b { display: block; margin-bottom: 2px; color: #b45309; }
+.hotspot:hover .hovercard, .hotspot:focus-visible .hovercard { display: block; }
+
+/* ===== 4. LAYOUT BUILDER CARD BÊN PHẢI (THEO ẢNH MẪU) ===== */
+.builder-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px;
+  min-height: 0;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+/* Thanh điều hướng (Tab Menu) dạng khối liền kề */
+.tab-menu-nav {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+  flex-shrink: 0;
+  width: 100%;
+}
+.tab-menu-btn {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 9px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #64748b;
+  transition: all 0.15s ease;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab-menu-btn:hover {
+  color: #0f172a;
+}
+.tab-menu-btn.active {
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* Vùng nội dung (Body) */
+.tab-body-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-top: 18px;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.tab-body-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.tab-body-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* Bố cục phân nhóm (Sub-sections) */
+.sub-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sub-section-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #334155;
+  text-align: left;
+}
+
+/* Các nút tùy chọn lưới (Option Grid & Button) */
+.builder-btn {
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+  text-align: center;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.builder-btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+.builder-btn.active {
+  border: 2px solid #b45309;
+  background: #fef3c7;
+  color: #78350f;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* ===== 5. TRANG 2: CẨM NANG & THÔNG TIN ===== */
+.info-page {
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px 20px 40px;
+}
+.info-page::-webkit-scrollbar {
+  width: 6px;
+}
+.info-page::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
+}
+
+/* ===== 6. LIGHTBOX ===== */
+.lightbox { 
+  position: fixed; 
+  inset: 0; 
+  z-index: 50; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 4px; 
+  background: rgba(234, 237, 242, 0.97); 
+  backdrop-filter: blur(8px); 
+}
+.lightbox[hidden] { display: none; }
+.lb-close { 
+  position: absolute; 
+  top: 14px; 
+  right: 18px; 
+  z-index: 60;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.lb-body { 
+  height: 98vh; 
+  max-height: 98dvh;
+  width: 100%;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+#lb-model {
+  height: 98vh;
+  max-height: 98dvh;
+  width: auto;
+  aspect-ratio: 225 / 561;
+}
+#lb-model.model-female {
+  aspect-ratio: 310 / 561;
+}
+#lb-model > svg {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ===== 7. NHÂN VẬT (SVG): đổi màu qua biến ở :root ===== */
+.dress { fill: var(--dress); transition: fill 0.25s ease; }
+.dress-edge { fill: var(--dress); stroke: var(--dress-edge); transition: all 0.25s ease; }
+.dress-back { fill: var(--dress-back); stroke: var(--dress); transition: all 0.25s ease; }
+.pants { fill: var(--pants); transition: fill 0.25s ease; }
+.shoe { fill: var(--shoe); transition: fill 0.25s ease; }
+.sole { fill: var(--sole); transition: fill 0.25s ease; }
+.skin { fill: var(--skin); }
+
+/* ===== 8. NÚT GẠT CHUYỂN ĐỔI MODEL (M / F) ===== */
+.model-switch-container {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4px;
+  border-radius: 9999px;
+  border: 1px solid #d8dee8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  user-select: none;
+}
+
+.model-switch-toggle {
+  position: relative;
+  width: 54px;
+  height: 28px;
+  border-radius: 9999px;
+  background-color: #cbd5e1;
+  cursor: pointer;
+  border: none;
+  padding: 3px;
+  transition: background-color 0.24s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.model-switch-toggle:hover {
+  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.3);
+}
+
+.model-switch-toggle.active-female {
+  background-color: #f43f5e;
+}
+
+.model-switch-toggle.active-female:hover {
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.3);
+}
+
+.model-switch-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  transform: translateX(0);
+  transition: transform 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.model-switch-toggle.active-female .model-switch-thumb {
+  transform: translateX(26px);
+  color: #0f172a;
+}
+
+/* Responsive if window is narrow or short */
+@media (max-width: 900px) {
+  body { height: auto; overflow: auto; }
+  #root { height: auto; min-height: 100vh; }
+  main { height: auto; padding: 10px; }
+  .split { grid-template-columns: 1fr; height: auto; min-height: unset; }
+  .stage { height: 65vh; min-height: 420px; }
+}
