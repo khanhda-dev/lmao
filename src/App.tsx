@@ -1388,6 +1388,85 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* --- CON BÒ THỬ NGHIỆM CHÍNH GIỮA MÀN HÌNH (SẼ XÓA Ở PROMPT SAU) --- */}
+      <div 
+        id="test-cow-overlay"
+        className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center"
+      >
+        <div className="p-4 bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-amber-300 pointer-events-auto flex flex-col items-center animate-bounce-subtle">
+          <svg 
+            width="220" 
+            height="180" 
+            viewBox="0 0 220 180" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Đuôi bò */}
+            <path d="M175 105 C190 100, 198 115, 192 128" stroke="#334155" strokeWidth="4" strokeLinecap="round" fill="none" />
+            <ellipse cx="193" cy="130" rx="6" ry="4" fill="#0f172a" />
+
+            {/* Chân sau */}
+            <rect x="145" y="115" width="14" height="42" rx="6" fill="#f8fafc" stroke="#334155" strokeWidth="2.5" />
+            <rect x="145" y="145" width="14" height="12" rx="3" fill="#1e293b" />
+            <rect x="162" y="112" width="14" height="44" rx="6" fill="#f1f5f9" stroke="#334155" strokeWidth="2.5" />
+            <rect x="162" y="144" width="14" height="12" rx="3" fill="#1e293b" />
+
+            {/* Chân trước */}
+            <rect x="80" y="115" width="14" height="42" rx="6" fill="#f8fafc" stroke="#334155" strokeWidth="2.5" />
+            <rect x="80" y="145" width="14" height="12" rx="3" fill="#1e293b" />
+            <rect x="98" y="115" width="14" height="42" rx="6" fill="#f8fafc" stroke="#334155" strokeWidth="2.5" />
+            <rect x="98" y="145" width="14" height="12" rx="3" fill="#1e293b" />
+
+            {/* Thân bò */}
+            <rect x="70" y="65" width="112" height="65" rx="30" fill="#ffffff" stroke="#334155" strokeWidth="3" />
+
+            {/* Đốm trên thân bò */}
+            <path d="M95 66 C105 75, 120 70, 128 66 Z" fill="#1e293b" />
+            <path d="M135 80 C145 75, 160 85, 155 105 C145 110, 135 98, 135 80 Z" fill="#1e293b" />
+            <path d="M85 100 C92 95, 102 105, 95 118 C88 120, 80 110, 85 100 Z" fill="#1e293b" />
+
+            {/* Sừng bò */}
+            <path d="M50 40 C46 26, 38 24, 34 26 C36 34, 45 42, 50 44 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="1.5" />
+            <path d="M82 40 C86 26, 94 24, 98 26 C96 34, 87 42, 82 44 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="1.5" />
+
+            {/* Tai bò */}
+            <ellipse cx="32" cy="46" rx="14" ry="8" transform="rotate(-20 32 46)" fill="#ffffff" stroke="#334155" strokeWidth="2.5" />
+            <ellipse cx="32" cy="46" rx="9" ry="5" transform="rotate(-20 32 46)" fill="#f472b6" />
+            <ellipse cx="100" cy="46" rx="14" ry="8" transform="rotate(20 100 46)" fill="#ffffff" stroke="#334155" strokeWidth="2.5" />
+            <ellipse cx="100" cy="46" rx="9" ry="5" transform="rotate(20 100 46)" fill="#f472b6" />
+
+            {/* Đầu bò */}
+            <rect x="42" y="34" width="48" height="54" rx="22" fill="#ffffff" stroke="#334155" strokeWidth="3" />
+
+            {/* Đốm trên đầu */}
+            <path d="M43 38 C52 38, 56 46, 52 56 C44 56, 42 46, 43 38 Z" fill="#1e293b" />
+
+            {/* Hai mắt */}
+            <circle cx="53" cy="54" r="4.5" fill="#1e293b" />
+            <circle cx="54.5" cy="52.5" r="1.5" fill="#ffffff" />
+            <circle cx="79" cy="54" r="4.5" fill="#1e293b" />
+            <circle cx="80.5" cy="52.5" r="1.5" fill="#ffffff" />
+
+            {/* Mõm bò hồng */}
+            <rect x="40" y="62" width="52" height="34" rx="16" fill="#fbcfe8" stroke="#db2777" strokeWidth="2" />
+            {/* Lỗ mũi */}
+            <circle cx="56" cy="76" r="3" fill="#be185d" />
+            <circle cx="76" cy="76" r="3" fill="#be185d" />
+            {/* Miệng cười */}
+            <path d="M61 84 Q66 88 71 84" stroke="#be185d" strokeWidth="2" strokeLinecap="round" fill="none" />
+
+            {/* Chuông cổ bò */}
+            <rect x="66" y="90" width="20" height="6" rx="2" fill="#b45309" />
+            <path d="M72 96 L70 106 L82 106 L80 96 Z" fill="#fbbf24" stroke="#d97706" strokeWidth="1.5" />
+            <circle cx="76" cy="107" r="2.5" fill="#f59e0b" />
+          </svg>
+          <div className="mt-1 text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1 rounded-full">
+            🐮 Con bò thử nghiệm
+          </div>
+        </div>
+      </div>
+      {/* ------------------------------------------------------------------ */}
     </div>
   );
 }
