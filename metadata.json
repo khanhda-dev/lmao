@@ -1,6 +1,6 @@
 {
-  "name": "Việt Phục Remix",
-  "description": "Ứng dụng phối đồ và khám phá Việt Phục truyền thống kết hợp phong cách Gen Z",
+  "name": "Phối Việt Phục Gen Z",
+  "description": "Khung giao diện phối trang phục truyền thống Việt Nam theo phong cách Gen Z.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

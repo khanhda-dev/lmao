@@ -7,8 +7,10 @@ export interface MaleCostumeProps {
 }
 
 // Bàn tay nam đồng bộ lộ ra từ cửa tay áo
-export const MaleHands: React.FC = () => (
-  <g id="male-hands" transform="translate(-28.7, 0)">
+export const MaleHands: React.FC<{ garmentId?: string }> = ({ garmentId }) => {
+  const isNarrow = garmentId === 'ngu-than-tay-chen';
+  return (
+    <g id="male-hands" transform={isNarrow ? "translate(-8, 0)" : "translate(-28.7, 0)"}>
     {/* Bàn tay trái */}
     <path 
       d="M32.0178 296.128C34.7251 284.98 41.4015 279.948 54.0376 280.796C66.6737 281.644 71.9878 287.917 74.1171 302.877C75.6839 313.885 76.788 328.392 73.4948 334.785C72.1717 337.354 69.4224 339.664 67.1059 338.73C64.7894 337.795 65.1756 335.131 65.9321 332.162C66.7872 328.806 67.0744 324.193 64.4918 323.208C62.9684 322.627 60.3794 324.432 59.7245 326.62C58.65 330.211 58.313 333.289 58.1794 337.223C58.0879 339.915 58.06 342.328 58.0551 344.066C58.0526 344.935 58.0558 345.634 58.0596 346.112L58.067 346.797C57.9891 349.984 55.9477 351.831 53.6084 351.87C49.1183 351.946 48.965 347.695 48.9659 347.09C48.9547 347.862 48.9502 348.472 48.9485 348.889C48.9476 349.104 48.9475 349.377 48.9475 349.377C48.959 351.716 47.3112 353.141 45.0765 353.185C42.8419 353.229 41.2368 351.382 40.8648 349.864C40.4928 348.346 40.4814 346.108 40.4814 346.108C35.9345 346.829 33.7188 343.959 33.3403 341.868C32.9618 339.777 32.8934 337.087 33.079 333.468C33.1068 332.925 33.132 332.553 33.1628 332.079C32.5759 332.463 31.8749 332.688 31.1211 332.692C29.0413 332.703 28.0205 331.016 27.7645 328.865C27.5085 326.715 27.5924 319.16 28.3022 314.55C29.012 309.941 29.3106 307.277 32.0178 296.128Z" 
@@ -33,7 +35,8 @@ export const MaleHands: React.FC = () => (
       strokeLinejoin="round"
     />
   </g>
-);
+  );
+};
 
 // Chân & Giày nam đồng bộ
 export const MaleShoes: React.FC<{ shoeColor?: string; soleColor?: string }> = ({ shoeColor, soleColor }) => (
@@ -161,8 +164,9 @@ export const MaleAoTac: React.FC<MaleCostumeProps> = ({ dressColor, liningColor,
       />
 
       {/* Cổ đứng & 5 cúc mạ vàng */}
-      <path d="M517.504 107.486C517.504 124.486 527.504 135.486 541.504 135.486C555.504 135.486 565.504 124.486 565.504 107.486H517.504Z" fill="rgba(0,0,0,0.2)" />
+      <path d="M517.504 107.486C517.504 124.486 527.504 135.486 541.504 135.486C555.504 135.486 565.504 124.486 565.504 107.486H517.504Z" fill={dressColor} />
       <path d="M523.504 107.486C523.504 120.486 531.504 129.486 541.504 129.486C551.504 129.486 559.504 120.486 559.504 107.486H523.504Z" fill="white" stroke="#E5E0D8" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M493.504 178.486L541.504 107.486H517.504L493.504 178.486Z" fill={dressColor} />
       <path d="M521.504 118.486C507.504 118.486 495.504 128.486 493.504 148.486L494.504 168.486" stroke="rgba(0,0,0,0.3)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="515.504" cy="118.986" r="2.2" fill="#E3B778" />
       <circle cx="507.904" cy="122.186" r="2.2" fill="#E3B778" />
@@ -210,6 +214,10 @@ export const MaleVienLinh: React.FC<MaleCostumeProps> = ({ dressColor, liningCol
       />
 
       {/* Đường nẹp cong cài khuy vai & 5 cúc */}
+      <path 
+        d="M948.504 102.486C935.504 112.486 921.504 126.486 905.504 168.486L897.504 218.486L948.504 122.486Z" 
+        fill={dressColor} 
+      />
       <path d="M935.504 126.486C919.504 138.486 905.504 154.486 899.504 178.486L897.504 218.486" stroke="rgba(0,0,0,0.3)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="928.304" cy="132.186" r="2.6" fill="#D9B25B" />
       <circle cx="919.704" cy="140.686" r="2.6" fill="#D9B25B" />
@@ -266,6 +274,10 @@ export const MaleNguThan: React.FC<MaleCostumeProps> = ({ dressColor, liningColo
       />
 
       {/* Nẹp cổ đứng & đường 5 cúc bên ngực phải */}
+      <path 
+        d="M1345.5 102.486C1332.5 112.486 1318.5 126.486 1302.5 168.486L1297.5 218.486L1345.5 122.486Z" 
+        fill={dressColor} 
+      />
       <path d="M1335.5 126.486C1319.5 138.486 1305.5 154.486 1299.5 178.486L1297.5 218.486" stroke="rgba(0,0,0,0.3)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="1328.3" cy="132.186" r="2.6" fill="#D9B25B" />
       <circle cx="1319.7" cy="140.686" r="2.6" fill="#D9B25B" />

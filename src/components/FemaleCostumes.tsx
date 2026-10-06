@@ -79,6 +79,10 @@ export const FemaleVienLinh: React.FC<FemaleCostumeProps> = ({ dressColor, pants
         strokeLinecap="round" 
         strokeLinejoin="round"
       />
+      <path 
+        d="M1771.86 161.594C1760 161.594 1750 165.85 1740 140.85L1739 176.85L1771.86 161.594Z" 
+        fill={dressColor} 
+      />
       <circle cx="1762" cy="106.85" r="2" fill="#D9B25B" />
       <circle cx="1753" cy="114.85" r="2" fill="#D9B25B" />
       <circle cx="1745" cy="125.85" r="2" fill="#D9B25B" />
@@ -249,8 +253,9 @@ export const FemaleAoTac: React.FC<FemaleCostumeProps> = ({ dressColor, liningCo
       />
 
       {/* Cổ áo giao lót trong & cổ đứng ngũ thân 5 cúc */}
-      <path d="M1045 539.85C1045 552.85 1053 561.85 1064 561.85C1075 561.85 1083 552.85 1083 539.85H1045Z" fill="rgba(0,0,0,0.2)" />
+      <path d="M1045 539.85C1045 552.85 1053 561.85 1064 561.85C1075 561.85 1083 552.85 1083 539.85H1045Z" fill={dressColor} />
       <path d="M1050 539.85C1050 549.85 1056 556.85 1064 556.85C1072 556.85 1078 549.85 1078 539.85H1050Z" fill="white" stroke="#E5E0D8" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M1020 578.85L1064 561.85L1083 539.85H1045L1048 558.85L1020 578.85Z" fill={dressColor} />
       <path d="M1048 548.85C1034 548.85 1022 558.85 1020 578.85L1021 598.85" stroke="rgba(0,0,0,0.3)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="1042" cy="549.35" r="2.2" fill="#E3B778" />
       <circle cx="1034.4" cy="552.55" r="2.2" fill="#E3B778" />
@@ -318,6 +323,7 @@ export const FemaleNguThan: React.FC<FemaleCostumeProps> = ({ dressColor, pantsC
         strokeLinejoin="round" 
       />
       <path d="M1550 534.85H1578" stroke="rgba(255,255,255,0.7)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M1532 570.85L1564 549.85H1550L1532 580.85Z" fill={dressColor} />
       <path 
         d="M1560 549.85C1548 558.85 1536 570.85 1532 588.85L1531 624.85" 
         stroke="rgba(0,0,0,0.25)" 

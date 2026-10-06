@@ -3,1378 +3,1313 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
-import { Shuffle, Search } from 'lucide-react';
-import { 
-  GARMENTS, 
-  HEADWEAR, 
-  FOOTWEAR, 
-  JEWELRY, 
-  HANDHELD, 
-  GEN_Z_ACCESSORIES, 
-  COLOR_PRESETS,
-  SPECIAL_GARMENTS,
-  type Garment,
-  type Headwear,
-  type Footwear,
-  type ColorPreset
-} from './data/costumeData';
-import { FemaleVienLinh, FemaleNhatBinh, FemaleAoTac, FemaleNguThan } from './components/FemaleCostumes';
-import { MaleGiaoLinh, MaleAoTac, MaleVienLinh, MaleNguThan, MaleHands, MaleShoes } from './components/MaleCostumes';
-import { SpecialLongBaoNam, SpecialQuanPhucNam, SpecialPhuongBaoNu, SpecialBachYNu } from './components/special';
+import { useState } from 'react';
+import {
+  Layers,
+  FileText,
+  Sparkles,
+  RefreshCw,
+  ZoomIn,
+  ZoomOut,
+  Crown,
+  Palette,
+  Check,
+  Eye,
+  Info,
+  SlidersHorizontal,
+  Bookmark,
+  User,
+  HeartHandshake,
+  Shirt,
+  Sparkle,
+  Camera,
+  Glasses,
+  ShoppingBag,
+  Headphones,
+  Watch,
+  Music,
+  Umbrella,
+  Fan
+} from 'lucide-react';
+import GiaoLinhNam from './components/GiaoLinhNam';
+import HoangBaoLongTrieu from './components/HoangBaoLongTrieu';
+import LePhucNguSac from './components/LePhucNguSac';
+import GiaoLinhThienThanh from './components/GiaoLinhThienThanh';
+import NguThanXanhCham from './components/NguThanXanhCham';
+import NguThanTuSac from './components/NguThanTuSac';
+import AoTacDoSon from './components/AoTacDoSon';
+import PhuongBaoHoangHau from './components/PhuongBaoHoangHau';
+import AoTacNuTocDai from './components/AoTacNuTocDai';
+import AoDoiKhamLamHong from './components/AoDoiKhamLamHong';
+import NguThanBichThuy from './components/NguThanBichThuy';
+import AccessoryVisuals from './components/AccessoryVisuals';
+
+// Model Registry Definition with Gender Grouping
+export interface ModelDef {
+  id: string;
+  name: string;
+  shortName: string;
+  gender: 'nam' | 'nu';
+  badge: string;
+  category: 'hoangtrieu' | 'nguthan' | 'giaolinh';
+  era: string;
+  desc: string;
+  historicalNote: string;
+  accentColor: string;
+  defaultColors: {
+    tunic: string;
+    pants: string;
+    sash: string;
+  };
+  targets: { id: number; label: string }[];
+}
+
+export const OUTFIT_MODELS: ModelDef[] = [
+  // =================== CỔ PHỤC NAM (7 MẪU) ===================
+  {
+    id: 'giao_linh_nam',
+    name: 'Giao Lĩnh Nam (Hắc Y Chu Biên)',
+    shortName: 'Giao Lĩnh Nam Mới',
+    gender: 'nam',
+    badge: 'Đại Triều Phục',
+    category: 'giaolinh',
+    era: 'Triều Lê - Nguyễn (Thế kỷ XV - XIX)',
+    desc: 'Trang phục Giao Lĩnh cổ chéo vạt sang phải viền chu biên (đỏ son), thân áo huyền sắc trang nghiêm, đội Mũ Bình Thiên đính 12 dải lưu miện ngũ sắc và tay cầm thẻ hốt ngọc biểu trưng quyền uy.',
+    historicalNote: 'Áo Giao Lĩnh (cổ giao) là một trong những dạng thức y phục truyền thống tiêu biểu nhất của người Việt, xuất hiện từ thời Lý - Trần và được quy chuẩn hoá trang trọng trong triều đình Lê - Nguyễn.',
+    accentColor: '#8D3435',
+    defaultColors: {
+      tunic: '#1A1A1A',
+      pants: '#8B1A1A',
+      sash: '#8D3435'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo (Hắc y)' },
+      { id: 1, label: 'Hạ y (Thường đỏ)' },
+      { id: 2, label: 'Viền cổ & Đai' }
+    ]
+  },
+  {
+    id: 'hoang_bao_long_trieu',
+    name: 'Hoàng Bào Long Triều (Hoàng Đế)',
+    shortName: 'Hoàng Bào Thiên Tử',
+    gender: 'nam',
+    badge: 'Thiên Tử',
+    category: 'hoangtrieu',
+    era: 'Đại Triều Phục (Lê Sơ - Nguyễn)',
+    desc: 'Hoàng Bào chính thống của bậc Thiên Tử sắc vàng hoàng kim lộng lẫy, dệt thêu rồng ẩn mây ngũ sắc, viền cổ ngọc bích đính ngọc trai, gấu áo thêu hoa văn sóng nước Thủy Ba ngũ hành và đội Mũ Xung Thiên / Bình Thiên đính ngọc quý.',
+    historicalNote: 'Hoàng bào dùng trong các đại lễ tế Giao, thiết triều mừng lễ vạn thọ và tiếp sứ giả. Họa tiết sóng nước Thủy Ba biểu trưng cho sự trường tồn, mưa thuận gió hòa và vương quyền tối thượng.',
+    accentColor: '#D8A20A',
+    defaultColors: {
+      tunic: '#F6D36A',
+      pants: '#1A1A1A',
+      sash: '#D8A20A'
+    },
+    targets: [
+      { id: 0, label: 'Sắc Hoàng Bào' },
+      { id: 1, label: 'Quần lót / Hài' },
+      { id: 2, label: 'Đai ngọc hoàng tộc' }
+    ]
+  },
+  {
+    id: 'ngu_than_xanh_cham',
+    name: 'Áo Ngũ Thân Tay Chẽn (Xanh Chàm)',
+    shortName: 'Ngũ Thân Xanh Chàm',
+    gender: 'nam',
+    badge: 'Quốc Phục Nam',
+    category: 'nguthan',
+    era: 'Triều Nguyễn (Năm 1744 - 1945)',
+    desc: 'Áo Dài Ngũ Thân tay chẽn nam giới chuẩn mực sắc xanh chàm thâm trầm, vạt hò chéo cài 5 chiếc cúc vàng tượng trưng cho Ngũ Thường (Nhân, Lễ, Nghĩa, Trí, Tín), quần lụa trắng và đầu đội khăn đóng truyền thống.',
+    historicalNote: 'Áo Ngũ Thân được chúa Nguyễn Phúc Khoát định hình năm 1744 và vua Minh Mạng phổ quát toàn quốc năm 1837, trở thành quốc phục chính thống của người Việt trong suốt hơn 200 năm.',
+    accentColor: '#3F5A86',
+    defaultColors: {
+      tunic: '#3F5A86',
+      pants: '#F2F2EC',
+      sash: '#D9B25B'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo xanh chàm' },
+      { id: 1, label: 'Quần lụa trắng' },
+      { id: 2, label: 'Khăn đóng & Cúc' }
+    ]
+  },
+  {
+    id: 'ngu_than_tu_sac',
+    name: 'Áo Ngũ Thân Tử Sắc (Tím Mận)',
+    shortName: 'Ngũ Thân Tử Sắc Nam',
+    gender: 'nam',
+    badge: 'Quý Tộc Nam',
+    category: 'nguthan',
+    era: 'Triều Nguyễn - Quý Tộc',
+    desc: 'Áo Ngũ Thân sắc tím mận chín (Tử Sắc) thanh cao dành cho giới thượng lưu và hoàng thân, cài hàng khuy vàng sang trọng, phối cùng khăn đóng tím đồng điệu và quần lụa ngà mềm mại.',
+    historicalNote: 'Màu tím xứ Huế và sắc tử thảo truyền thống là màu sắc mang tính hoài cổ, biểu trưng cho sự thủy chung, kín đáo và phong thái quý tộc trang nhã.',
+    accentColor: '#8F7DB0',
+    defaultColors: {
+      tunic: '#8F7DB0',
+      pants: '#F5F5F0',
+      sash: '#D9B25B'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo tím mận' },
+      { id: 1, label: 'Quần lụa ngà' },
+      { id: 2, label: 'Khăn đóng tím' }
+    ]
+  },
+  {
+    id: 'ngu_than_bich_thuy',
+    name: 'Áo Ngũ Thân Bích Thủy (Xanh Ngọc Bích)',
+    shortName: 'Ngũ Thân Bích Thủy',
+    gender: 'nam',
+    badge: 'Nho Nhã Nam',
+    category: 'nguthan',
+    era: 'Triều Nguyễn (Năm 1744 - 1945)',
+    desc: 'Áo Dài Ngũ Thân tay chẽn màu xanh ngọc bích (Bích Thủy) thanh tao thoát tục, vạt hò cài 5 cúc mạ vàng óng ả, phối cùng quần lụa đen tuyền trang nhã và phong thái nho nhã của bậc học giả quý tộc.',
+    historicalNote: 'Sắc ngọc bích tượng trưng cho ngũ hành Mộc - đại diện cho mùa xuân, sự sinh sôi nảy nở, khí chất thanh cao quân tử và tấm lòng thanh liêm của giới trí thức xưa.',
+    accentColor: '#0D7482',
+    defaultColors: {
+      tunic: '#0D7482',
+      pants: '#1A1A1A',
+      sash: '#D9B25B'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo ngọc bích' },
+      { id: 1, label: 'Quần lụa đen' },
+      { id: 2, label: 'Cúc & Khăn đóng' }
+    ]
+  },
+  {
+    id: 'ao_doi_kham_lam_hong',
+    name: 'Lễ Phục Nhị Tầng (Đỏ Thắm Phối Lam)',
+    shortName: 'Lễ Phục Nhị Tầng Nam',
+    gender: 'nam',
+    badge: 'Lễ Triều Phục',
+    category: 'hoangtrieu',
+    era: 'Thời Lê Trung Hưng - Nguyễn',
+    desc: 'Trang phục lễ hội nhị tầng phối hợp độc đáo giữa áo khoác vạt lỡ sắc đỏ son thắm tươi bên ngoài và thân áo dài màu xanh lam thẫm bên trong, quần lụa ngà mềm mại và cúc ngọc cài quý phái.',
+    historicalNote: 'Phong cách mặc nhiều tầng lớp áo (nhị tầng / tam tầng y phục) vừa tôn vinh độ đài các phong lưu, vừa thể hiện sự tôn nghiêm và chỉn chu trong các nghi lễ trang trọng của người xưa.',
+    accentColor: '#A3202F',
+    defaultColors: {
+      tunic: '#A3202F',
+      pants: '#23407A',
+      sash: '#F1DECA'
+    },
+    targets: [
+      { id: 0, label: 'Áo ngoài đỏ thắm' },
+      { id: 1, label: 'Lớp trong áo lam' },
+      { id: 2, label: 'Quần lụa ngà' }
+    ]
+  },
+  {
+    id: 'ao_tac_do_son_khan',
+    name: 'Áo Tấc Nam Đỏ Son (Có Khăn)',
+    shortName: 'Áo Tấc Nam Đỏ Son',
+    gender: 'nam',
+    badge: 'Hỷ Phục Nam',
+    category: 'nguthan',
+    era: 'Triều Nguyễn - Lễ Cưới & Đại Lễ',
+    desc: 'Áo Tấc nam (áo ngũ thân tay thụng dài một tấc) sắc đỏ son rực rỡ, cổ áo đứng viền trắng bên trong, hàng cúc mạ vàng óng ánh, phối cùng quần lụa màu xanh lam thẫm quý phái và khăn đóng đỏ trang nghiêm.',
+    historicalNote: 'Áo Tấc màu đỏ son thường được các chú rể, tân khoa hoặc gia chủ mặc trong các dịp đại hỷ như cưới hỏi, lễ tế gia tiên, hội làng mùa xuân, mang ý nghĩa chúc phúc may mắn và thịnh vượng.',
+    accentColor: '#A3202F',
+    defaultColors: {
+      tunic: '#A3202F',
+      pants: '#23407A',
+      sash: '#E3B778'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo đỏ son' },
+      { id: 1, label: 'Quần lụa lam thẫm' },
+      { id: 2, label: 'Cúc & Khăn đóng' }
+    ]
+  },
+
+  // =================== CỔ PHỤC NỮ (7 MẪU) ===================
+  {
+    id: 'phuong_bao_hoang_hau',
+    name: 'Phượng Bào Ngũ Sắc (Hoàng Hậu / Mệnh Phụ)',
+    shortName: 'Phượng Bào Hoàng Hậu',
+    gender: 'nu',
+    badge: 'Mẫu Nghi Thiên Hạ',
+    category: 'hoangtrieu',
+    era: 'Triều Lê - Nguyễn (Đại Lễ Cung Đình)',
+    desc: 'Hoàng phục / Phượng Bào cao quý bậc nhất của bậc Hoàng Hậu và Mệnh Phụ, thân thêu tường vân ngũ sắc, đai ngọc đới, gấu áo thêu sóng nước Thủy Ba ba tầng và đầu đội Mão Phượng / Mũ Miện Phượng Đình đính ngọc vàng lộng lẫy.',
+    historicalNote: 'Phượng Bào kết hợp cùng Mão Phượng đính 9 con chim phượng ngậm ngọc là biểu tượng tối thượng của bậc Mẫu nghi thiên hạ, tượng trưng cho phúc lộc trường tồn và sự tôn quý mẫu mực.',
+    accentColor: '#F58B3E',
+    defaultColors: {
+      tunic: '#F58B3E',
+      pants: '#2E617D',
+      sash: '#FDBA1D'
+    },
+    targets: [
+      { id: 0, label: 'Thân Phượng Bào' },
+      { id: 1, label: 'Hạ xiêm Thủy Ba' },
+      { id: 2, label: 'Đai & Viền vàng' }
+    ]
+  },
+  {
+    id: 'le_phuc_ngu_sac_hat',
+    name: 'Nhật Bình / Lễ Phục Ngũ Sắc (Có Mũ)',
+    shortName: 'Nhật Bình Nữ (Có Mũ)',
+    gender: 'nu',
+    badge: 'Cung Đình Nữ',
+    category: 'hoangtrieu',
+    era: 'Triều Lê - Nguyễn (Hậu Cung & Mệnh Phụ)',
+    desc: 'Lễ phục thụng xanh chàm (Lam bảo), cửa tay dệt dải viền ngũ sắc tượng trưng cho ngũ hành (Kim, Mộc, Thủy, Hỏa, Thổ), thường màu ngà dệt ngọc văn và đầu đội Mũ Triều Nghi tròn hoa văn lam bảo trang nghiêm.',
+    historicalNote: 'Viền cổ tay ngũ sắc là nét văn hóa đặc thù mang triết lý âm dương ngũ hành của trang phục cung đình và quý tộc Việt cổ, bảo hộ thân chủ và tôn vinh sự cao quý đoan trang của nữ giới.',
+    accentColor: '#1F2A78',
+    defaultColors: {
+      tunic: '#1F2A78',
+      pants: '#F6EEDC',
+      sash: '#E2A93B'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo lam' },
+      { id: 1, label: 'Váy thêu ngà' },
+      { id: 2, label: 'Bổ tử & Đai' }
+    ]
+  },
+  {
+    id: 'le_phuc_ngu_sac_nohat',
+    name: 'Nhật Bình / Lễ Phục Ngũ Sắc (Búi Tóc)',
+    shortName: 'Nhật Bình Nữ (Búi Tóc)',
+    gender: 'nu',
+    badge: 'Yến Tiệc Nữ',
+    category: 'hoangtrieu',
+    era: 'Triều Lê - Nguyễn (Dạo Yến)',
+    desc: 'Phiên bản thường triều và dạo yến của Lễ Phục Ngũ Sắc nữ, không đội mũ triều nghi để lộ mái tóc búi cài trâm tao nhã, toát lên phong thái quyền quý nhẹ nhàng, thanh tú và dịu dàng.',
+    historicalNote: 'Phong cách tóc búi tự nhiên cài trâm thịnh hành trong các buổi yến tiệc thân mật của hoàng thân và tiểu thư quyền quý, vừa giữ trọn nét tôn nghiêm vừa thể hiện nét đẹp mềm mại của phụ nữ Việt.',
+    accentColor: '#2B4FA0',
+    defaultColors: {
+      tunic: '#1F2A78',
+      pants: '#F6EEDC',
+      sash: '#E2A93B'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo lam' },
+      { id: 1, label: 'Váy thêu ngà' },
+      { id: 2, label: 'Bổ tử & Đai' }
+    ]
+  },
+  {
+    id: 'giao_linh_thien_thanh',
+    name: 'Áo Giao Lĩnh Nữ Thiên Thanh (Thường Phục)',
+    shortName: 'Giao Lĩnh Nữ Thiên Thanh',
+    gender: 'nu',
+    badge: 'Khuê Các Nữ',
+    category: 'giaolinh',
+    era: 'Thời Lý - Trần - Lê',
+    desc: 'Áo Giao Lĩnh nữ sắc xanh mây trời (Thiên Thanh) thanh thoát, cổ vạt chéo viền sắc ngà kem, đai ngọc đới buông dải thắt nơ mềm mại thướt tha, mang vẻ đẹp tao nhã của các tiểu thư khuê các.',
+    historicalNote: 'Màu Thiên Thanh (xanh da trời nhạt) là biểu trưng cho nét đẹp tinh khiết, thanh cao và thanh nhã của các thiếu nữ dòng dõi danh gia vọng tộc thời xưa.',
+    accentColor: '#7F9FBA',
+    defaultColors: {
+      tunic: '#B3CEE5',
+      pants: '#F8F9FA',
+      sash: '#FFFDD0'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo mây trời' },
+      { id: 1, label: 'Nội y / Váy lụa' },
+      { id: 2, label: 'Dải thắt lưng ngọc' }
+    ]
+  },
+  {
+    id: 'giao_linh_thien_thanh_bun',
+    name: 'Áo Giao Lĩnh Nữ Thiên Thanh (Búi Tóc)',
+    shortName: 'Giao Lĩnh Nữ Búi Tóc',
+    gender: 'nu',
+    badge: 'Tao Nhã Nữ',
+    category: 'giaolinh',
+    era: 'Thời Lý - Trần - Lê',
+    desc: 'Biến thể Áo Giao Lĩnh Thiên Thanh phối búi tóc mộc mạc cài trâm, vạt áo chéo viền kem thanh lịch buông dài qua gối, toát lên phong thái đoan trang của nàng thơ dạo hoa thưởng ngoạn.',
+    historicalNote: 'Dạng vạt chéo kết hợp dải đai ngọc đới buông dài là hình tượng y phục nữ giới tiêu biểu được ghi chép qua các văn bản cổ và tượng điêu khắc thời Lý - Trần.',
+    accentColor: '#5B86AB',
+    defaultColors: {
+      tunic: '#B3CEE5',
+      pants: '#F8F9FA',
+      sash: '#FFFDD0'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo mây trời' },
+      { id: 1, label: 'Nội y / Váy lụa' },
+      { id: 2, label: 'Dải thắt lưng ngọc' }
+    ]
+  },
+  {
+    id: 'ao_tac_do_son_bun',
+    name: 'Áo Tấc Nữ Đỏ Son (Tóc Búi Cô Dâu)',
+    shortName: 'Áo Tấc Nữ Hỷ Phục',
+    gender: 'nu',
+    badge: 'Hỷ Phục Nữ',
+    category: 'nguthan',
+    era: 'Triều Nguyễn - Lễ Cưới Cô Dâu',
+    desc: 'Biến thể Áo Tấc đỏ son tay thụng phối kiểu tóc búi cài trâm hoa truyền thống, khoe trọn nét duyên dáng rạng rỡ, tươi tắn và quý phái của các cô dâu hay tiểu thư đài các trong ngày vu quy.',
+    historicalNote: 'Tay áo thụng dài che kín hai bàn tay khi hành lễ bái gia tiên, thể hiện phong thái đoan trang, khiêm cung và tôn trọng lễ nghĩa gia đình truyền thống.',
+    accentColor: '#C42B3E',
+    defaultColors: {
+      tunic: '#A3202F',
+      pants: '#23407A',
+      sash: '#E3B778'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo đỏ son' },
+      { id: 1, label: 'Quần lụa lam thẫm' },
+      { id: 2, label: 'Cúc & Trâm hoa' }
+    ]
+  },
+  {
+    id: 'ao_tac_nu_toc_dai',
+    name: 'Áo Tấc Nữ Đỏ Son (Tóc Thả Nàng Thơ)',
+    shortName: 'Áo Tấc Nữ Tóc Thả',
+    gender: 'nu',
+    badge: 'Nàng Thơ Kinh Kỳ',
+    category: 'nguthan',
+    era: 'Triều Nguyễn (Nàng Thơ Xứ Huế)',
+    desc: 'Áo Tấc nữ đỏ son tay thụng viền trắng kem bên trong, cài 5 hạt khuy vàng, phối cùng quần lụa màu xanh lam thẫm quý phái và mái tóc dài bồng bềnh buông xõa dịu dàng của các tiểu thư đài các xứ Kinh kỳ.',
+    historicalNote: 'Áo Tấc tay thụng dài kết hợp kiểu tóc dài tự nhiên mang phong thái thanh lịch, vừa giữ được nét e ấp khiêm nhường truyền thống, vừa toát lên vẻ đẹp thanh tân tươi trẻ của người phụ nữ Việt.',
+    accentColor: '#A3202F',
+    defaultColors: {
+      tunic: '#A3202F',
+      pants: '#23407A',
+      sash: '#E3B778'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo đỏ son' },
+      { id: 1, label: 'Quần lụa lam thẫm' },
+      { id: 2, label: 'Cúc & Viền ngà' }
+    ]
+  }
+];
+
+// Preset Color Palettes (Image 1)
+export interface ColorPalettePreset {
+  id: string;
+  name: string;
+  inner: string;
+  outer: string;
+  pants: string;
+}
+
+export const COLOR_PALETTES: ColorPalettePreset[] = [
+  {
+    id: 'hoang_trieu',
+    name: 'Hoàng Triều Quý Phái',
+    inner: '#F5B017',
+    outer: '#C02428',
+    pants: '#FFFFFF'
+  },
+  {
+    id: 'co_do',
+    name: 'Cố Đô Trầm Mặc',
+    inner: '#E5D3BD',
+    outer: '#6B2D5C',
+    pants: '#FFFFFF'
+  },
+  {
+    id: 'truc_lam',
+    name: 'Trúc Lâm Thanh Nhã',
+    inner: '#CBB484',
+    outer: '#275B44',
+    pants: '#26282A'
+  },
+  {
+    id: 'sen_hong',
+    name: 'Sen Hồng Đồng Nội',
+    inner: '#FCE4E8',
+    outer: '#D65C78',
+    pants: '#3A2E2F'
+  },
+  {
+    id: 'cyberfolk',
+    name: 'Gen Z Cyberfolk',
+    inner: '#F85F64',
+    outer: '#20508F',
+    pants: '#1E2838'
+  },
+  {
+    id: 'tram_huong',
+    name: 'Trầm Hương Nhật Nguyệt',
+    inner: '#EFE5D7',
+    outer: '#906E4D',
+    pants: '#D6A734'
+  }
+];
 
 export default function App() {
-  // Navigation: 1 = Trang 1 (Phối đồ), 2 = Trang 2 (Cẩm nang thông tin)
-  const [activePage, setActivePage] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState<'tab1' | 'tab2'>('tab1');
 
-  // Model Gender: 'male' (Nam) | 'female' (Nữ)
-  const [modelGender, setModelGender] = useState<'male' | 'female'>('male');
+  // Sub-tabs on Right Control Panel of Trang 1 (Trang phục / Màu sắc / Phụ kiện / Gen Z)
+  const [activeSubTab, setActiveSubTab] = useState<'outfit' | 'color' | 'accessories' | 'genz'>('outfit');
 
-  // Slot 1: Garment selection (Trang phục phổ thông)
-  const [selectedGarment, setSelectedGarment] = useState<Garment>(GARMENTS[2]); // Default: Ngũ thân tay chẽn
+  // Primary Gender Filter: 'all' | 'nam' | 'nu'
+  const [selectedGender, setSelectedGender] = useState<'all' | 'nam' | 'nu'>('all');
 
-  // Slot Đặc biệt: Trang phục đặc biệt cố định nguyên bản (null nếu mặc đồ thường)
-  const [selectedSpecialId, setSelectedSpecialId] = useState<string | null>(null);
+  // Secondary Category Filter: 'all' | 'hoangtrieu' | 'nguthan' | 'giaolinh'
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  // Slot 2: Color customization (3 hex colors: lining, dress, pants)
-  const [selectedPreset, setSelectedPreset] = useState<ColorPreset>(COLOR_PRESETS[0]);
-  const [liningColor, setLiningColor] = useState<string>(COLOR_PRESETS[0].lining);
-  const [dressColor, setDressColor] = useState<string>(COLOR_PRESETS[0].dress);
-  const [pantsColor, setPantsColor] = useState<string>(COLOR_PRESETS[0].pants);
+  // Selected Model State
+  const [selectedModelIdx, setSelectedModelIdx] = useState<number>(0);
+  const currentModel = OUTFIT_MODELS[selectedModelIdx];
 
-  // Slot 3: Traditional accessories
-  const [selectedHeadwear, setSelectedHeadwear] = useState<Headwear | null>(HEADWEAR[4]); // Default: Khăn xếp
-  const [selectedFootwear, setSelectedFootwear] = useState<Footwear>(FOOTWEAR[0]); // Default: Hài thêu
-  const [selectedJewelry, setSelectedJewelry] = useState<string[]>(['kieng-co']); // Kiềng cổ
-  const [selectedHandheld, setSelectedHandheld] = useState<string>('quat'); // Quạt
+  // Selected Preset Palette
+  const [selectedPaletteId, setSelectedPaletteId] = useState<string | null>(null);
 
-  // Slot 4: Gen Z modern accessories (5 items from PDF)
-  const [selectedGenZ, setSelectedGenZ] = useState<string[]>(['kinh-ram']);
+  // Customizer state
+  const [selectedColorTarget, setSelectedColorTarget] = useState<number>(0);
 
-  // Builder Tab: 'garment' | 'color' | 'accessory' | 'genz'
-  const [builderTab, setBuilderTab] = useState<'garment' | 'color' | 'accessory' | 'genz'>('garment');
+  // Traditional Accessories State (Image 2)
+  const [selectedHeadwear, setSelectedHeadwear] = useState<string>('none');
+  const [selectedFootwear, setSelectedFootwear] = useState<string>('hai_theu');
+  const [selectedJewelry, setSelectedJewelry] = useState<string[]>(['kieng_co']);
+  const [selectedHandheld, setSelectedHandheld] = useState<string>('none');
 
-  // Lightbox state
-  const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
+  // Gen Z Modern Accessories State (Image 3)
+  const [selectedGenZAccessories, setSelectedGenZAccessories] = useState<string[]>([]);
 
-  // Update CSS Variables on root whenever colors or footwear changes
-  useEffect(() => {
-    const root = document.documentElement;
-    root.style.setProperty('--dress', dressColor);
-    root.style.setProperty('--lining', liningColor);
-    root.style.setProperty('--pants', pantsColor);
+  // Colors customization
+  const [tunicColor, setTunicColor] = useState<string>(currentModel.defaultColors.tunic);
+  const [pantsColor, setPantsColor] = useState<string>(currentModel.defaultColors.pants);
+  const [sashColor, setSashColor] = useState<string>(currentModel.defaultColors.sash);
+  const [useCustomColors, setUseCustomColors] = useState<boolean>(false);
+  const [isZoomed, setIsZoomed] = useState<boolean>(false);
 
-    // Compute subtle tone variations for dress back and dress edge
-    if (selectedPreset.dress === dressColor) {
-      root.style.setProperty('--dress-back', selectedPreset.dressBack || '#E2A00E');
-      root.style.setProperty('--dress-edge', selectedPreset.dressEdge || liningColor);
+  // Gallery preview modal state (for Trang 2)
+  const [previewModalIdx, setPreviewModalIdx] = useState<number | null>(null);
+
+  const handleSelectModel = (idx: number) => {
+    setSelectedModelIdx(idx);
+    const targetModel = OUTFIT_MODELS[idx];
+    setUseCustomColors(false);
+    setSelectedPaletteId(null);
+    setTunicColor(targetModel.defaultColors.tunic);
+    setPantsColor(targetModel.defaultColors.pants);
+    setSashColor(targetModel.defaultColors.sash);
+    setSelectedColorTarget(0);
+  };
+
+  const handleSwitchGender = (gender: 'all' | 'nam' | 'nu') => {
+    setSelectedGender(gender);
+    if (gender !== 'all') {
+      const firstMatchIdx = OUTFIT_MODELS.findIndex((m) => m.gender === gender);
+      if (firstMatchIdx !== -1) {
+        handleSelectModel(firstMatchIdx);
+      }
+    }
+  };
+
+  const handleApplyPalette = (palette: ColorPalettePreset) => {
+    setSelectedPaletteId(palette.id);
+    setUseCustomColors(true);
+    setSashColor(palette.inner);
+    setTunicColor(palette.outer);
+    setPantsColor(palette.pants);
+  };
+
+  const toggleJewelry = (id: string) => {
+    setSelectedJewelry((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const toggleGenZAccessory = (id: string) => {
+    setSelectedGenZAccessories((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  // Palette colors for customization
+  const neutralColors = [
+    { hex: '#1A1A1A', label: 'Đen huyền' },
+    { hex: '#8B1A1A', label: 'Đỏ son / Chu' },
+    { hex: '#A3202F', label: 'Đỏ thắm lễ hội' },
+    { hex: '#F6D36A', label: 'Vàng hoàng kim' },
+    { hex: '#1F2A78', label: 'Xanh chàm cổ' },
+    { hex: '#3F5A86', label: 'Lam chàm trầm' },
+    { hex: '#8F7DB0', label: 'Tím mận chín' },
+    { hex: '#B3CEE5', label: 'Xanh thiên thanh' },
+    { hex: '#637A67', label: 'Xanh rêu nhã' },
+    { hex: '#F8F9FA', label: 'Trắng sứ' }
+  ];
+
+  const handleSelectColor = (hex: string) => {
+    setUseCustomColors(true);
+    setSelectedPaletteId(null);
+    if (selectedColorTarget === 0) {
+      setTunicColor(hex);
+    } else if (selectedColorTarget === 1) {
+      setPantsColor(hex);
     } else {
-      root.style.setProperty('--dress-back', dressColor);
-      root.style.setProperty('--dress-edge', liningColor);
+      setSashColor(hex);
     }
-
-    // Footwear styling
-    root.style.setProperty('--shoe', selectedFootwear.shoeColor);
-    root.style.setProperty('--sole', selectedFootwear.soleColor);
-  }, [dressColor, liningColor, pantsColor, selectedFootwear, selectedPreset]);
-
-  // Apply a color preset
-  const handleApplyPreset = (preset: ColorPreset) => {
-    setSelectedSpecialId(null);
-    setSelectedPreset(preset);
-    setLiningColor(preset.lining);
-    setDressColor(preset.dress);
-    setPantsColor(preset.pants);
   };
 
-  // Select garment and apply its characteristic look
-  const handleSelectGarment = (g: Garment) => {
-    setSelectedSpecialId(null);
-    setSelectedGarment(g);
+  const handleResetColors = () => {
+    setUseCustomColors(false);
+    setSelectedPaletteId(null);
+    setTunicColor(currentModel.defaultColors.tunic);
+    setPantsColor(currentModel.defaultColors.pants);
+    setSashColor(currentModel.defaultColors.sash);
   };
 
-  // Select special garment (toggles on/off - chỉ hiện hoặc không hiện)
-  const handleSelectSpecial = (id: string) => {
-    setSelectedSpecialId(prev => (prev === id ? null : id));
-  };
+  // Helper to render the appropriate model component
+  const renderModelView = (modelIdx: number, customColorsActive = useCustomColors) => {
+    const model = OUTFIT_MODELS[modelIdx];
+    if (!model) return <GiaoLinhNam />;
 
-  // Toggle jewelry
-  const handleToggleJewelry = (id: string) => {
-    setSelectedSpecialId(null);
-    setSelectedJewelry(prev => 
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
-  };
-
-  // Toggle Gen Z item
-  const handleToggleGenZ = (id: string) => {
-    setSelectedSpecialId(null);
-    setSelectedGenZ(prev =>
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
-  };
-
-  // Randomize look
-  const handleRandomRemix = () => {
-    setSelectedSpecialId(null);
-    const validGarments = GARMENTS.filter(g => modelGender === 'female' || g.id !== 'nhat-binh');
-    const randomGarment = validGarments[Math.floor(Math.random() * validGarments.length)];
-    const randomPreset = COLOR_PRESETS[Math.floor(Math.random() * COLOR_PRESETS.length)];
-    const randomHead = Math.random() > 0.3 ? HEADWEAR[Math.floor(Math.random() * HEADWEAR.length)] : null;
-    const randomFoot = FOOTWEAR[Math.floor(Math.random() * FOOTWEAR.length)];
-    const randomGenZ = GEN_Z_ACCESSORIES.filter(() => Math.random() > 0.6).map(i => i.id);
-
-    setSelectedGarment(randomGarment);
-    handleApplyPreset(randomPreset);
-    setSelectedHeadwear(randomHead);
-    setSelectedFootwear(randomFoot);
-    setSelectedGenZ(randomGenZ);
-  };
-
-  // Keydown for Esc to close lightbox
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && lightboxOpen) {
-        setLightboxOpen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxOpen]);
-
-  // Toggle gender
-  const handleToggleGender = () => {
-    setModelGender(prev => {
-      const nextGender = prev === 'male' ? 'female' : 'male';
-      // Nếu đang mặc trang phục đặc biệt, chuyển sang trang phục đặc biệt tương ứng của giới tính mới
-      if (selectedSpecialId) {
-        if (nextGender === 'female') {
-          if (selectedSpecialId === 'special-long-bao-nam') setSelectedSpecialId('special-phuong-bao-nu');
-          else if (selectedSpecialId === 'special-quan-phuc-nam') setSelectedSpecialId('special-bach-y-nu');
-          else setSelectedSpecialId('special-phuong-bao-nu');
-        } else {
-          if (selectedSpecialId === 'special-phuong-bao-nu') setSelectedSpecialId('special-long-bao-nam');
-          else if (selectedSpecialId === 'special-bach-y-nu') setSelectedSpecialId('special-quan-phuc-nam');
-          else setSelectedSpecialId('special-long-bao-nam');
-        }
-      } else {
-        if (nextGender === 'male' && selectedGarment.id === 'nhat-binh') {
-          const fallback = GARMENTS.find(g => g.id === 'ngu-than-tay-chen') || GARMENTS[0];
-          setSelectedGarment(fallback);
-        }
-      }
-      return nextGender;
-    });
-  };
-
-  // Render Female Model wearing Traditional Costumes
-  const renderFemaleModelSVG = (isLightbox: boolean = false) => (
-    <div className="model model-female" id={isLightbox ? "lb-model" : "stage-model"}>
-      <svg 
-        viewBox="0 -18 310 567" 
-        role="img" 
-        aria-label={`Người mẫu nữ mặc ${selectedGarment.name}`}
-        className="overflow-visible"
-      >
-        <g transform="translate(155, 0) scale(1.058) translate(-143.5, 0)">
-          {/* 1. TÓC PHÍA SAU VÀ BÚI TÓC TRUYỀN THỐNG */}
-          <path 
-            d="M103.845 43.6051C103.426 19.9083 120.626 0.388443 142.262 0.00625526C163.899 -0.375933 181.747 16.7944 182.165 40.4912C182.364 51.7269 189.147 72.3167 182.879 80.8634C174.005 92.9628 155.156 85.619 143.778 85.82C131.337 86.0398 115.418 92.5689 104.527 82.2474C92.9734 71.2973 104.023 53.6755 103.845 43.6051Z" 
-            fill="#20150B" 
+    switch (model.id) {
+      case 'giao_linh_nam':
+        return (
+          <GiaoLinhNam
+            robeColor={tunicColor}
+            skirtColor={pantsColor}
+            collarColor={sashColor}
+            useCustomColors={customColorsActive}
           />
-
-          {/* 2. CHÂN & GIÀY */}
-          {/* Cổ chân da */}
-          <path d="M183.206 462.634C194.81 462.106 204.664 471.044 205.267 482.645L205.626 489.558C206.26 501.745 196.55 511.974 184.346 511.974C172.577 511.974 163.037 502.433 163.037 490.664V483.741C163.037 472.445 171.921 463.147 183.206 462.634Z" fill="#FDBA90" />
-          <path d="M104.068 462.634C92.4639 462.106 82.6097 471.044 82.0065 482.645L81.6471 489.558C81.0136 501.745 90.724 511.974 102.927 511.974C114.696 511.974 124.237 502.433 124.237 490.664V483.741C124.237 472.445 115.352 463.148 104.068 462.634Z" fill="#FDBA90" />
-
-          {/* Giày phải */}
-          <path 
-            className="shoe"
-            d="M211.913 494.049C211.167 493.322 210.165 492.915 209.123 492.915H162.422C160.213 492.915 158.422 494.706 158.422 496.915V510.411H228.717L211.913 494.049Z" 
-            fill="var(--shoe)" 
+        );
+      case 'hoang_bao_long_trieu':
+        return (
+          <HoangBaoLongTrieu
+            robeColor={tunicColor}
+            useCustomColors={customColorsActive}
           />
-          <path 
-            className="sole"
-            d="M158.422 514.118C158.422 516.327 160.213 518.118 162.422 518.118H226.791C230.381 518.118 232.154 513.756 229.582 511.252L228.717 510.411H158.422V514.118Z" 
-            fill="var(--sole)" 
+        );
+      case 'ngu_than_xanh_cham':
+        return (
+          <NguThanXanhCham
+            robeColor={tunicColor}
+            pantsColor={pantsColor}
+            useCustomColors={customColorsActive}
           />
-
-          {/* Giày trái */}
-          <path 
-            className="shoe"
-            d="M75.3601 494.049C76.1069 493.322 77.1082 492.915 78.1506 492.915H124.852C127.061 492.915 128.852 494.706 128.852 496.915V510.315H58.654L75.3601 494.049Z" 
-            fill="var(--shoe)" 
+        );
+      case 'ngu_than_tu_sac':
+        return (
+          <NguThanTuSac
+            robeColor={tunicColor}
+            pantsColor={pantsColor}
+            useCustomColors={customColorsActive}
           />
-          <path 
-            className="sole"
-            fillRule="evenodd" 
-            clipRule="evenodd" 
-            d="M128.852 510.315V514.118C128.852 516.327 127.061 518.118 124.852 518.118H60.4822C56.8928 518.118 55.1201 513.756 57.6917 511.252L58.654 510.315H128.852Z" 
-            fill="var(--sole)" 
+        );
+      case 'ngu_than_bich_thuy':
+        return (
+          <NguThanBichThuy
+            robeColor={tunicColor}
+            pantsColor={pantsColor}
+            sashColor={sashColor}
+            useCustomColors={customColorsActive}
           />
-
-          {/* Phụ kiện sneaker nếu được chọn */}
-          {selectedGenZ.includes('giay-sneaker') && (
-            <g id="female-sneaker-acc">
-              <rect x="56" y="512" width="74" height="6.5" rx="2" fill="#ffffff" stroke="#e2e8f0" strokeWidth="0.8" />
-              <line x1="60" y1="515.5" x2="126" y2="515.5" stroke="#ef4444" strokeWidth="1.2" />
-              <rect x="156" y="512" width="74" height="6.5" rx="2" fill="#ffffff" stroke="#e2e8f0" strokeWidth="0.8" />
-              <line x1="160" y1="515.5" x2="226" y2="515.5" stroke="#ef4444" strokeWidth="1.2" />
-              <path d="M78 497 L88 505 M88 497 L98 505" stroke="#09090b" strokeWidth="1" strokeLinecap="round" />
-              <path d="M198 497 L208 505 M208 497 L218 505" stroke="#09090b" strokeWidth="1" strokeLinecap="round" />
-            </g>
-          )}
-
-          {/* 3. TRANG PHỤC NỮ TƯƠNG ỨNG THEO TỪNG LOẠI ÁO */}
-          {/* 3.1. Chân váy dài Giao Lĩnh */}
-          {selectedGarment.id === 'giao-linh' && (
-            <g id="female-skirt-giao-linh">
-              <path 
-                className="pants"
-                d="M101.5 172.85H185.5C189.5 264.85 213.5 394.85 221.5 490.85C185.5 496.85 101.5 496.85 65.5 490.85C73.5 394.85 97.5 264.85 101.5 172.85Z" 
-                fill="var(--pants)" 
-                stroke="rgba(0,0,0,0.06)" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-              />
-              <path d="M125 185 C122 280, 118 410, 115 492" stroke="rgba(0,0,0,0.06)" strokeWidth="1.2" strokeLinecap="round" fill="none" />
-              <path d="M162 185 C165 280, 169 410, 172 492" stroke="rgba(0,0,0,0.06)" strokeWidth="1.2" strokeLinecap="round" fill="none" />
-            </g>
-          )}
-
-          {/* 3.2. Áo Nhật Bình Nữ */}
-          {selectedGarment.id === 'nhat-binh' && (
-            <FemaleNhatBinh dressColor={dressColor} liningColor={liningColor} pantsColor={pantsColor} selectedHeadwearId={selectedHeadwear?.id} />
-          )}
-
-          {/* 3.3. Áo Tấc (Áo thụng) Nữ */}
-          {selectedGarment.id === 'ao-tac' && (
-            <FemaleAoTac dressColor={dressColor} liningColor={liningColor} pantsColor={pantsColor} />
-          )}
-
-          {/* 3.4. Áo Ngũ Thân Tay Chẽn Nữ */}
-          {selectedGarment.id === 'ngu-than-tay-chen' && (
-            <FemaleNguThan dressColor={dressColor} liningColor={liningColor} pantsColor={pantsColor} />
-          )}
-
-          {/* 3.5. Áo Viên Lĩnh Nữ */}
-          {selectedGarment.id === 'vien-linh' && (
-            <FemaleVienLinh dressColor={dressColor} liningColor={liningColor} pantsColor={pantsColor} />
-          )}
-
-          {/* 4. CỔ VÀ BÓNG ĐỔ CỔ */}
-          <path 
-            d="M143.047 65.1283C149.185 65.1284 154.16 70.1041 154.16 76.2415V90.8743C154.16 97.0116 149.185 101.986 143.047 101.987C136.91 101.987 131.934 97.0117 131.934 90.8743V76.2415C131.934 70.104 136.91 65.1283 143.047 65.1283Z" 
-            fill="#FDBA90" 
-            stroke="#FDBA90" 
+        );
+      case 'ao_doi_kham_lam_hong':
+        return (
+          <AoDoiKhamLamHong
+            robeColor={tunicColor}
+            innerRobeColor={pantsColor}
+            pantsColor={sashColor}
+            useCustomColors={customColorsActive}
           />
-
-          {/* 5. TAY ÁO DÀI RỘNG (TAY THỤNG GIAO LĨNH - Đổi màu theo dressColor) */}
-          {selectedGarment.id === 'giao-linh' && (
-            <g id="female-sleeves-giao-linh">
-              <path 
-                className="dress"
-                d="M125.5 90.8497L109.5 91.8497C89.5 89.8497 73.5 94.8497 67.5 105.85L46.5 172.85C35.5 209.85 21.5 239.85 1.5 262.85C19.5 280.85 49.5 280.85 73.5 264.85L83.5 244.85L94.5 212.85L102.5 188.85L103.5 144.85L109.5 104.85L125.5 90.8497Z" 
-                fill="var(--dress)" 
-                stroke="var(--dress-edge)" 
-                strokeWidth="0.8"
-              />
-              <path 
-                d="M1.5 262.85C19.5 280.85 49.5 280.85 73.5 264.85" 
-                stroke={liningColor} 
-                strokeWidth="3.2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                fill="none"
-              />
-
-              <path 
-                className="dress"
-                d="M161.5 90.8497L177.5 91.8497C197.5 89.8497 213.5 94.8497 219.5 105.85L240.5 172.85C251.5 209.85 265.5 239.85 285.5 262.85C267.5 280.85 237.5 280.85 213.5 264.85L203.5 244.85L192.5 212.85L184.5 188.85L183.5 144.85L177.5 104.85L161.5 90.8497Z" 
-                fill="var(--dress)" 
-                stroke="var(--dress-edge)" 
-                strokeWidth="0.8"
-              />
-              <path 
-                d="M285.5 262.85C267.5 280.85 237.5 280.85 213.5 264.85" 
-                stroke={liningColor} 
-                strokeWidth="3.2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                fill="none"
-              />
-            </g>
-          )}
-
-          {/* 6. BÀN TAY (Lộ ra dưới cửa tay áo rộng) */}
-          <path d="M37.7429 259.866C41.2373 250.41 47.5751 246.696 58.5177 248.719C69.4603 250.742 73.4617 256.756 73.8017 270.028C74.0519 279.795 73.543 292.569 70.0199 297.815C68.6044 299.922 65.9704 301.66 64.0434 300.609C62.1165 299.558 62.7239 297.272 63.6855 294.758C64.7725 291.915 65.4913 287.919 63.3372 286.797C62.0666 286.135 59.6238 287.447 58.8301 289.291C57.5279 292.315 56.9213 294.968 56.4053 298.388C56.0523 300.728 55.7831 302.831 55.6022 304.348C55.5119 305.106 55.4438 305.716 55.3986 306.134L55.3355 306.733C54.9441 309.506 52.9749 310.911 50.9291 310.708C47.0026 310.318 47.3002 306.592 47.3624 306.065C47.2743 306.737 47.2085 307.269 47.1646 307.633C47.142 307.821 47.1143 308.059 47.1143 308.059C46.8869 310.102 45.304 311.178 43.3492 310.989C41.3944 310.801 40.1809 309.026 40.0103 307.664C39.8397 306.301 40.057 304.346 40.057 304.346C36.0152 304.514 34.3728 301.784 34.2546 299.921C34.1365 298.058 34.3498 295.703 34.8791 292.563C34.9585 292.092 35.0183 291.769 35.0933 291.359C34.5421 291.635 33.9074 291.76 33.249 291.687C31.4328 291.485 30.7131 289.909 30.7079 288.006C30.7027 286.104 31.5427 279.518 32.6301 275.567C33.7175 271.616 34.2485 269.321 37.7429 259.866Z" fill="#FDBA90"/>
-          <path d="M36.2516 285.187C36.8298 281.733 38.337 274.619 39.7398 273.79M40.7847 299.226C41.4306 293.52 43.3587 281.292 45.9038 278.033M53.6291 279.456C52.0036 283.881 48.5865 294.954 47.9219 303.842" stroke="#ED9D63" strokeLinecap="round" strokeLinejoin="round"/>
-
-          <path d="M248.65 259.866C245.156 250.41 238.818 246.696 227.875 248.719C216.933 250.742 212.931 256.756 212.591 270.028C212.341 279.795 212.85 292.569 216.373 297.815C217.789 299.922 220.423 301.66 222.35 300.609C224.277 299.558 223.669 297.272 222.708 294.758C221.621 291.915 220.902 287.919 223.056 286.797C224.326 286.135 226.769 287.447 227.563 289.291C228.865 292.315 229.472 294.968 229.988 298.388C230.341 300.728 230.61 302.831 230.791 304.348C230.881 305.106 230.949 305.716 230.995 306.134L231.058 306.733C231.449 309.506 233.418 310.911 235.464 310.708C239.39 310.318 239.093 306.592 239.031 306.065C239.119 306.737 239.185 307.269 239.228 307.633C239.251 307.821 239.279 308.059 239.279 308.059C239.506 310.102 241.089 311.178 243.044 310.989C244.999 310.801 246.212 309.026 246.383 307.664C246.553 306.301 246.336 304.346 246.336 304.346C250.378 304.514 252.02 301.784 252.138 299.921C252.257 298.058 252.043 295.703 251.514 292.563C251.435 292.092 251.375 291.769 251.3 291.359C251.851 291.635 252.486 291.76 253.144 291.687C254.96 291.485 255.68 289.909 255.685 288.006C255.69 286.104 254.85 279.518 253.763 275.567C252.676 271.616 252.145 269.321 248.65 259.866Z" fill="#FDBA90"/>
-          <path d="M250.545 286.987C249.966 283.533 248.459 276.419 247.056 275.59M246.012 301.026C245.366 295.32 243.438 283.092 240.892 279.833M233.167 281.256C234.793 285.681 238.21 296.754 238.874 305.642" stroke="#ED9D63" strokeLinecap="round" strokeLinejoin="round"/>
-
-          {/* 7. PHẦN THÂN TRÊN & CỔ ÁO VẠT CHÉO (GIAO LĨNH) */}
-          {selectedGarment.id === 'giao-linh' && (
-            <g id="female-upper-giao-linh">
-              {/* Lớp áo lót trong cổ chữ V (Đổi màu theo liningColor) */}
-              <path d="M129.5 90.8497H157.5L143.5 132.85L129.5 90.8497Z" fill={liningColor} />
-
-              {/* Vạt áo trái dưới (Đổi màu theo dressColor) */}
-              <path 
-                className="dress"
-                d="M129.5 90.8497L109.5 91.8497C103.5 92.8497 99.5 95.8497 99.5 101.85L102.5 182.85H111.5C120.5 164.85 135.5 146.85 143.5 132.85L129.5 90.8497Z" 
-                fill="var(--dress)" 
-                stroke="var(--dress-edge)" 
-                strokeLinejoin="round" 
-              />
-
-              {/* Vạt áo phải vắt chéo đè lên trên (Đổi màu theo dressColor) */}
-              <path 
-                className="dress"
-                d="M157.5 90.8497L177.5 91.8497C183.5 92.8497 187.5 95.8497 187.5 101.85L184.5 182.85H111.5C120.5 164.85 135.5 146.85 143.5 132.85L157.5 90.8497Z" 
-                fill="var(--dress)" 
-                stroke="var(--dress-edge)" 
-                strokeLinejoin="round" 
-              />
-
-              {/* Đường nẹp viền cổ áo giao lĩnh (Đổi màu viền cổ) */}
-              <path 
-                d="M129.5 90.8497L143.5 132.85M157.5 92.8497L143.5 132.85C135.5 146.85 120.5 164.85 111.5 182.85" 
-                stroke="var(--dress-edge)" 
-                strokeWidth="4.5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-              />
-              <path 
-                d="M129.5 90.8497L143.5 132.85M157.5 92.8497L143.5 132.85C135.5 146.85 120.5 164.85 111.5 182.85" 
-                stroke={liningColor} 
-                strokeWidth="2.4" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-              />
-
-              {/* 8. ĐAI THẮT LƯNG & DẢI LỤA BUÔNG (Đổi màu theo liningColor hoặc viền) */}
-              <path 
-                d="M96.5 172.85H190.5L189.5 190.85H97.5L96.5 172.85Z" 
-                fill={liningColor} 
-                stroke="var(--dress-edge)" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-              />
-              <path 
-                d="M108.5 186.85L100.5 264.85L108.5 269.85L114.5 187.85L108.5 186.85Z" 
-                fill={liningColor} 
-                stroke="rgba(0,0,0,0.12)" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-              />
-              <path 
-                d="M114.5 186.85L119.5 250.85L127.5 248.85L121.5 185.85L114.5 186.85Z" 
-                fill={liningColor} 
-                stroke="rgba(0,0,0,0.12)" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-              />
-              <path 
-                d="M105.5 181.85C105.5 175.85 117.5 175.85 117.5 181.85C117.5 187.85 105.5 187.85 105.5 181.85Z" 
-                fill={liningColor} 
-                stroke="var(--dress-edge)" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-              />
-            </g>
-          )}
-
-          {/* DÂY MÁY ẢNH VÒNG PHÍA SAU GÁY / CỔ (Nằm trên vai áo, vòng ra sau gáy) */}
-          {selectedGenZ.includes('may-anh') && (
-            <g id="female-back-may-anh">
-              <path 
-                d="M122.5 106 C119 72, 168 72, 164.5 106" 
-                fill="none" 
-                stroke="#000000" 
-                strokeWidth="5.5" 
-                strokeLinecap="round" 
-                opacity="0.25"
-                transform="translate(0.5, 1)"
-              />
-              <path 
-                d="M122.5 106 C119 72, 168 72, 164.5 106" 
-                fill="none" 
-                stroke="#18181b" 
-                strokeWidth="5" 
-                strokeLinecap="round" 
-              />
-              <path 
-                d="M122.5 106 C119 72, 168 72, 164.5 106" 
-                fill="none" 
-                stroke="#27272a" 
-                strokeWidth="3" 
-                strokeLinecap="round" 
-              />
-              <path 
-                d="M122.5 106 C119 72, 168 72, 164.5 106" 
-                fill="none" 
-                stroke="#d4af37" 
-                strokeWidth="0.8" 
-                strokeLinecap="round" 
-                strokeDasharray="3 2" 
-              />
-            </g>
-          )}
-
-          {/* CỔ DA (Nằm đè lên dây để dây máy ảnh vòng ra sau gáy / cổ) */}
-          <path 
-            d="M143.047 65.1283C149.185 65.1284 154.16 70.1041 154.16 76.2415V90.85H131.934V76.2415C131.934 70.104 136.91 65.1283 143.047 65.1283Z" 
-            fill="#FDBA90" 
+        );
+      case 'ao_tac_do_son_khan':
+        return (
+          <AoTacDoSon
+            showBun={false}
+            robeColor={tunicColor}
+            pantsColor={pantsColor}
+            useCustomColors={customColorsActive}
           />
-
-          {/* 9. KHUÔN MẶT, TAI VÀ TÓC MÁI (Vẽ trước các phụ kiện ngoài) */}
-          <path d="M168.012 44.9437C171.851 44.9438 174.963 48.0556 174.963 51.8939C174.963 55.7321 171.851 58.844 168.012 58.8441C164.174 58.8441 161.062 55.7322 161.062 51.8939C161.062 48.0555 164.174 44.9437 168.012 44.9437Z" fill="#FDBA90" stroke="#FDBA90"/>
-          <path d="M118.082 44.9437C121.92 44.9438 125.032 48.0556 125.032 51.8939C125.032 55.7321 121.92 58.8439 118.082 58.8441C114.243 58.8441 111.132 55.7321 111.131 51.8939C111.131 48.0555 114.243 44.9437 118.082 44.9437Z" fill="#FDBA90" stroke="#FDBA90"/>
-          <path d="M172.718 50.0549C170.891 50.0549 170.174 52.4219 170.058 53.7322" stroke="#20150B" strokeLinecap="round"/>
-          <path d="M113.581 50.0549C115.408 50.0549 116.125 52.4219 116.241 53.7322" stroke="#20150B" strokeLinecap="round"/>
-
-          <path d="M140.203 16.3192H145.889C157.719 16.3192 167.319 26.0193 167.319 37.9969V52.3045C167.319 65.878 155.563 77.6561 142.939 77.6561C130.321 77.656 118.773 65.8835 118.773 52.3045V37.9969C118.773 26.0193 128.373 16.3192 140.203 16.3192Z" fill="#FDBA90" stroke="#FDBA90"/>
-
-          <path d="M153.301 9.11324C153.301 15.4093 149.441 23.3011 142.519 30.6255C135.598 37.9499 113.526 38.2337 113.526 38.2337C111.47 22.6062 129.598 -1.72156 153.301 9.11324Z" fill="#20150B"/>
-          <path d="M148.221 10.4791C150.002 13.6819 151.132 24.918 156.772 32.1592C162.411 39.4004 172.03 39.638 172.03 39.638C170.523 25.5457 160.771 10.4791 148.221 10.4791Z" fill="#20150B"/>
-
-          <path d="M123.94 40.0443C126.444 37.0885 135.369 36.2913 137.775 40.0443" stroke="#20150B" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M147.727 40.0443C150.231 37.0885 159.156 36.2913 161.562 40.0443" stroke="#20150B" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-          
-          <ellipse cx="130.635" cy="46.9875" rx="2.78392" ry="3.6967" fill="#20150B"/>
-          <circle cx="131.6" cy="45.8" r="0.9" fill="#FFFFFF"/>
-          
-          <ellipse cx="154.66" cy="46.9875" rx="2.78392" ry="3.6967" fill="#20150B"/>
-          <circle cx="155.6" cy="45.8" r="0.9" fill="#FFFFFF"/>
-
-          <path d="M142.13 48.9125L140.214 56.8607C140.214 56.8607 141.907 58.7811 144.683 58.6811" stroke="#20150B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M139.016 66.7729C141.02 68.054 146.885 67.709 148.471 65.9154" stroke="#e11d48" strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
-
-          {/* 10. KIỀNG CỔ TRUYỀN THỐNG NẾU ĐƯỢC CHỌN */}
-          {selectedJewelry.includes('kieng-co') && (
-            <g id="female-layer-kieng-co">
-              <ellipse cx="143.5" cy="102" rx="22" ry="12" fill="none" stroke="#e2e8f0" strokeWidth="3" />
-              <ellipse cx="143.5" cy="102" rx="22" ry="12" fill="none" stroke="#94a3b8" strokeWidth="1" />
-              <circle cx="143.5" cy="114" r="2.5" fill="#e2e8f0" stroke="#64748b" strokeWidth="0.8" />
-            </g>
-          )}
-
-          {/* GEN Z LAYER 1: TÚI XÁCH SHOULDER BAG (Bê nguyên xi từ nam) */}
-          {selectedGenZ.includes('tui-xach') && (
-            <g id="female-layer-tui-xach" transform="translate(46, -24)">
-              {/* Quai đeo to bản buông từ vai người mẫu xuống */}
-              <path 
-                d="M52 118 C51 155, 41 205, 36 248" 
-                fill="none" 
-                stroke="#09090b" 
-                strokeWidth="6.5" 
-                strokeLinecap="round" 
-              />
-              {/* Đường gân chỉ may nổi trên quai túi */}
-              <path 
-                d="M52 119 C51 155, 41 204, 36 247" 
-                fill="none" 
-                stroke="#27272a" 
-                strokeWidth="1.2" 
-                strokeLinecap="round" 
-                strokeDasharray="3 2" 
-              />
-              {/* Khuyên kim loại móc quai túi */}
-              <ellipse cx="36" cy="248" rx="3.5" ry="2.2" fill="none" stroke="#a1a1aa" strokeWidth="1.5" />
-
-              {/* Thân túi xách dáng shoulder bag đen to bản, thời thượng */}
-              <g>
-                {/* Bóng đổ nhẹ của túi lên trang phục */}
-                <path 
-                  d="M16 250 C16 243, 56 243, 58 250 L63 285 C63 301, 52 312, 38 312 C24 312, 13 301, 13 285 Z" 
-                  fill="#000000" 
-                  opacity="0.25" 
-                  transform="translate(1.5, 2)" 
-                />
-                {/* Thân túi da đen */}
-                <path 
-                  d="M16 250 C16 243, 56 243, 58 250 L63 285 C63 301, 52 312, 38 312 C24 312, 13 301, 13 285 Z" 
-                  fill="#18181b" 
-                  stroke="#09090b" 
-                  strokeWidth="1.5" 
-                  strokeLinejoin="round" 
-                />
-                {/* Nắp túi xếp nếp da mềm sang trọng */}
-                <path 
-                  d="M14 252 C24 257, 50 257, 60 252 L59 274 C50 279, 24 279, 15 274 Z" 
-                  fill="#27272a" 
-                  stroke="#09090b" 
-                  strokeWidth="1" 
-                />
-                {/* Khóa cài kim loại bạc sang trọng */}
-                <rect x="34.5" y="271" width="7" height="4.5" rx="1.2" fill="#e4e4e7" stroke="#71717a" strokeWidth="0.8" />
-                <line x1="36" y1="273.2" x2="40" y2="273.2" stroke="#52525b" strokeWidth="0.8" />
-                {/* Ánh sáng phản quang trên da bóng */}
-                <path 
-                  d="M17 282 C17 296, 26 307, 38 307" 
-                  fill="none" 
-                  stroke="#3f3f46" 
-                  strokeWidth="1.2" 
-                  strokeLinecap="round" 
-                  opacity="0.6" 
-                />
-              </g>
-            </g>
-          )}
-
-          {/* GEN Z LAYER 2: MÁY ẢNH ĐEO TRƯỚC NGỰC (Bê nguyên xi từ layer nam, buông từ 2 vai xuống thân máy) */}
-          {selectedGenZ.includes('may-anh') && (
-            <g id="female-layer-may-anh" transform="translate(29.5, -2)">
-              {/* Bóng đổ của 2 dây máy ảnh trước ngực buông từ sau vai xuống */}
-              <path 
-                d="M93 108 C91 128, 95 154, 97 178 M135 108 C137 128, 133 154, 131 178" 
-                fill="none" 
-                stroke="#000000" 
-                strokeWidth="5" 
-                strokeLinecap="round" 
-                opacity="0.25" 
-                transform="translate(0.8, 1.2)"
-              />
-              {/* Dây đeo máy ảnh bản dày thả từ sau vai xuống thân máy */}
-              <path 
-                d="M93 108 C91 128, 95 154, 97 178 M135 108 C137 128, 133 154, 131 178" 
-                fill="none" 
-                stroke="#18181b" 
-                strokeWidth="4.8" 
-                strokeLinecap="round" 
-              />
-              {/* Đệm êm dệt viền trong */}
-              <path 
-                d="M93 108 C91 128, 95 154, 97 178 M135 108 C137 128, 133 154, 131 178" 
-                fill="none" 
-                stroke="#27272a" 
-                strokeWidth="2.8" 
-                strokeLinecap="round" 
-              />
-              {/* Đường chỉ may gân nổi màu vàng phong cách retro cổ điển */}
-              <path 
-                d="M93 108 C91 128, 95 154, 97 178 M135 108 C137 128, 133 154, 131 178" 
-                fill="none" 
-                stroke="#d4af37" 
-                strokeWidth="0.8" 
-                strokeLinecap="round" 
-                strokeDasharray="3 2" 
-              />
-              {/* Khoen móc kim loại 2 bên thân máy */}
-              <circle cx="97" cy="177" r="2" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
-              <circle cx="131" cy="177" r="2" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
-
-              {/* Bóng nhẹ của máy ảnh lên áo */}
-              <rect x="94" y="177" width="40" height="24" rx="3.5" fill="#000000" opacity="0.3" transform="translate(1, 2)" />
-
-              {/* Thân máy ảnh retro / mirrorless đặt ngay chính giữa ngực */}
-              <g>
-                {/* Thân dưới bọc da đen */}
-                <rect x="94" y="177" width="40" height="24" rx="3.5" fill="#18181b" stroke="#09090b" strokeWidth="1" />
-                {/* Báng cầm vân nổi */}
-                <rect x="95.5" y="183" width="5.5" height="16.5" rx="1.5" fill="#27272a" />
-                {/* Phần nắp trên kim loại bạc cổ điển */}
-                <rect x="94" y="174" width="40" height="6.5" rx="2" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="0.8" />
-                {/* Nút bấm chụp & bánh răng xoay */}
-                <rect x="97" y="172" width="4" height="2.5" rx="0.6" fill="#94a3b8" />
-                <circle cx="130" cy="173" r="1.8" fill="#ef4444" />
-                <rect x="110" y="172.5" width="8" height="2" rx="0.5" fill="#64748b" />
-                {/* Chấm đỏ phong cách Leica */}
-                <circle cx="102" cy="184" r="1.5" fill="#ef4444" />
-                {/* Ống kính trung tâm (Lens) */}
-                <circle cx="114" cy="189" r="9" fill="#27272a" stroke="#cbd5e1" strokeWidth="1.5" />
-                <circle cx="114" cy="189" r="6.8" fill="#09090b" />
-                <circle cx="114" cy="189" r="4.8" fill="#0284c7" opacity="0.65" />
-                {/* Vệt phản quang thấu kính */}
-                <ellipse cx="112" cy="187" rx="2" ry="1.2" fill="#ffffff" opacity="0.85" />
-                <rect x="123" y="175" width="4.5" height="3" rx="0.6" fill="#38bdf8" opacity="0.6" />
-              </g>
-            </g>
-          )}
-
-          {/* GEN Z LAYER 5: ĐỒNG HỒ ĐEO TAY (Bê nguyên xi từ nam, đeo ôm trọn vòng cổ tay áo bên phải) */}
-          {selectedGenZ.includes('dong-ho') && (
-            <g id="female-layer-dong-ho" transform="translate(225, 250) scale(0.86) rotate(-22.5)">
-              {/* Bóng đổ nhẹ thanh mảnh */}
-              <path 
-                d="M-22.5 -1 C-22.5 -3.5, 22.5 -3.5, 22.5 -1 C23.5 2, 23.5 3, 22.5 4 C22.5 6.5, -22.5 6.5, -22.5 4 C-23.5 3, -23.5 2, -22.5 -1 Z" 
-                fill="#000000" 
-                opacity="0.25" 
-                transform="translate(0, 1.2)"
-              />
-              {/* Quai sau mỏng ôm khít cổ tay */}
-              <path 
-                d="M-22.5 -0.5 C-22.5 -3, -15 -4.2, 0 -4.2 C15 -4.2, 22.5 -3, 22.5 -0.5 C22.5 1.5, 21 2.8, 17 2.8 L-17 2.8 C-21 2.8, -22.5 1.5, -22.5 -0.5 Z" 
-                fill="#09090b" 
-              />
-              {/* Quai đeo trước mỏng thanh lịch, ôm sát viền cổ tay không bị cộm */}
-              <path 
-                d="M-22 -2.8 C-11 -4, 11 -4, 22 -2.8 C23.5 -1.8, 23.5 2, 22 3.2 C11 4.5, -11 4.5, -22 3.2 C-23.5 2, -23.5 -1.8, -22 -2.8 Z" 
-                fill="#18181b" 
-                stroke="#09090b" 
-                strokeWidth="1.2" 
-                strokeLinejoin="round" 
-              />
-              {/* Rãnh khâu / vân thể thao mảnh mai trên quai */}
-              <line x1="-19" y1="0.2" x2="-9" y2="0.2" stroke="#3f3f46" strokeWidth="0.8" strokeLinecap="round" />
-              <line x1="9" y1="0.2" x2="19" y2="0.2" stroke="#3f3f46" strokeWidth="0.8" strokeLinecap="round" />
-
-              {/* Mặt đồng hồ tròn màu xám bạc viền kim loại thanh lịch đặt chính giữa */}
-              <circle cx="0" cy="0" r="8.8" fill="#09090b" stroke="#27272a" strokeWidth="1" />
-              <circle cx="0" cy="0" r="7.6" fill="#e2e8f0" stroke="#09090b" strokeWidth="1.2" />
-              <circle cx="0" cy="0" r="6.2" fill="#cbd5e1" />
-              <circle cx="0" cy="0" r="1.1" fill="#09090b" />
-              <line x1="0" y1="0" x2="0" y2="-4" stroke="#09090b" strokeWidth="1" strokeLinecap="round" />
-              <line x1="0" y1="0" x2="2.8" y2="1.4" stroke="#09090b" strokeWidth="1" strokeLinecap="round" />
-              <line x1="0" y1="0" x2="-1.8" y2="3.2" stroke="#ef4444" strokeWidth="0.6" strokeLinecap="round" />
-              <rect x="7.8" y="-1.8" width="1.8" height="3.6" rx="0.7" fill="#94a3b8" stroke="#09090b" strokeWidth="0.4" />
-            </g>
-          )}
-
-          {/* GEN Z LAYER 3: KÍNH RÂM (Bê nguyên xi từ nam, vừa vặn sống mũi và đôi mắt) */}
-          {selectedGenZ.includes('kinh-ram') && (
-            <g id="female-layer-kinh-ram" transform="translate(29.65, -13.5)">
-              <path 
-                d="M87 58 C87 54, 107 53, 109 57 C111 56, 115 56, 117 57 C119 53, 139 54, 139 58 L138 66 C137 70, 118 70, 114 65 C112 65, 110 65, 108 65 C104 70, 88 70, 87 66 Z" 
-                fill="#18181b" 
-                stroke="#27272a" 
-                strokeWidth="1.2" 
-                strokeLinejoin="round" 
-              />
-              <rect x="89" y="56" width="18" height="9.5" rx="3" fill="#09090b" opacity="0.95" />
-              <rect x="116" y="56" width="18" height="9.5" rx="3" fill="#09090b" opacity="0.95" />
-              <line x1="92" y1="57.5" x2="98" y2="63.5" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" opacity="0.45" />
-              <line x1="119" y1="57.5" x2="125" y2="63.5" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" opacity="0.45" />
-              <path d="M87 59 L79 61" stroke="#18181b" strokeWidth="1.8" strokeLinecap="round" />
-              <path d="M139 59 L147 61" stroke="#18181b" strokeWidth="1.8" strokeLinecap="round" />
-            </g>
-          )}
-
-          {/* GEN Z LAYER 4: TAI NGHE TRÙM ĐẦU (Bê nguyên xi từ nam) */}
-          {selectedGenZ.includes('tai-nghe-trum-dau') && (
-            <g id="female-layer-tai-nghe" transform="translate(29.5, -9.5)">
-              {/* Vòm đệm tai nghe vòng rộng trên đỉnh đầu, dày dặn và chunky */}
-              <path 
-                d="M75 48 C71 -2, 157 -2, 153 48" 
-                fill="none" 
-                stroke="#09090b" 
-                strokeWidth="9" 
-                strokeLinecap="round" 
-              />
-              {/* Lớp đệm êm ái lót trong vòm tai nghe */}
-              <path 
-                d="M76 46 C73 2, 155 2, 152 46" 
-                fill="none" 
-                stroke="#1e293b" 
-                strokeWidth="5" 
-                strokeLinecap="round" 
-              />
-              {/* Đường gân chỉ may nổi trên vòm đệm */}
-              <path 
-                d="M78 45 C75 5, 153 5, 150 45" 
-                fill="none" 
-                stroke="#475569" 
-                strokeWidth="1.2" 
-                strokeLinecap="round" 
-                strokeDasharray="4 3" 
-              />
-              {/* Khớp trượt kéo dài kim loại mạ bạc sáng bóng 2 bên nối vào củ tai */}
-              <rect x="72" y="42" width="6" height="9" rx="1.5" fill="#cbd5e1" stroke="#64748b" strokeWidth="0.8" />
-              <rect x="150" y="42" width="6" height="9" rx="1.5" fill="#cbd5e1" stroke="#64748b" strokeWidth="0.8" />
-
-              {/* Củ tai trái (Bên trái người xem) - ôm trùm tai */}
-              <g transform="translate(76, 61.5) rotate(-6)">
-                <ellipse cx="0" cy="0" rx="11.5" ry="18" fill="#09090b" stroke="#18181b" strokeWidth="1.5" />
-                <ellipse cx="0" cy="0" rx="9" ry="15" fill="#18181b" />
-                <ellipse cx="-2" cy="0" rx="7" ry="13" fill="#0f172a" stroke="#475569" strokeWidth="1.2" />
-                <circle cx="-2" cy="0" r="2.8" fill="#64748b" stroke="#94a3b8" strokeWidth="0.8" />
-                <path d="M-5 -6 C-7 -2, -7 2, -5 6" fill="none" stroke="#94a3b8" strokeWidth="1.2" opacity="0.6" strokeLinecap="round" />
-              </g>
-
-              {/* Củ tai phải (Bên phải người xem) - ôm trùm tai */}
-              <g transform="translate(152, 61.5) rotate(6)">
-                <ellipse cx="0" cy="0" rx="11.5" ry="18" fill="#09090b" stroke="#18181b" strokeWidth="1.5" />
-                <ellipse cx="0" cy="0" rx="9" ry="15" fill="#18181b" />
-                <ellipse cx="2" cy="0" rx="7" ry="13" fill="#0f172a" stroke="#475569" strokeWidth="1.2" />
-                <circle cx="2" cy="0" r="2.8" fill="#64748b" stroke="#94a3b8" strokeWidth="0.8" />
-                <path d="M5 -6 C7 -2, 7 2, 5 6" fill="none" stroke="#94a3b8" strokeWidth="1.2" opacity="0.6" strokeLinecap="round" />
-              </g>
-            </g>
-          )}
-        </g>
-      </svg>
-    </div>
-  );
-
-  // Render SVG Character component
-  const renderCharacterSVG = (isLightbox: boolean = false) => {
-    // 1. Kiểm tra nếu đang mặc Trang phục Đặc biệt (nguyên gốc, cố định)
-    if (selectedSpecialId === 'special-long-bao-nam') {
-      return <SpecialLongBaoNam isLightbox={isLightbox} />;
+        );
+      case 'phuong_bao_hoang_hau':
+        return (
+          <PhuongBaoHoangHau
+            robeColor={tunicColor}
+            skirtColor={pantsColor}
+            sashColor={sashColor}
+            useCustomColors={customColorsActive}
+          />
+        );
+      case 'le_phuc_ngu_sac_hat':
+        return (
+          <LePhucNguSac
+            showHat={true}
+            robeColor={tunicColor}
+            skirtColor={pantsColor}
+            useCustomColors={customColorsActive}
+          />
+        );
+      case 'le_phuc_ngu_sac_nohat':
+        return (
+          <LePhucNguSac
+            showHat={false}
+            robeColor={tunicColor}
+            skirtColor={pantsColor}
+            useCustomColors={customColorsActive}
+          />
+        );
+      case 'giao_linh_thien_thanh':
+        return (
+          <GiaoLinhThienThanh
+            showBun={false}
+            robeColor={tunicColor}
+            collarColor={pantsColor}
+            beltColor={sashColor}
+            useCustomColors={customColorsActive}
+          />
+        );
+      case 'giao_linh_thien_thanh_bun':
+        return (
+          <GiaoLinhThienThanh
+            showBun={true}
+            robeColor={tunicColor}
+            collarColor={pantsColor}
+            beltColor={sashColor}
+            useCustomColors={customColorsActive}
+          />
+        );
+      case 'ao_tac_do_son_bun':
+        return (
+          <AoTacDoSon
+            showBun={true}
+            robeColor={tunicColor}
+            pantsColor={pantsColor}
+            useCustomColors={customColorsActive}
+          />
+        );
+      case 'ao_tac_nu_toc_dai':
+        return (
+          <AoTacNuTocDai
+            robeColor={tunicColor}
+            pantsColor={pantsColor}
+            sashColor={sashColor}
+            useCustomColors={customColorsActive}
+          />
+        );
+      default:
+        return <GiaoLinhNam />;
     }
-    if (selectedSpecialId === 'special-quan-phuc-nam') {
-      return <SpecialQuanPhucNam isLightbox={isLightbox} />;
-    }
-    if (selectedSpecialId === 'special-phuong-bao-nu') {
-      return <SpecialPhuongBaoNu isLightbox={isLightbox} />;
-    }
-    if (selectedSpecialId === 'special-bach-y-nu') {
-      return <SpecialBachYNu isLightbox={isLightbox} />;
-    }
+  };
 
-    if (modelGender === 'female') {
-      return renderFemaleModelSVG(isLightbox);
-    }
+  const filteredModels = OUTFIT_MODELS.map((item, originalIdx) => ({
+    ...item,
+    originalIdx
+  })).filter((item) => {
+    const matchGender = selectedGender === 'all' || item.gender === selectedGender;
+    const matchCat = selectedCategory === 'all' || item.category === selectedCategory;
+    return matchGender && matchCat;
+  });
 
-    return (
-      <div className="model" id={isLightbox ? "lb-model" : "stage-model"}>
-        <svg viewBox="-45 0 315 561" role="img" aria-label={`Nhân vật mặc ${selectedGarment.name}`} className="overflow-visible">
-        <defs>
-          <g id={isLightbox ? "arm-lb" : "arm"}>
-            <path className="dress" d="M36.5 137.5C38.9 127.8 48.7 121.9 58.3 124.2C68 126.5 73.9 136.1 71.5 145.8L53.6 218.4C51.2 228.1 41.4 234 31.8 231.8C22.1 229.5 16.2 219.8 18.6 210.1Z"/>
-            <path className="dress" d="M43.4 312.6L3.7 307.8L16.6 220.7C18.1 210.7 27.3 203.7 37.3 204.9C47.3 206.1 54.5 215.1 53.3 225.2Z"/>
-            <circle className="dress" cx="35.6" cy="218.5" r="18.7"/>
-            <path className="skin" d="M4.9 295.6C7.6 284.5 14.3 279.4 26.9 280.3C39.5 281.1 44.9 287.4 47 302.4C48.6 313.4 49.7 327.9 46.4 334.3C45 336.9 42.3 339.2 40 338.2C37.7 337.3 38 334.6 38.8 331.7C39.7 328.3 39.9 323.7 37.4 322.7C35.8 322.1 33.2 323.9 32.6 326.1C31.5 329.7 31.2 332.8 31 336.7C31 339.4 30.9 341.8 30.9 343.6C30.9 344.4 30.9 345.1 30.9 345.6L30.9 346.3C30.9 349.5 28.8 351.3 26.5 351.4C22 351.4 21.8 347.2 21.8 346.6C21.8 347.4 21.8 348 21.8 348.4C21.8 348.6 21.8 348.9 21.8 348.9C21.8 351.2 20.2 352.6 17.9 352.7C15.7 352.7 14.1 350.9 13.7 349.4C13.4 347.8 13.3 345.6 13.3 345.6C8.8 346.3 6.6 343.5 6.2 341.4C5.8 339.3 5.8 336.6 5.9 333C6 332.4 6 332.1 6 331.6C5.4 332 4.7 332.2 4 332.2C1.9 332.2 0.9 330.5 0.6 328.4C0.4 326.2 0.5 318.7 1.2 314.1C1.9 309.4 2.2 306.8 4.9 295.6Z"/>
-            <path d="M5.5 331.5C5.4 328 5.6 320.7 7 319.6M13.3 344.4C12.9 338.7 12.5 326.3 14.6 322.7M23.4 322.7C22.5 327.3 21 338.8 22.1 347.7" fill="none" stroke="#ED9D63" strokeLinecap="round"/>
-          </g>
-          <g id={isLightbox ? "leg-lb" : "leg"}>
-            <circle className="skin" cx="67.7" cy="529.8" r="21"/>
-            <path className="shoe" d="M40.5 530.9C41.2 530.2 42.2 529.9 43.2 529.9H89.1C91.3 529.9 93.1 531.7 93.1 533.9V548.8H20.3Z"/>
-            <path className="sole" d="M93.1 556.5C93.1 558.7 91.3 560.5 89.1 560.5H17.7C14 560.5 12.3 555.9 15.1 553.5L20.3 548.8H93.1Z"/>
-            <path className="pants" d="M80 357C68 356 58 365 57 377L44 521H92L101 380C101 368 92 358 80 357Z"/>
-          </g>
-          <path id={isLightbox ? "neck-lb" : "neck"} d="M114 78.9C122.6 78.9 129.6 85.9 129.6 94.5V109.6C129.6 118.2 122.6 125.2 114 125.2C105.5 125.2 98.5 118.2 98.5 109.6V94.5C98.5 85.7 105.6 78.9 114 78.9Z"/>
-          <clipPath id={isLightbox ? "neckClip-lb" : "neckClip"}><use href={`#${isLightbox ? "neck-lb" : "neck"}`}/></clipPath>
-          <clipPath id={isLightbox ? "hairClip-lb" : "hairClip"}><path d="M84.8 52.2C84.8 52.2 84.5 43.2 85.2 40.6C86.4 35.8 90.5 34 91.5 32.6C99.8 42.4 119.1 52.1 134.8 48.4C134.8 54.2 137.7 65 140.3 65C143 65 143.9 51.3 147.4 52.1C154.1 41.8 167.2 24.9 147.4 12.4L149 10.1L151.9 8.3C149.5 5.6 140.5 4.3 138 7.9C138 7.9 133.8 -3.9 115 -12C93.2 -21.4 61.2 5.2 61.2 5.2L49.2 27.7L74.9 60.9C74.9 60.9 74.5 56.2 79.5 53.2C81.9 51.8 84.8 52.2 84.8 52.2Z"/></clipPath>
-        </defs>
+  const maleModels = OUTFIT_MODELS.map((item, originalIdx) => ({
+    ...item,
+    originalIdx
+  })).filter((m) => m.gender === 'nam');
 
-        {/* Chân & Giày nam */}
-        <MaleShoes shoeColor={selectedFootwear.shoeColor} soleColor={selectedFootwear.soleColor} />
+  const femaleModels = OUTFIT_MODELS.map((item, originalIdx) => ({
+    ...item,
+    originalIdx
+  })).filter((m) => m.gender === 'nu');
 
-        {/* 4 Trang phục Cổ phục Nam tương ứng */}
-        {selectedGarment.id === 'giao-linh' && (
-          <MaleGiaoLinh dressColor={dressColor} liningColor={liningColor} pantsColor={pantsColor} />
-        )}
-        {selectedGarment.id === 'ao-tac' && (
-          <MaleAoTac dressColor={dressColor} liningColor={liningColor} pantsColor={pantsColor} />
-        )}
-        {selectedGarment.id === 'vien-linh' && (
-          <MaleVienLinh dressColor={dressColor} liningColor={liningColor} pantsColor={pantsColor} />
-        )}
-        {(selectedGarment.id === 'ngu-than-tay-chen' || selectedGarment.id === 'nhat-binh') && (
-          <MaleNguThan dressColor={dressColor} liningColor={liningColor} pantsColor={pantsColor} />
-        )}
+  // Label map for active accessories
+  const headwearLabels: Record<string, string> = {
+    none: 'Không đội đầu',
+    non_ba_tam: 'Nón ba tầm',
+    non_dau: 'Nón dấu',
+    non_la: 'Nón lá',
+    khan_vanh_day: 'Khăn vành dây',
+    khan_xep: 'Khăn xếp'
+  };
 
-        {/* Bàn tay nam đồng bộ lộ ra từ mép ống tay áo */}
-        <MaleHands />
+  const footwearLabels: Record<string, string> = {
+    hai_theu: 'Hài thêu',
+    guoc_moc: 'Guốc mộc',
+    sneaker: 'Sneaker'
+  };
 
-        {/* Dây máy ảnh quấn vòng phía sau gáy / cổ (Vòng qua đằng sau cổ theo đúng thực tế) */}
-        {selectedGenZ.includes('may-anh') && (
-          <path 
-            d="M93 108 C90 88, 138 88, 135 108" 
-            fill="none" 
-            stroke="#18181b" 
-            strokeWidth="5" 
-            strokeLinecap="round" 
-          />
-        )}
+  const handheldLabels: Record<string, string> = {
+    none: 'Không cầm đồ',
+    dan_nguyet: 'Đàn nguyệt',
+    o_du: 'Ô (Dù)',
+    quat: 'Quạt'
+  };
 
-        {/* Cổ + đầu */}
-        <use href={`#${isLightbox ? "neck-lb" : "neck"}`} className="skin"/>
-        <ellipse cx="109.5" cy="48.8" rx="32.5" ry="50.8" fill="#ED9D63" clipPath={`url(#${isLightbox ? "neckClip-lb" : "neckClip"})`}/>
-        <path fill="#934103" d="M65.4 30.9C65.5 31.2 65.5 31.5 65.6 31.8C66 33.3 66.6 34.8 67.4 36.2C67.7 36.8 68.1 37.3 68.4 37.8C69.4 39.2 70.4 40.4 71.5 41.6L72.2 42.4C72.6 42.8 73.1 43.3 73.5 43.8C71.1 43.3 68.8 45.4 68.4 47.7C67.9 50.1 68.9 52.4 70.1 54.5C72.2 58.1 75.2 60.6 77.9 63.8C79.9 66.2 81 69 83.1 71.2L83.3 71.4C89 77.2 98.1 78.5 105.6 81C108.3 81.9 120.6 96.5 135.6 91C139 89.7 140.5 88.5 144.1 85.2C157.1 73.4 161.6 51.9 153.9 36.3C145.6 19.4 127.9 6.2 115.1 4.3C102.3 2.3 96.5 1.8 91.2 4.3C85.9 6.8 83.2 14.5 87.7 18.3C84.9 16.3 81.4 15.3 78 15.6C74.8 15.8 71.7 17.1 69.5 19.3C67.7 21 66.4 23.2 65.7 25.5C65.2 27.3 65.1 29.1 65.4 30.9Z"/>
-        <circle className="skin" cx="144.2" cy="61.1" r="8.5"/>
-        <circle className="skin" cx="83.9" cy="61.1" r="8.5"/>
-        <path d="M79.7 58.2C80.5 58.9 82.2 60.8 82 62.3M148.5 58.6C147.1 58.6 146.1 61.3 146.2 62.7" fill="none" stroke="#662D03" strokeLinecap="round"/>
-        <path className="skin" d="M85.4 41.8C86 22.5 105.2 9.1 123.6 15.6C135.1 19.7 142.7 30.5 142.7 42.7V67.9C142.7 83.7 129.9 96.6 114 96.6C98.2 96.6 85.4 83.7 85.4 67.9V42.7Z"/>
-        <g clipPath={`url(#${isLightbox ? "hairClip-lb" : "hairClip"})`}>
-          <path fill="#934103" d="M65.2 29.6C65.3 29.9 65.4 30.2 65.4 30.5C65.8 32.1 66.4 33.6 67.2 35C67.5 35.6 67.9 36.1 68.2 36.7C69.2 38 70.2 39.3 71.3 40.6L72 41.3C72.4 41.8 72.8 42.3 73.3 42.7C70.9 42.2 68.6 44.4 68.2 46.8C67.8 49.2 68.7 51.5 69.9 53.7C72 57.4 75 59.9 77.6 63.2C79.6 65.6 80.7 68.5 82.8 70.8L83 71C88.6 76.9 97.6 78.2 105.1 80.8C107.7 81.7 136.8 89.8 136.8 91.6C136.8 91.2 139.6 88.4 143.2 85C156.1 73 160.6 51.1 152.9 35.1C144.7 17.9 128.6 6 114.5 2.4C100.4 -1.3 96.1 -0.2 90.8 2.4C85.5 4.9 82.9 12.8 87.3 16.7C84.5 14.6 81.1 13.7 77.7 13.9C74.5 14.1 71.5 15.5 69.3 17.7C67.5 19.5 66.2 21.7 65.5 24.1C65.1 25.9 65 27.7 65.2 29.6Z"/>
-          <path fill="#662D03" d="M65.1 29C65.1 29.5 65.1 30 65.2 30.3C65.4 32 66.2 34.3 66.5 34.9C66.9 35.4 67.8 37 68.2 37.6C69.2 39 70.7 40.8 70.7 40.8L72.5 42.8C71 42.5 68.3 44.7 67.9 47.2C67.4 49.7 68.5 52.2 69.8 54.4C72.1 58.4 75.5 61 78.4 64.4C80.6 66.9 81.9 69.9 84.3 72.4C87.1 69.3 88.9 65.5 89.4 61.6C90.4 54.2 96 48.9 96.3 41.5C94.8 35 91.9 33.2 88.8 29.4C86.4 26.6 83.6 24.1 80.4 22C78 20.5 74.8 20.3 71.9 20.7C69.3 21 66.7 22 65.8 23.2C65.3 25 65.1 26.7 65.1 29Z"/>
-        </g>
-
-        {/* Mặt: miệng, mũi, lông mày, mắt, tóc mai */}
-        <g fill="none" stroke="#662D03" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M120.4 82.3C116.8 83.9 112.7 84.2 108.9 83"/>
-          <path d="M110.8 61.2C107.9 64.2 107.5 74.5 107.5 74.5H112.8"/>
-          <path d="M133.6 53C128.5 52 123.3 51.8 118.1 52.6M105.8 53C100.7 52 95.5 51.8 90.3 52.6"/>
-          <path d="M85.1 59.4C85.1 58 84.7 47.5 84.7 44.6C84.7 37.3 91.1 32.5 91.1 32.5"/>
-        </g>
-        <ellipse cx="125" cy="60.5" rx="2.6" ry="3.5" fill="#662D03"/>
-        <ellipse cx="98" cy="60.5" rx="2.6" ry="3.5" fill="#662D03"/>
-
-        {/* GEN Z LAYER 3: Kính râm (Sunglasses) */}
-        {selectedGenZ.includes('kinh-ram') && (
-          <g id="layer-kinh-ram">
-            {/* Gọng kính retro */}
-            <path 
-              d="M87 58 C87 54, 107 53, 109 57 C111 56, 115 56, 117 57 C119 53, 139 54, 139 58 L138 66 C137 70, 118 70, 114 65 C112 65, 110 65, 108 65 C104 70, 88 70, 87 66 Z" 
-              fill="#18181b" 
-              stroke="#27272a" 
-              strokeWidth="1.2" 
-              strokeLinejoin="round" 
-            />
-            {/* Tròng kính râm đen bóng */}
-            <rect x="89" y="56" width="18" height="9.5" rx="3" fill="#09090b" opacity="0.95" />
-            <rect x="116" y="56" width="18" height="9.5" rx="3" fill="#09090b" opacity="0.95" />
-            {/* Vệt sáng phản quang kính râm */}
-            <line x1="92" y1="57.5" x2="98" y2="63.5" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" opacity="0.45" />
-            <line x1="119" y1="57.5" x2="125" y2="63.5" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" opacity="0.45" />
-            {/* Càng kính hướng về tai */}
-            <path d="M87 59 L79 61" stroke="#18181b" strokeWidth="1.8" strokeLinecap="round" />
-            <path d="M139 59 L147 61" stroke="#18181b" strokeWidth="1.8" strokeLinecap="round" />
-          </g>
-        )}
-
-        {/* GEN Z LAYER 4: Tai nghe trùm đầu - giãn nhẹ ra khỏi mặt, ôm vừa vặn che tai (Comfortable Over-ear Headphones) */}
-        {selectedGenZ.includes('tai-nghe-trum-dau') && (
-          <g id="layer-tai-nghe">
-            {/* Vòm đệm tai nghe vòng rộng trên đỉnh đầu, dày dặn và chunky */}
-            <path 
-              d="M75 48 C71 -2, 157 -2, 153 48" 
-              fill="none" 
-              stroke="#09090b" 
-              strokeWidth="9" 
-              strokeLinecap="round" 
-            />
-            {/* Lớp đệm êm ái lót trong vòm tai nghe */}
-            <path 
-              d="M76 46 C73 2, 155 2, 152 46" 
-              fill="none" 
-              stroke="#1e293b" 
-              strokeWidth="5" 
-              strokeLinecap="round" 
-            />
-            {/* Đường gân chỉ may nổi trên vòm đệm */}
-            <path 
-              d="M78 45 C75 5, 153 5, 150 45" 
-              fill="none" 
-              stroke="#475569" 
-              strokeWidth="1.2" 
-              strokeLinecap="round" 
-              strokeDasharray="4 3" 
-            />
-            {/* Khớp trượt kéo dài kim loại mạ bạc sáng bóng 2 bên nối vào củ tai */}
-            <rect x="72" y="42" width="6" height="9" rx="1.5" fill="#cbd5e1" stroke="#64748b" strokeWidth="0.8" />
-            <rect x="150" y="42" width="6" height="9" rx="1.5" fill="#cbd5e1" stroke="#64748b" strokeWidth="0.8" />
-
-            {/* Củ tai trái (Bên trái người xem) - giãn nhẹ ra không ép sát mặt, ôm trùm tai */}
-            <g transform="translate(76, 61.5) rotate(-6)">
-              {/* Đệm da mút xốp to bản ôm trọn tai */}
-              <ellipse cx="0" cy="0" rx="11.5" ry="18" fill="#09090b" stroke="#18181b" strokeWidth="1.5" />
-              {/* Lớp viền đệm mút êm ái */}
-              <ellipse cx="0" cy="0" rx="9" ry="15" fill="#18181b" />
-              {/* Vỏ ngoài củ tai kim loại nhám cao cấp */}
-              <ellipse cx="-2" cy="0" rx="7" ry="13" fill="#0f172a" stroke="#475569" strokeWidth="1.2" />
-              {/* Trục xoay kim loại */}
-              <circle cx="-2" cy="0" r="2.8" fill="#64748b" stroke="#94a3b8" strokeWidth="0.8" />
-              {/* Vệt phản quang ánh sáng trên vỏ củ tai */}
-              <path d="M-5 -6 C-7 -2, -7 2, -5 6" fill="none" stroke="#94a3b8" strokeWidth="1.2" opacity="0.6" strokeLinecap="round" />
-            </g>
-
-            {/* Củ tai phải (Bên phải người xem) - giãn nhẹ ra không ép sát mặt, ôm trùm tai */}
-            <g transform="translate(152, 61.5) rotate(6)">
-              {/* Đệm da mút xốp to bản ôm trọn tai */}
-              <ellipse cx="0" cy="0" rx="11.5" ry="18" fill="#09090b" stroke="#18181b" strokeWidth="1.5" />
-              {/* Lớp viền đệm mút êm ái */}
-              <ellipse cx="0" cy="0" rx="9" ry="15" fill="#18181b" />
-              {/* Vỏ ngoài củ tai kim loại nhám cao cấp */}
-              <ellipse cx="2" cy="0" rx="7" ry="13" fill="#0f172a" stroke="#475569" strokeWidth="1.2" />
-              {/* Trục xoay kim loại */}
-              <circle cx="2" cy="0" r="2.8" fill="#64748b" stroke="#94a3b8" strokeWidth="0.8" />
-              {/* Vệt phản quang ánh sáng trên vỏ củ tai */}
-              <path d="M5 -6 C7 -2, 7 2, 5 6" fill="none" stroke="#94a3b8" strokeWidth="1.2" opacity="0.6" strokeLinecap="round" />
-            </g>
-          </g>
-        )}
-
-        {/* Kiềng cổ nếu được chọn */}
-        {selectedJewelry.includes('kieng-co') && (
-          <ellipse cx="114" cy="127" rx="20" ry="12" fill="none" stroke="#E5E7EB" strokeWidth="2.5" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.3))" />
-        )}
-
-        {/* GEN Z LAYER 1: Túi xách shoulder bag đen to bản, quai rộng - đeo bên phải model (bên trái người xem) */}
-        {selectedGenZ.includes('tui-xach') && (
-          <g id="layer-tui-xach">
-            {/* Quai đeo to bản, mềm mại buông từ vai phải người mẫu xuống */}
-            <path 
-              d="M52 118 C51 155, 41 205, 36 248" 
-              fill="none" 
-              stroke="#09090b" 
-              strokeWidth="6.5" 
-              strokeLinecap="round" 
-            />
-            {/* Đường gân chỉ may nổi trên quai túi */}
-            <path 
-              d="M52 119 C51 155, 41 204, 36 247" 
-              fill="none" 
-              stroke="#27272a" 
-              strokeWidth="1.2" 
-              strokeLinecap="round" 
-              strokeDasharray="3 2" 
-            />
-            {/* Khuyên kim loại móc quai túi */}
-            <ellipse cx="36" cy="248" rx="3.5" ry="2.2" fill="none" stroke="#a1a1aa" strokeWidth="1.5" />
-
-            {/* Thân túi xách dáng shoulder bag đen to bản, thời thượng */}
-            <g>
-              {/* Bóng đổ nhẹ của túi lên trang phục */}
-              <path 
-                d="M16 250 C16 243, 56 243, 58 250 L63 285 C63 301, 52 312, 38 312 C24 312, 13 301, 13 285 Z" 
-                fill="#000000" 
-                opacity="0.25" 
-                transform="translate(1.5, 2)" 
-              />
-              {/* Thân túi da đen */}
-              <path 
-                d="M16 250 C16 243, 56 243, 58 250 L63 285 C63 301, 52 312, 38 312 C24 312, 13 301, 13 285 Z" 
-                fill="#18181b" 
-                stroke="#09090b" 
-                strokeWidth="1.5" 
-                strokeLinejoin="round" 
-              />
-              {/* Nắp túi xếp nếp da mềm sang trọng */}
-              <path 
-                d="M14 252 C24 257, 50 257, 60 252 L59 274 C50 279, 24 279, 15 274 Z" 
-                fill="#27272a" 
-                stroke="#09090b" 
-                strokeWidth="1" 
-              />
-              {/* Khóa cài kim loại bạc sang trọng */}
-              <rect x="34.5" y="271" width="7" height="4.5" rx="1.2" fill="#e4e4e7" stroke="#71717a" strokeWidth="0.8" />
-              <line x1="36" y1="273.2" x2="40" y2="273.2" stroke="#52525b" strokeWidth="0.8" />
-              {/* Ánh sáng phản quang trên da bóng */}
-              <path 
-                d="M17 282 C17 296, 26 307, 38 307" 
-                fill="none" 
-                stroke="#3f3f46" 
-                strokeWidth="1.2" 
-                strokeLinecap="round" 
-                opacity="0.6" 
-              />
-            </g>
-          </g>
-        )}
-
-        {/* GEN Z LAYER 2: Máy ảnh đeo quàng qua cổ thả buông trước ngực (Camera with strap hanging from behind neck) */}
-        {selectedGenZ.includes('may-anh') && (
-          <g id="layer-may-anh">
-            {/* Bóng đổ của 2 dây máy ảnh trước ngực buông từ sau vai xuống */}
-            <path 
-              d="M93 108 C91 128, 95 154, 97 178 M135 108 C137 128, 133 154, 131 178" 
-              fill="none" 
-              stroke="#000000" 
-              strokeWidth="5" 
-              strokeLinecap="round" 
-              opacity="0.25" 
-              transform="translate(0.8, 1.2)"
-            />
-            {/* Dây đeo máy ảnh bản dày thả từ sau vai xuống thân máy */}
-            <path 
-              d="M93 108 C91 128, 95 154, 97 178 M135 108 C137 128, 133 154, 131 178" 
-              fill="none" 
-              stroke="#18181b" 
-              strokeWidth="4.8" 
-              strokeLinecap="round" 
-            />
-            {/* Đệm êm dệt viền trong */}
-            <path 
-              d="M93 108 C91 128, 95 154, 97 178 M135 108 C137 128, 133 154, 131 178" 
-              fill="none" 
-              stroke="#27272a" 
-              strokeWidth="2.8" 
-              strokeLinecap="round" 
-            />
-            {/* Đường chỉ may gân nổi màu vàng phong cách retro cổ điển */}
-            <path 
-              d="M93 108 C91 128, 95 154, 97 178 M135 108 C137 128, 133 154, 131 178" 
-              fill="none" 
-              stroke="#d4af37" 
-              strokeWidth="0.8" 
-              strokeLinecap="round" 
-              strokeDasharray="3 2" 
-            />
-            {/* Khoen móc kim loại 2 bên thân máy */}
-            <circle cx="97" cy="177" r="2" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
-            <circle cx="131" cy="177" r="2" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
-
-            {/* Bóng nhẹ của máy ảnh lên áo */}
-            <rect x="94" y="177" width="40" height="24" rx="3.5" fill="#000000" opacity="0.3" transform="translate(1, 2)" />
-
-            {/* Thân máy ảnh retro / mirrorless đặt ngay chính giữa ngực */}
-            <g>
-              {/* Thân dưới bọc da đen */}
-              <rect x="94" y="177" width="40" height="24" rx="3.5" fill="#18181b" stroke="#09090b" strokeWidth="1" />
-              {/* Báng cầm vân nổi */}
-              <rect x="95.5" y="183" width="5.5" height="16.5" rx="1.5" fill="#27272a" />
-              {/* Phần nắp trên kim loại bạc cổ điển */}
-              <rect x="94" y="174" width="40" height="6.5" rx="2" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="0.8" />
-              {/* Nút bấm chụp & bánh răng xoay */}
-              <rect x="97" y="172" width="4" height="2.5" rx="0.6" fill="#94a3b8" />
-              <circle cx="130" cy="173" r="1.8" fill="#ef4444" />
-              <rect x="110" y="172.5" width="8" height="2" rx="0.5" fill="#64748b" />
-              {/* Chấm đỏ phong cách Leica */}
-              <circle cx="102" cy="184" r="1.5" fill="#ef4444" />
-              {/* Ống kính trung tâm (Lens) */}
-              <circle cx="114" cy="189" r="9" fill="#27272a" stroke="#cbd5e1" strokeWidth="1.5" />
-              <circle cx="114" cy="189" r="6.8" fill="#09090b" />
-              <circle cx="114" cy="189" r="4.8" fill="#0284c7" opacity="0.65" />
-              {/* Vệt phản quang thấu kính */}
-              <ellipse cx="112" cy="187" rx="2" ry="1.2" fill="#ffffff" opacity="0.85" />
-              <rect x="123" y="175" width="4.5" height="3" rx="0.6" fill="#38bdf8" opacity="0.6" />
-            </g>
-          </g>
-        )}
-
-        {/* GEN Z LAYER 5: Đồng hồ đeo ôm khít vòng quanh cổ tay - quai mỏng thanh mảnh (Slim Wrap-around Wristwatch) */}
-        {selectedGenZ.includes('dong-ho') && (
-          <g id="layer-dong-ho" transform="translate(196, 285) rotate(-5)">
-            {/* Bóng đổ nhẹ thanh mảnh */}
-            <path 
-              d="M-22.5 -1 C-22.5 -3.5, 22.5 -3.5, 22.5 -1 C23.5 2, 23.5 3, 22.5 4 C22.5 6.5, -22.5 6.5, -22.5 4 C-23.5 3, -23.5 2, -22.5 -1 Z" 
-              fill="#000000" 
-              opacity="0.25" 
-              transform="translate(0, 1.2)"
-            />
-            {/* Quai sau mỏng ôm khít cổ tay */}
-            <path 
-              d="M-22.5 -0.5 C-22.5 -3, -15 -4.2, 0 -4.2 C15 -4.2, 22.5 -3, 22.5 -0.5 C22.5 1.5, 21 2.8, 17 2.8 L-17 2.8 C-21 2.8, -22.5 1.5, -22.5 -0.5 Z" 
-              fill="#09090b" 
-            />
-            {/* Quai đeo trước mỏng thanh lịch, ôm sát viền cổ tay không bị cộm */}
-            <path 
-              d="M-22 -2.8 C-11 -4, 11 -4, 22 -2.8 C23.5 -1.8, 23.5 2, 22 3.2 C11 4.5, -11 4.5, -22 3.2 C-23.5 2, -23.5 -1.8, -22 -2.8 Z" 
-              fill="#18181b" 
-              stroke="#09090b" 
-              strokeWidth="1.2" 
-              strokeLinejoin="round" 
-            />
-            {/* Rãnh khâu / vân thể thao mảnh mai trên quai */}
-            <line x1="-19" y1="0.2" x2="-9" y2="0.2" stroke="#3f3f46" strokeWidth="0.8" strokeLinecap="round" />
-            <line x1="9" y1="0.2" x2="19" y2="0.2" stroke="#3f3f46" strokeWidth="0.8" strokeLinecap="round" />
-
-            {/* Mặt đồng hồ tròn màu xám bạc viền kim loại thanh lịch đặt chính giữa */}
-            {/* Viền ngoài kim loại đen dày (black bezel) */}
-            <circle cx="0" cy="0" r="8.8" fill="#09090b" stroke="#27272a" strokeWidth="1" />
-            {/* Vành kim loại thép sáng bóng */}
-            <circle cx="0" cy="0" r="7.6" fill="#e2e8f0" stroke="#09090b" strokeWidth="1.2" />
-            {/* Mặt số màu xám bạc (grey dial) */}
-            <circle cx="0" cy="0" r="6.2" fill="#cbd5e1" />
-            {/* Vạch số và tâm đồng hồ */}
-            <circle cx="0" cy="0" r="1.1" fill="#09090b" />
-            {/* Kim đồng hồ đen thanh lịch */}
-            <line x1="0" y1="0" x2="0" y2="-4" stroke="#09090b" strokeWidth="1" strokeLinecap="round" />
-            <line x1="0" y1="0" x2="2.8" y2="1.4" stroke="#09090b" strokeWidth="1" strokeLinecap="round" />
-            {/* Điểm nhấn kim giây đỏ */}
-            <line x1="0" y1="0" x2="-1.8" y2="3.2" stroke="#ef4444" strokeWidth="0.6" strokeLinecap="round" />
-            {/* Núm vặn chỉnh giờ kim loại bên phải */}
-            <rect x="7.8" y="-1.8" width="1.8" height="3.6" rx="0.7" fill="#94a3b8" stroke="#09090b" strokeWidth="0.4" />
-          </g>
-        )}
-      </svg>
-    </div>
-    );
+  const genzLabels: Record<string, string> = {
+    may_anh: 'Máy ảnh',
+    kinh_ram: 'Kính râm',
+    tui_xach: 'Túi xách',
+    tai_nghe: 'Tai nghe trùm đầu',
+    dong_ho: 'Đồng hồ'
   };
 
   return (
-    <div className="flex flex-col h-full w-full min-h-0 overflow-hidden">
-      {/* Top Header */}
-      <header className="topbar">
-        <div className="brand">
-          <span className="text-amber-600">✦</span>
-          <span>Việt Phục Remix</span>
+    <div className="min-h-screen w-full flex flex-col bg-slate-100 text-slate-800 font-sans">
+      {/* HEADER & TAB NAVIGATION */}
+      <header className="w-full bg-white border-b border-slate-200 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-30 shadow-2xs">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-600 via-rose-700 to-indigo-900 flex items-center justify-center text-white text-xs font-bold shadow-xs">
+            <Crown className="w-4 h-4 text-amber-200" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-sm text-slate-900">
+                Studio Phối Cổ Phục Việt
+              </span>
+              <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                14 Mẫu Cổ Phục • Bảng Màu • Phụ Kiện • Gen Z
+              </span>
+            </div>
+            <span className="text-[11px] text-slate-500 font-normal hidden sm:inline">
+              7 Mẫu Cổ Phục Nam & 7 Mẫu Cổ Phục Nữ Chuẩn Lịch Sử
+            </span>
+          </div>
         </div>
-        <nav className="tabs" role="tablist">
-          <button 
-            role="tab" 
-            className={activePage === 1 ? 'active' : ''} 
-            aria-selected={activePage === 1}
-            onClick={() => setActivePage(1)}
+
+        {/* Tab Switcher: Trang 1 / Trang 2 */}
+        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <button
+            type="button"
+            onClick={() => setActiveTab('tab1')}
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+              activeTab === 'tab1'
+                ? 'bg-white text-slate-900 shadow-2xs'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
           >
-            Trang 1
+            <Layers className="w-3.5 h-3.5" />
+            <span>Trang 1: Phòng Thử Đồ</span>
           </button>
-          <button 
-            role="tab" 
-            className={activePage === 2 ? 'active' : ''} 
-            aria-selected={activePage === 2}
-            onClick={() => setActivePage(2)}
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('tab2')}
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+              activeTab === 'tab2'
+                ? 'bg-white text-slate-900 shadow-2xs'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
           >
-            Trang 2
+            <FileText className="w-3.5 h-3.5" />
+            <span>Trang 2: Đại Triển Lãm Nam - Nữ</span>
           </button>
-        </nav>
+        </div>
       </header>
 
-      {/* Main Content Area */}
-      <main>
-        {/* ===== TRANG 1: PHỐI ĐỒ & BẢNG ĐIỀU KHIỂN ===== */}
-        <section className={`page ${activePage === 1 ? 'active' : ''}`}>
-          <div className="split">
-            
-            {/* Trái: Nhân vật */}
-            <div className="card stage-col">
-              <div className="stage">
-                {/* Nút gạt chuyển đổi model M / F ở góc trình chiếu */}
-                <div className="model-switch-container">
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={modelGender === 'female'}
-                    aria-label="Chuyển đổi người mẫu Nam (M) và Nữ (F)"
-                    onClick={handleToggleGender}
-                    className={`model-switch-toggle ${modelGender === 'female' ? 'active-female' : ''}`}
-                    title={modelGender === 'male' ? 'Đang chọn mẫu Nam (M) - Gạt để chuyển sang mẫu Nữ (F)' : 'Đang chọn mẫu Nữ (F) - Gạt để chuyển sang mẫu Nam (M)'}
-                  >
-                    <span className="model-switch-thumb">
-                      {modelGender === 'male' ? 'M' : 'F'}
-                    </span>
-                  </button>
-                </div>
-
-                {renderCharacterSVG(false)}
+      {/* MAIN CONTENT AREA */}
+      <main className="flex-1 w-full p-4 sm:p-6 flex flex-col items-center justify-center">
+        {activeTab === 'tab1' ? (
+          /* TRANG 1: 42% BÊN TRÁI (HIỂN THỊ MODEL) + 58% BÊN PHẢI (4 TAB ĐIỀU KHIỂN) */
+          <div className="w-full max-w-6xl bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+            {/* Top Frame Bar */}
+            <div className="w-full px-4 py-2.5 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
               </div>
-              <div className="grid grid-cols-2 gap-3 shrink-0 pt-1">
-                <button 
-                  type="button"
-                  className="builder-btn flex items-center justify-center gap-2 py-2.5 px-4 font-medium text-[13px] text-slate-700 hover:border-slate-400 bg-white" 
-                  onClick={handleRandomRemix}
-                  title="Ngẫu nhiên"
-                >
-                  <Shuffle className="w-4 h-4 text-slate-700 shrink-0" strokeWidth={2} />
-                  <span>Ngẫu nhiên</span>
-                </button>
-                <button 
-                  type="button"
-                  className="builder-btn flex items-center justify-center py-2.5 px-4 text-slate-700 hover:border-slate-400 bg-white" 
-                  onClick={() => setLightboxOpen(true)}
-                  title="Phóng to"
-                  aria-label="Phóng to"
-                >
-                  <Search className="w-4 h-4 text-slate-700 shrink-0" strokeWidth={2} />
-                </button>
+              <span className="text-[11px] text-slate-600 font-medium flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                <span>
+                  Đang thử đồ:{' '}
+                  <strong className="text-slate-900">{currentModel.name}</strong> •{' '}
+                  <span
+                    className={`font-semibold ${
+                      currentModel.gender === 'nam' ? 'text-blue-700' : 'text-rose-700'
+                    }`}
+                  >
+                    [{currentModel.gender === 'nam' ? 'Cổ Phục Nam' : 'Cổ Phục Nữ'}]
+                  </span>{' '}
+                  • {currentModel.era}
+                </span>
+              </span>
+              <div className="text-[11px] text-slate-500 hidden sm:block">
+                Vector chuẩn tỉ lệ di sản
               </div>
             </div>
 
-            {/* Phải: Khung chứa Tab Menu và Vùng nội dung theo ảnh mẫu */}
-            <div className="builder-panel">
-              {/* Thanh điều hướng (Tab Menu) dạng khối liền kề */}
-              <div className="tab-menu-nav">
-                <button
-                  type="button"
-                  className={`tab-menu-btn ${builderTab === 'garment' ? 'active' : ''}`}
-                  onClick={() => setBuilderTab('garment')}
+            {/* Split View: 42% Left + 58% Right */}
+            <div className="w-full p-4 sm:p-6 flex flex-col lg:flex-row gap-6">
+              {/* 42% BÊN TRÁI: GIAO DIỆN HIỂN THỊ MODEL ĐANG CHỌN */}
+              <div className="w-full lg:w-[42%] min-h-[580px] rounded-2xl bg-[#F7F4EE] border border-[#E9E3D8] p-4 sm:p-5 flex flex-col items-center justify-between relative shadow-2xs overflow-hidden">
+                {/* Top Viewport Indicator */}
+                <div className="w-full flex justify-between items-center text-[11px] text-stone-600 z-10">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-stone-900 bg-white/90 px-3 py-1 rounded-full border border-stone-200/80 shadow-2xs flex items-center gap-1">
+                      {currentModel.gender === 'nam' ? (
+                        <User className="w-3 h-3 text-blue-600 inline" />
+                      ) : (
+                        <HeartHandshake className="w-3 h-3 text-rose-500 inline" />
+                      )}
+                      {currentModel.shortName}
+                    </span>
+                    <span
+                      className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+                        currentModel.gender === 'nam'
+                          ? 'bg-blue-50 text-blue-800 border-blue-200'
+                          : 'bg-rose-50 text-rose-800 border-rose-200'
+                      }`}
+                    >
+                      {currentModel.badge}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1 bg-white/90 px-1.5 py-0.5 rounded-lg border border-stone-200/80">
+                    <button
+                      type="button"
+                      onClick={() => setIsZoomed(!isZoomed)}
+                      className="p-1 hover:text-stone-900 cursor-pointer text-stone-600 transition-colors"
+                      title={isZoomed ? 'Thu nhỏ' : 'Phóng to'}
+                    >
+                      {isZoomed ? <ZoomOut className="w-3.5 h-3.5" /> : <ZoomIn className="w-3.5 h-3.5" />}
+                    </button>
+                    {(useCustomColors || selectedPaletteId) && (
+                      <button
+                        type="button"
+                        onClick={handleResetColors}
+                        className="p-1 hover:text-stone-900 cursor-pointer text-stone-600 transition-colors flex items-center gap-1 text-[10px]"
+                        title="Về màu chuẩn gốc"
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Model Graphic Canvas */}
+                <div
+                  className={`relative flex-1 w-full flex items-center justify-center py-2 transition-transform duration-300 ${
+                    isZoomed ? 'scale-115' : 'scale-100'
+                  }`}
                 >
-                  Trang phục
-                </button>
-                <button
-                  type="button"
-                  className={`tab-menu-btn ${builderTab === 'color' ? 'active' : ''}`}
-                  onClick={() => setBuilderTab('color')}
-                >
-                  Màu sắc
-                </button>
-                <button
-                  type="button"
-                  className={`tab-menu-btn ${builderTab === 'accessory' ? 'active' : ''}`}
-                  onClick={() => setBuilderTab('accessory')}
-                >
-                  Phụ kiện
-                </button>
-                <button
-                  type="button"
-                  className={`tab-menu-btn ${builderTab === 'genz' ? 'active' : ''}`}
-                  onClick={() => setBuilderTab('genz')}
-                >
-                  Gen Z
-                </button>
+                  {renderModelView(selectedModelIdx)}
+                  <AccessoryVisuals
+                    modelId={currentModel.id}
+                    gender={currentModel.gender}
+                    headwear={selectedHeadwear}
+                    footwear={selectedFootwear}
+                    jewelry={selectedJewelry}
+                    handheld={selectedHandheld}
+                    genz={selectedGenZAccessories}
+                  />
+                </div>
+
+                {/* Applied Accessories Badges Overlay on Model Box */}
+                {(selectedHeadwear !== 'none' ||
+                  selectedFootwear !== 'hai_theu' ||
+                  selectedJewelry.length > 0 ||
+                  selectedHandheld !== 'none' ||
+                  selectedGenZAccessories.length > 0) && (
+                  <div className="w-full z-10 py-1.5 px-2 bg-white/80 backdrop-blur-xs rounded-xl border border-stone-200/70 mb-2 flex items-center gap-1 flex-wrap text-[10px] text-stone-700">
+                    <span className="font-bold text-stone-900 flex items-center gap-0.5">
+                      <SlidersHorizontal className="w-2.5 h-2.5 text-amber-700" />
+                      <span>Phụ kiện:</span>
+                    </span>
+                    {selectedHeadwear !== 'none' && (
+                      <span className="bg-amber-100/90 text-amber-900 px-1.5 py-0.2 rounded border border-amber-200">
+                        {headwearLabels[selectedHeadwear]}
+                      </span>
+                    )}
+                    {selectedFootwear !== 'hai_theu' && (
+                      <span className="bg-stone-100 text-stone-800 px-1.5 py-0.2 rounded border border-stone-200">
+                        {footwearLabels[selectedFootwear]}
+                      </span>
+                    )}
+                    {selectedJewelry.map((j) => (
+                      <span
+                        key={j}
+                        className="bg-yellow-100 text-yellow-900 px-1.5 py-0.2 rounded border border-yellow-200"
+                      >
+                        {j === 'kieng_co' ? 'Kiềng cổ' : 'Trâm cài'}
+                      </span>
+                    ))}
+                    {selectedHandheld !== 'none' && (
+                      <span className="bg-blue-100 text-blue-900 px-1.5 py-0.2 rounded border border-blue-200">
+                        {handheldLabels[selectedHandheld]}
+                      </span>
+                    )}
+                    {selectedGenZAccessories.map((g) => (
+                      <span
+                        key={g}
+                        className="bg-indigo-100 text-indigo-900 px-1.5 py-0.2 rounded border border-indigo-200 font-medium"
+                      >
+                        ✨ {genzLabels[g]}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Bottom Status & Color Mode Toggle */}
+                <div className="w-full flex items-center justify-between z-10 pt-2 border-t border-stone-200/80">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-semibold text-stone-800">
+                      {selectedPaletteId
+                        ? `Phối màu: ${
+                            COLOR_PALETTES.find((p) => p.id === selectedPaletteId)?.name
+                          }`
+                        : useCustomColors
+                        ? 'Đang phối màu tùy chỉnh'
+                        : 'Màu truyền thống nguyên bản'}
+                    </span>
+                    <span className="text-[10px] text-stone-500">
+                      {useCustomColors || selectedPaletteId
+                        ? 'Nhấn reset để về màu gốc'
+                        : 'Màu sắc lưu truyền lịch sử'}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (useCustomColors || selectedPaletteId) {
+                        handleResetColors();
+                      } else {
+                        setActiveSubTab('color');
+                      }
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold shadow-2xs cursor-pointer transition-all ${
+                      useCustomColors || selectedPaletteId
+                        ? 'bg-amber-600 text-white hover:bg-amber-700'
+                        : 'bg-white text-stone-700 border border-stone-300 hover:bg-stone-50'
+                    }`}
+                  >
+                    {useCustomColors || selectedPaletteId ? 'Xem màu gốc' : 'Đổi bảng màu'}
+                  </button>
+                </div>
               </div>
 
-              {/* Vùng nội dung (Body): Trải dọc phía dưới, chia thành các phân nhóm thuộc tính */}
-              <div className="tab-body-scroll">
-                
-                {/* 1. TAB TRANG PHỤC */}
-                {builderTab === 'garment' && (
-                  <div>
-                    {/* Phân nhóm 1: Kiểu áo ngoài phổ thông */}
-                    <div className="sub-section">
-                      <h3 className="sub-section-title">Kiểu áo ngoài</h3>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                        {GARMENTS
-                          .filter(g => modelGender === 'female' || g.id !== 'nhat-binh')
-                          .map((g) => {
-                            const isSelected = selectedSpecialId === null && selectedGarment.id === g.id;
-                            return (
-                              <button
-                                key={g.id}
-                                type="button"
-                                onClick={() => handleSelectGarment(g)}
-                                className={`builder-btn ${isSelected ? 'active' : ''}`}
-                              >
-                                {g.name}
-                              </button>
-                            );
-                          })}
+              {/* 58% BÊN PHẢI: BẢNG ĐIỀU KHIỂN CHÍNH (4 MỤC: TRANG PHỤC · MÀU SẮC · PHỤ KIỆN · GEN Z) */}
+              <div className="w-full lg:w-[58%] flex flex-col justify-between space-y-4">
+                {/* 4-SUBTAB NAVIGATION BAR (Exact layout as User Screenshots) */}
+                <div className="grid grid-cols-4 gap-1 bg-[#EEF2F6] p-1.5 rounded-2xl border border-slate-200/70">
+                  <button
+                    type="button"
+                    onClick={() => setActiveSubTab('outfit')}
+                    className={`py-2 px-2 text-center text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+                      activeSubTab === 'outfit'
+                        ? 'bg-white text-slate-900 shadow-xs font-bold'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    Trang phục
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveSubTab('color')}
+                    className={`py-2 px-2 text-center text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+                      activeSubTab === 'color'
+                        ? 'bg-white text-slate-900 shadow-xs font-bold'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    Màu sắc
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveSubTab('accessories')}
+                    className={`py-2 px-2 text-center text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+                      activeSubTab === 'accessories'
+                        ? 'bg-white text-slate-900 shadow-xs font-bold'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    Phụ kiện
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveSubTab('genz')}
+                    className={`py-2 px-2 text-center text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+                      activeSubTab === 'genz'
+                        ? 'bg-white text-slate-900 shadow-xs font-bold'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    Gen Z
+                  </button>
+                </div>
+
+                {/* ================= CONTENT OF SUB-TAB 1: TRANG PHỤC ================= */}
+                {activeSubTab === 'outfit' && (
+                  <div className="space-y-3 animate-in fade-in duration-200">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                          <Shirt className="w-4 h-4 text-amber-600" />
+                          <span>Danh mục Cổ Phục ({OUTFIT_MODELS.length} mẫu)</span>
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          Phân nhóm theo <strong>7 Mẫu Nam</strong> & <strong>7 Mẫu Nữ</strong>
+                        </p>
                       </div>
+                      <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
+                        Mẫu {selectedModelIdx + 1} / {OUTFIT_MODELS.length}
+                      </span>
                     </div>
 
-                    {/* Phân nhóm 2: Trang phục Đặc biệt (Được đẩy xuống để không sát hàng trên, nút đơn giản) */}
-                    <div className="sub-section mt-7">
-                      <h3 className="sub-section-title">Đặc biệt</h3>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                        {SPECIAL_GARMENTS
-                          .filter(sg => (modelGender === 'male' ? sg.gender === 'Nam' : sg.gender === 'Nữ'))
-                          .map((sg) => {
-                            const isSelected = selectedSpecialId === sg.id;
-                            return (
-                              <button
-                                key={sg.id}
-                                type="button"
-                                onClick={() => handleSelectSpecial(sg.id)}
-                                className={`builder-btn ${isSelected ? 'active' : ''}`}
-                              >
-                                {sg.name}
-                              </button>
-                            );
-                          })}
+                    {/* MAIN GENDER TABS: NAM / NỮ */}
+                    <div className="grid grid-cols-3 gap-1.5 bg-slate-100 p-1.5 rounded-xl text-xs font-semibold">
+                      <button
+                        type="button"
+                        onClick={() => handleSwitchGender('all')}
+                        className={`py-2 rounded-lg cursor-pointer transition-all text-center flex items-center justify-center gap-1.5 ${
+                          selectedGender === 'all'
+                            ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                            : 'text-slate-500 hover:text-slate-800'
+                        }`}
+                      >
+                        <Crown className="w-3.5 h-3.5 text-amber-600" />
+                        <span>Tất cả (14)</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleSwitchGender('nam')}
+                        className={`py-2 rounded-lg cursor-pointer transition-all text-center flex items-center justify-center gap-1.5 ${
+                          selectedGender === 'nam'
+                            ? 'bg-blue-600 text-white shadow-xs font-bold'
+                            : 'text-slate-600 hover:text-blue-700 hover:bg-blue-50/50'
+                        }`}
+                      >
+                        <User className="w-3.5 h-3.5" />
+                        <span>👦 Cổ Phục Nam (7)</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleSwitchGender('nu')}
+                        className={`py-2 rounded-lg cursor-pointer transition-all text-center flex items-center justify-center gap-1.5 ${
+                          selectedGender === 'nu'
+                            ? 'bg-rose-600 text-white shadow-xs font-bold'
+                            : 'text-slate-600 hover:text-rose-700 hover:bg-rose-50/50'
+                        }`}
+                      >
+                        <HeartHandshake className="w-3.5 h-3.5" />
+                        <span>👧 Cổ Phục Nữ (7)</span>
+                      </button>
+                    </div>
+
+                    {/* Secondary Category Filter */}
+                    <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/80 p-1 rounded-xl text-xs overflow-x-auto">
+                      <span className="text-[10px] text-slate-400 font-medium px-2 shrink-0">
+                        Kiểu dáng:
+                      </span>
+                      {[
+                        { id: 'all', label: 'Tất cả kiểu' },
+                        { id: 'hoangtrieu', label: 'Hoàng Triều & Lễ Phục' },
+                        { id: 'nguthan', label: 'Ngũ Thân & Áo Tấc' },
+                        { id: 'giaolinh', label: 'Áo Giao Lĩnh' }
+                      ].map((cat) => (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => setSelectedCategory(cat.id)}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-medium cursor-pointer transition-all whitespace-nowrap ${
+                            selectedCategory === cat.id
+                              ? 'bg-slate-900 text-white shadow-2xs font-semibold'
+                              : 'text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          {cat.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Outfit Model Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-56 overflow-y-auto pr-1">
+                      {filteredModels.map((item) => {
+                        const isSelected = selectedModelIdx === item.originalIdx;
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => handleSelectModel(item.originalIdx)}
+                            className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all flex flex-col justify-between relative overflow-hidden ${
+                              isSelected
+                                ? item.gender === 'nam'
+                                  ? 'border-blue-600 bg-blue-50/60 shadow-xs ring-1 ring-blue-600'
+                                  : 'border-rose-500 bg-rose-50/60 shadow-xs ring-1 ring-rose-500'
+                                : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60'
+                            }`}
+                          >
+                            <div className="flex items-start justify-between gap-1 mb-1">
+                              <div className="flex items-center gap-1">
+                                <span
+                                  className="w-3.5 h-3.5 rounded-full border border-black/20 shrink-0"
+                                  style={{ backgroundColor: item.accentColor }}
+                                />
+                                <span
+                                  className={`text-[9px] font-bold px-1.5 py-0.2 rounded ${
+                                    item.gender === 'nam'
+                                      ? 'bg-blue-100 text-blue-800'
+                                      : 'bg-rose-100 text-rose-800'
+                                  }`}
+                                >
+                                  {item.gender === 'nam' ? 'Nam' : 'Nữ'}
+                                </span>
+                              </div>
+                              {isSelected ? (
+                                <span
+                                  className={`w-4 h-4 rounded-full text-white flex items-center justify-center text-[10px] ${
+                                    item.gender === 'nam' ? 'bg-blue-600' : 'bg-rose-600'
+                                  }`}
+                                >
+                                  <Check className="w-2.5 h-2.5" />
+                                </span>
+                              ) : (
+                                <span className="text-[9.5px] text-slate-400 font-medium">
+                                  #{item.originalIdx + 1}
+                                </span>
+                              )}
+                            </div>
+                            <div>
+                              <span className="font-bold text-xs text-slate-900 block leading-tight line-clamp-1">
+                                {item.shortName}
+                              </span>
+                              <span className="text-[9.5px] text-slate-500 block mt-0.5 line-clamp-1">
+                                {item.badge}
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Selected Model Description Banner */}
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-start gap-2.5">
+                      <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                      <div className="text-xs space-y-1">
+                        <div className="font-semibold text-slate-900 flex items-center gap-1.5">
+                          <span>{currentModel.name}</span>
+                          <span
+                            className={`text-[10px] px-2 py-0.2 rounded-full font-bold ${
+                              currentModel.gender === 'nam'
+                                ? 'bg-blue-100 text-blue-800'
+                                : 'bg-rose-100 text-rose-800'
+                            }`}
+                          >
+                            {currentModel.gender === 'nam' ? 'Cổ Phục Nam' : 'Cổ Phục Nữ'}
+                          </span>
+                        </div>
+                        <p className="text-slate-600 text-[11px] leading-relaxed">
+                          {currentModel.desc}
+                        </p>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* 2. TAB MÀU SẮC */}
-                {builderTab === 'color' && (
-                  <div className="sub-section">
-                    <h3 className="sub-section-title">Phong cách phối màu (Lót trong · Áo ngoài · Quần)</h3>
+                {/* ================= CONTENT OF SUB-TAB 2: MÀU SẮC (IMAGE 1) ================= */}
+                {activeSubTab === 'color' && (
+                  <div className="space-y-4 animate-in fade-in duration-200">
+                    <div>
+                      <h3 className="text-xs font-semibold text-slate-800">
+                        Phong cách phối màu (Lót trong · Áo ngoài · Quần)
+                      </h3>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        Chọn bảng màu mẫu chuẩn thẩm mỹ hoặc tự do pha màu chi tiết bên dưới
+                      </p>
+                    </div>
+
+                    {/* 6 Preset Palettes Grid (Exact Match to Image 1) */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                      {COLOR_PRESETS.map((preset) => {
-                        const isSelected = selectedPreset.id === preset.id;
+                      {COLOR_PALETTES.map((palette) => {
+                        const isSelected = selectedPaletteId === palette.id;
                         return (
                           <button
-                            key={preset.id}
+                            key={palette.id}
                             type="button"
-                            onClick={() => handleApplyPreset(preset)}
-                            className={`builder-btn flex flex-col items-center gap-2 p-3 ${isSelected ? 'active' : ''}`}
+                            onClick={() => handleApplyPalette(palette)}
+                            className={`p-3 rounded-2xl border text-center cursor-pointer transition-all flex flex-col items-center justify-between gap-2.5 shadow-2xs ${
+                              isSelected
+                                ? 'bg-[#FFF9EC] border-[#B8860B] ring-1 ring-[#B8860B] shadow-xs'
+                                : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/80'
+                            }`}
                           >
-                            {/* Dải 3 màu trực quan như ô màu tóc trong ảnh mẫu */}
-                            <div className="w-full h-8 rounded-lg flex overflow-hidden border border-black/10 shrink-0">
-                              <span 
-                                className="flex-1 h-full" 
-                                style={{ backgroundColor: preset.lining }} 
-                                title={`Lót trong: ${preset.lining}`} 
+                            {/* Color Bar Pill (3 parts: Lót trong · Áo ngoài · Quần) */}
+                            <div className="w-full h-8 rounded-xl overflow-hidden flex border border-slate-300/80 shadow-2xs">
+                              <div
+                                className="h-full flex-1"
+                                style={{ backgroundColor: palette.inner }}
+                                title={`Lót trong: ${palette.inner}`}
                               />
-                              <span 
-                                className="flex-1 h-full" 
-                                style={{ backgroundColor: preset.dress }} 
-                                title={`Áo ngoài: ${preset.dress}`} 
+                              <div
+                                className="h-full flex-1"
+                                style={{ backgroundColor: palette.outer }}
+                                title={`Áo ngoài: ${palette.outer}`}
                               />
-                              <span 
-                                className="flex-1 h-full" 
-                                style={{ backgroundColor: preset.pants }} 
-                                title={`Quần/váy: ${preset.pants}`} 
+                              <div
+                                className="h-full flex-1"
+                                style={{ backgroundColor: palette.pants }}
+                                title={`Quần / Váy: ${palette.pants}`}
                               />
                             </div>
-                            <span className="text-[13px] truncate w-full text-center">
-                              {preset.name}
+
+                            <span
+                              className={`text-xs font-medium ${
+                                isSelected ? 'text-amber-950 font-bold' : 'text-slate-800'
+                              }`}
+                            >
+                              {palette.name}
                             </span>
                           </button>
                         );
                       })}
                     </div>
-                  </div>
-                )}
 
-                {/* 3. TAB PHỤ KIỆN */}
-                {builderTab === 'accessory' && (
-                  <div className="space-y-6">
-                    {/* Phân nhóm 1: Đồ đội đầu */}
-                    <div className="sub-section">
-                      <h3 className="sub-section-title">Đồ đội đầu</h3>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                        <button
-                          type="button"
-                          onClick={() => { setSelectedSpecialId(null); setSelectedHeadwear(null); }}
-                          className={`builder-btn ${selectedHeadwear === null ? 'active' : ''}`}
-                        >
-                          ✕ Không đội đầu
-                        </button>
-                        {HEADWEAR.map((hw) => {
-                          const isSelected = selectedHeadwear?.id === hw.id;
-                          return (
-                            <button
-                              key={hw.id}
-                              type="button"
-                              onClick={() => { setSelectedSpecialId(null); setSelectedHeadwear(hw); }}
-                              className={`builder-btn ${isSelected ? 'active' : ''}`}
-                            >
-                              {hw.name}
-                            </button>
-                          );
-                        })}
+                    {/* Fine-tune Custom Colors Section */}
+                    <div className="space-y-2.5 pt-3 border-t border-slate-200">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                          <Palette className="w-3.5 h-3.5 text-slate-700" />
+                          <span>Pha màu từng bộ phận chi tiết:</span>
+                        </span>
+                        {(useCustomColors || selectedPaletteId) && (
+                          <button
+                            type="button"
+                            onClick={handleResetColors}
+                            className="text-[11px] text-amber-700 font-medium hover:underline cursor-pointer"
+                          >
+                            Khôi phục màu gốc
+                          </button>
+                        )}
                       </div>
-                    </div>
 
-                    {/* Phân nhóm 2: Giày dép */}
-                    <div className="sub-section">
-                      <h3 className="sub-section-title">Giày dép</h3>
-                      <div className="grid grid-cols-3 gap-2.5">
-                        {FOOTWEAR.map((fw) => {
-                          const isSelected = selectedFootwear.id === fw.id;
-                          return (
-                            <button
-                              key={fw.id}
-                              type="button"
-                              onClick={() => { setSelectedSpecialId(null); setSelectedFootwear(fw); }}
-                              className={`builder-btn ${isSelected ? 'active' : ''}`}
-                            >
-                              {fw.name}
-                            </button>
-                          );
-                        })}
+                      {/* Target Selector */}
+                      <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs">
+                        {currentModel.targets.map((tgt) => (
+                          <button
+                            key={tgt.id}
+                            type="button"
+                            onClick={() => setSelectedColorTarget(tgt.id)}
+                            className={`flex-1 py-1.5 rounded-lg text-center cursor-pointer transition-all ${
+                              selectedColorTarget === tgt.id
+                                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                                : 'text-slate-600 hover:text-slate-900'
+                            }`}
+                          >
+                            {tgt.label}
+                          </button>
+                        ))}
                       </div>
-                    </div>
 
-                    {/* Phân nhóm 3: Trang sức */}
-                    <div className="sub-section">
-                      <h3 className="sub-section-title">Trang sức</h3>
-                      <div className="grid grid-cols-2 gap-2.5">
-                        {JEWELRY.map((jw) => {
-                          const isChecked = selectedJewelry.includes(jw.id);
+                      {/* Swatch circles */}
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {neutralColors.map((color, idx) => {
+                          const currentColor =
+                            selectedColorTarget === 0
+                              ? tunicColor
+                              : selectedColorTarget === 1
+                              ? pantsColor
+                              : sashColor;
+                          const isSelected =
+                            useCustomColors &&
+                            currentColor.toLowerCase() === color.hex.toLowerCase();
+
                           return (
                             <button
-                              key={jw.id}
+                              key={idx}
                               type="button"
-                              onClick={() => handleToggleJewelry(jw.id)}
-                              className={`builder-btn ${isChecked ? 'active' : ''}`}
-                            >
-                              {jw.name}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Phân nhóm 4: Đồ cầm tay */}
-                    <div className="sub-section">
-                      <h3 className="sub-section-title">Đồ cầm tay</h3>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                        <button
-                          type="button"
-                          onClick={() => { setSelectedSpecialId(null); setSelectedHandheld('none'); }}
-                          className={`builder-btn ${selectedHandheld === 'none' ? 'active' : ''}`}
-                        >
-                          ✕ Không cầm đồ
-                        </button>
-                        {HANDHELD.map((hh) => {
-                          const isSelected = selectedHandheld === hh.id;
-                          return (
-                            <button
-                              key={hh.id}
-                              type="button"
-                              onClick={() => { setSelectedSpecialId(null); setSelectedHandheld(hh.id); }}
-                              className={`builder-btn ${isSelected ? 'active' : ''}`}
-                            >
-                              {hh.name}
-                            </button>
+                              title={color.label}
+                              onClick={() => handleSelectColor(color.hex)}
+                              style={{ backgroundColor: color.hex }}
+                              className={`w-6.5 h-6.5 rounded-full border cursor-pointer transition-transform ${
+                                isSelected
+                                  ? 'border-slate-900 scale-115 shadow-xs ring-2 ring-slate-400'
+                                  : 'border-black/15 hover:scale-110'
+                              }`}
+                            />
                           );
                         })}
                       </div>
@@ -1382,76 +1317,490 @@ export default function App() {
                   </div>
                 )}
 
-                {/* 4. TAB PHONG CÁCH GEN Z */}
-                {builderTab === 'genz' && (
-                  <div className="sub-section">
-                    <h3 className="sub-section-title">Phụ kiện hiện đại Gen Z</h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                      {GEN_Z_ACCESSORIES.map((item) => {
-                        const isChecked = selectedGenZ.includes(item.id);
+                {/* ================= CONTENT OF SUB-TAB 3: PHỤ KIỆN (IMAGE 2) ================= */}
+                {activeSubTab === 'accessories' && (
+                  <div className="space-y-4 max-h-[460px] overflow-y-auto pr-1 animate-in fade-in duration-200">
+                    {/* 1. Đồ đội đầu */}
+                    <div className="space-y-2">
+                      <span className="text-xs font-semibold text-slate-800 block">Đồ đội đầu</span>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {[
+                          { id: 'none', label: '✕ Không đội đầu' },
+                          { id: 'non_ba_tam', label: 'Nón ba tầm' },
+                          { id: 'non_dau', label: 'Nón dấu' },
+                          { id: 'non_la', label: 'Nón lá' },
+                          { id: 'khan_vanh_day', label: 'Khăn vành dây' },
+                          { id: 'khan_xep', label: 'Khăn xếp' }
+                        ].map((item) => {
+                          const isSelected = selectedHeadwear === item.id;
+                          return (
+                            <button
+                              key={item.id}
+                              type="button"
+                              onClick={() => setSelectedHeadwear(item.id)}
+                              className={`py-2.5 px-3 rounded-xl border text-center text-xs font-medium cursor-pointer transition-all shadow-2xs ${
+                                isSelected
+                                  ? 'bg-[#FFF9EC] border-[#B8860B] text-amber-950 font-bold ring-1 ring-[#B8860B]'
+                                  : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                              }`}
+                            >
+                              {item.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 2. Giày dép */}
+                    <div className="space-y-2 pt-2 border-t border-slate-100">
+                      <span className="text-xs font-semibold text-slate-800 block">Giày dép</span>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { id: 'hai_theu', label: 'Hài thêu' },
+                          { id: 'guoc_moc', label: 'Guốc mộc' },
+                          { id: 'sneaker', label: 'Sneaker' }
+                        ].map((item) => {
+                          const isSelected = selectedFootwear === item.id;
+                          return (
+                            <button
+                              key={item.id}
+                              type="button"
+                              onClick={() => setSelectedFootwear(item.id)}
+                              className={`py-2.5 px-3 rounded-xl border text-center text-xs font-medium cursor-pointer transition-all shadow-2xs ${
+                                isSelected
+                                  ? 'bg-[#FFF9EC] border-[#B8860B] text-amber-950 font-bold ring-1 ring-[#B8860B]'
+                                  : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                              }`}
+                            >
+                              {item.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 3. Trang sức */}
+                    <div className="space-y-2 pt-2 border-t border-slate-100">
+                      <span className="text-xs font-semibold text-slate-800 block">Trang sức</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { id: 'kieng_co', label: 'Kiềng cổ' },
+                          { id: 'tram_cai', label: 'Trâm cài' }
+                        ].map((item) => {
+                          const isSelected = selectedJewelry.includes(item.id);
+                          return (
+                            <button
+                              key={item.id}
+                              type="button"
+                              onClick={() => toggleJewelry(item.id)}
+                              className={`py-2.5 px-3 rounded-xl border text-center text-xs font-medium cursor-pointer transition-all shadow-2xs ${
+                                isSelected
+                                  ? 'bg-[#FFF9EC] border-[#B8860B] text-amber-950 font-bold ring-1 ring-[#B8860B]'
+                                  : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                              }`}
+                            >
+                              {item.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 4. Đồ cầm tay */}
+                    <div className="space-y-2 pt-2 border-t border-slate-100">
+                      <span className="text-xs font-semibold text-slate-800 block">Đồ cầm tay</span>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {[
+                          { id: 'none', label: '✕ Không cầm đồ' },
+                          { id: 'dan_nguyet', label: 'Đàn nguyệt' },
+                          { id: 'o_du', label: 'Ô (Dù)' },
+                          { id: 'quat', label: 'Quạt' }
+                        ].map((item) => {
+                          const isSelected = selectedHandheld === item.id;
+                          return (
+                            <button
+                              key={item.id}
+                              type="button"
+                              onClick={() => setSelectedHandheld(item.id)}
+                              className={`py-2.5 px-3 rounded-xl border text-center text-xs font-medium cursor-pointer transition-all shadow-2xs ${
+                                isSelected
+                                  ? 'bg-[#FFF9EC] border-[#B8860B] text-amber-950 font-bold ring-1 ring-[#B8860B]'
+                                  : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                              }`}
+                            >
+                              {item.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* ================= CONTENT OF SUB-TAB 4: GEN Z (IMAGE 3) ================= */}
+                {activeSubTab === 'genz' && (
+                  <div className="space-y-4 animate-in fade-in duration-200">
+                    <div>
+                      <h3 className="text-xs font-semibold text-slate-800">
+                        Phụ kiện hiện đại Gen Z
+                      </h3>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        Phối kết hợp phong cách Cyberfolk đương đại với cổ phục truyền thống
+                      </p>
+                    </div>
+
+                    {/* Gen Z Accessories Grid (Exact match to Image 3) */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {[
+                        { id: 'may_anh', label: 'Máy ảnh', icon: Camera },
+                        { id: 'kinh_ram', label: 'Kính râm', icon: Glasses },
+                        { id: 'tui_xach', label: 'Túi xách', icon: ShoppingBag },
+                        { id: 'tai_nghe', label: 'Tai nghe trùm đầu', icon: Headphones },
+                        { id: 'dong_ho', label: 'Đồng hồ', icon: Watch }
+                      ].map((item) => {
+                        const isSelected = selectedGenZAccessories.includes(item.id);
+                        const Icon = item.icon;
                         return (
                           <button
                             key={item.id}
                             type="button"
-                            onClick={() => handleToggleGenZ(item.id)}
-                            className={`builder-btn ${isChecked ? 'active' : ''}`}
+                            onClick={() => toggleGenZAccessory(item.id)}
+                            className={`py-3 px-4 rounded-xl border text-center text-xs font-medium cursor-pointer transition-all flex items-center justify-center gap-2 shadow-2xs ${
+                              isSelected
+                                ? 'bg-indigo-50/80 border-indigo-600 text-indigo-950 font-bold ring-1 ring-indigo-500 shadow-xs'
+                                : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                            }`}
                           >
-                            {item.name}
+                            <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-indigo-600' : 'text-slate-500'}`} />
+                            <span>{item.label}</span>
                           </button>
                         );
                       })}
                     </div>
+
+                    <div className="bg-indigo-50/50 border border-indigo-100 rounded-2xl p-4 text-xs text-indigo-900 flex items-start gap-2.5 mt-4">
+                      <Sparkle className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                      <p className="text-[11px] leading-relaxed">
+                        <strong>Xu hướng Việt Phục Gen Z:</strong> Sự giao thoa tinh tế giữa trang phục truyền thống nghìn năm và phụ kiện công nghệ đương đại giúp lan tỏa vẻ đẹp cổ phục vào đời sống trẻ một cách đầy cá tính và tự hào!
+                      </p>
+                    </div>
                   </div>
                 )}
 
+                {/* Quick Action Footer Buttons */}
+                <div className="flex items-center justify-between pt-3 border-t border-slate-200">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                    <span>Mục đang chọn:</span>
+                    <strong className="text-slate-800">
+                      {activeSubTab === 'outfit'
+                        ? 'Trang phục'
+                        : activeSubTab === 'color'
+                        ? 'Bảng màu'
+                        : activeSubTab === 'accessories'
+                        ? 'Phụ kiện'
+                        : 'Gen Z'}
+                    </strong>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('tab2')}
+                      className="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer shadow-2xs flex items-center gap-1.5"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Xem cả 2 gian Triển Lãm</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const nextIdx = (selectedModelIdx + 1) % OUTFIT_MODELS.length;
+                        handleSelectModel(nextIdx);
+                      }}
+                      className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 cursor-pointer shadow-2xs flex items-center gap-1.5"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                      <span>Mẫu kế tiếp</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
+            {/* Bottom Historical Note */}
+            <div className="w-full bg-[#FDFCF9] px-6 py-3 border-t border-slate-200 text-center text-xs text-stone-600">
+              <strong>Ý nghĩa văn hóa:</strong> {currentModel.historicalNote}
+            </div>
           </div>
-        </section>
+        ) : (
+          /* TRANG 2: ĐẠI TRIỂN LÃM GOM RÕ RỆT THÀNH 2 PHẦN: CỔ PHỤC NAM & CỔ PHỤC NỮ */
+          <div className="w-full max-w-6xl flex flex-col gap-8">
+            {/* Gallery Header */}
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl font-bold text-slate-900">
+                    Đại Triển Lãm Cổ Phục Nam & Nữ
+                  </h2>
+                  <span className="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-300">
+                    2 Đại Sảnh Di Sản
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 mt-1 max-w-2xl">
+                  Tổng hợp toàn bộ 14 kiệt tác cổ phục được phân định rõ ràng thành 2 khu triển lãm: <strong>Gian Cổ Phục Nam (7 bộ)</strong> và <strong>Gian Cổ Phục Nữ (7 bộ)</strong>. Nhấp vào để xem chi tiết lớn hoặc chuyển ngay vào phòng thử đồ.
+                </p>
+              </div>
 
-        {/* ===== TRANG 2: ĐỂ TRỐNG ===== */}
-        <section className={`page ${activePage === 2 ? 'active' : ''}`}>
-          <div className="card h-full min-h-0 flex items-center justify-center p-8 text-slate-400">
-            {/* Để trống cho người dùng thêm nội dung sau */}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('tab1')}
+                  className="px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-colors shadow-2xs shrink-0 flex items-center gap-2 cursor-pointer"
+                >
+                  <Layers className="w-4 h-4 text-amber-300" />
+                  <span>Vào phòng thử đồ</span>
+                </button>
+              </div>
+            </div>
+
+            {/* PHẦN 1: GIAN TRIỂN LÃM CỔ PHỤC NAM (7 MẪU) */}
+            <section className="space-y-4">
+              <div className="flex items-center justify-between border-b border-blue-200 pb-2.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                    <User className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                      <span>Phần I: Bộ Sưu Tập Cổ Phục Nam</span>
+                      <span className="bg-blue-100 text-blue-800 text-[11px] font-semibold px-2 py-0.5 rounded-full">
+                        7 Mẫu Nam Giới
+                      </span>
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      Giao Lĩnh Nam, Hoàng Bào Long Triều, Ngũ Thân Xanh Chàm, Tử Sắc, Bích Thủy, Nhị Tầng & Áo Tấc Nam
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {maleModels.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow group ring-1 ring-blue-50"
+                  >
+                    {/* Top Bar */}
+                    <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-blue-50/40">
+                      <span className="font-bold text-xs text-slate-900 flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-blue-600" />
+                        {item.name}
+                      </span>
+                      <span className="text-[10px] font-semibold bg-blue-100 text-blue-800 border border-blue-200 px-2 py-0.5 rounded-full">
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    {/* Visual Window */}
+                    <div className="h-80 bg-[#F9F7F2] p-4 flex items-center justify-center relative overflow-hidden">
+                      <div className="w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                        {renderModelView(item.originalIdx, false)}
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4 flex flex-col justify-between flex-1 border-t border-slate-100 bg-white">
+                      <div className="text-[11px] text-blue-900 font-semibold mb-1 flex items-center gap-1">
+                        <Bookmark className="w-3 h-3 text-blue-600" />
+                        <span>{item.era}</span>
+                      </div>
+                      <p className="text-xs text-slate-600 line-clamp-3 mb-4 leading-relaxed">
+                        {item.desc}
+                      </p>
+
+                      <div className="flex items-center gap-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setPreviewModalIdx(item.originalIdx)}
+                          className="flex-1 py-2 px-3 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>Chi tiết</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleSelectModel(item.originalIdx);
+                            setActiveTab('tab1');
+                          }}
+                          className="flex-1 py-2 px-3 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Thử đồ này</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* PHẦN 2: GIAN TRIỂN LÃM CỔ PHỤC NỮ (7 MẪU) */}
+            <section className="space-y-4 pt-4">
+              <div className="flex items-center justify-between border-b border-rose-200 pb-2.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                    <HeartHandshake className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                      <span>Phần II: Bộ Sưu Tập Cổ Phục Nữ</span>
+                      <span className="bg-rose-100 text-rose-800 text-[11px] font-semibold px-2 py-0.5 rounded-full">
+                        7 Mẫu Nữ Giới
+                      </span>
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      Phượng Bào Hoàng Hậu, Lễ Phục Nhật Bình, Giao Lĩnh Thiên Thanh & Áo Tấc Nữ
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {femaleModels.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow group ring-1 ring-rose-50"
+                  >
+                    {/* Top Bar */}
+                    <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-rose-50/40">
+                      <span className="font-bold text-xs text-slate-900 flex items-center gap-1.5">
+                        <HeartHandshake className="w-3.5 h-3.5 text-rose-500" />
+                        {item.name}
+                      </span>
+                      <span className="text-[10px] font-semibold bg-rose-100 text-rose-800 border border-rose-200 px-2 py-0.5 rounded-full">
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    {/* Visual Window */}
+                    <div className="h-80 bg-[#F9F7F2] p-4 flex items-center justify-center relative overflow-hidden">
+                      <div className="w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                        {renderModelView(item.originalIdx, false)}
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4 flex flex-col justify-between flex-1 border-t border-slate-100 bg-white">
+                      <div className="text-[11px] text-rose-900 font-semibold mb-1 flex items-center gap-1">
+                        <Bookmark className="w-3 h-3 text-rose-600" />
+                        <span>{item.era}</span>
+                      </div>
+                      <p className="text-xs text-slate-600 line-clamp-3 mb-4 leading-relaxed">
+                        {item.desc}
+                      </p>
+
+                      <div className="flex items-center gap-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setPreviewModalIdx(item.originalIdx)}
+                          className="flex-1 py-2 px-3 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>Chi tiết</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleSelectModel(item.originalIdx);
+                            setActiveTab('tab1');
+                          }}
+                          className="flex-1 py-2 px-3 rounded-xl bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Thử đồ này</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
-        </section>
+        )}
       </main>
 
-      {/* Lightbox Zoom */}
-      {lightboxOpen && (
-        <div 
-          className="lightbox" 
-          role="dialog" 
-          aria-modal="true" 
-          aria-label="Phóng to ảnh"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setLightboxOpen(false);
-          }}
-        >
-          {/* Nút gạt M/F và nút đóng trong Lightbox */}
-          <div className="absolute top-3.5 right-4 z-60 flex items-center gap-3">
-            <div className="model-switch-container !relative !top-auto !right-auto shadow-md">
+      {/* MODAL PREVIEW FOR GALLERY */}
+      {previewModalIdx !== null && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-bold text-lg text-slate-900">
+                    {OUTFIT_MODELS[previewModalIdx].name}
+                  </h3>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      OUTFIT_MODELS[previewModalIdx].gender === 'nam'
+                        ? 'bg-blue-100 text-blue-800'
+                        : 'bg-rose-100 text-rose-800'
+                    }`}
+                  >
+                    {OUTFIT_MODELS[previewModalIdx].gender === 'nam' ? 'Cổ Phục Nam' : 'Cổ Phục Nữ'}
+                  </span>
+                </div>
+                <span className="text-xs text-amber-700 font-medium">
+                  {OUTFIT_MODELS[previewModalIdx].era}
+                </span>
+              </div>
               <button
                 type="button"
-                role="switch"
-                aria-checked={modelGender === 'female'}
-                aria-label="Chuyển đổi người mẫu Nam (M) và Nữ (F)"
-                onClick={handleToggleGender}
-                className={`model-switch-toggle ${modelGender === 'female' ? 'active-female' : ''}`}
-                title={modelGender === 'male' ? 'Đang chọn mẫu Nam (M) - Gạt để chuyển sang mẫu Nữ (F)' : 'Đang chọn mẫu Nữ (F) - Gạt để chuyển sang mẫu Nam (M)'}
+                onClick={() => setPreviewModalIdx(null)}
+                className="w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center font-bold text-sm cursor-pointer"
               >
-                <span className="model-switch-thumb">
-                  {modelGender === 'male' ? 'M' : 'F'}
-                </span>
+                ✕
               </button>
             </div>
-            <button className="btn lb-close !static shadow-md" onClick={() => setLightboxOpen(false)}>
-              Đóng (Esc)
-            </button>
-          </div>
-          <div className="lb-body">
-            {renderCharacterSVG(true)}
+
+            <div className="h-[420px] bg-[#F7F4EE] rounded-2xl flex items-center justify-center p-4 border border-[#E9E3D8]">
+              {renderModelView(previewModalIdx, false)}
+            </div>
+
+            <p className="text-xs text-slate-600 leading-relaxed">
+              {OUTFIT_MODELS[previewModalIdx].desc}
+            </p>
+
+            <div className="bg-amber-50 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-900">
+              <strong>Ý nghĩa văn hóa:</strong> {OUTFIT_MODELS[previewModalIdx].historicalNote}
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setPreviewModalIdx(null)}
+                className="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  handleSelectModel(previewModalIdx);
+                  setPreviewModalIdx(null);
+                  setActiveTab('tab1');
+                }}
+                className={`px-5 py-2 rounded-xl text-white text-xs font-semibold cursor-pointer shadow-2xs ${
+                  OUTFIT_MODELS[previewModalIdx].gender === 'nam'
+                    ? 'bg-blue-600 hover:bg-blue-700'
+                    : 'bg-rose-600 hover:bg-rose-700'
+                }`}
+              >
+                Đưa vào phòng thử đồ
+              </button>
+            </div>
           </div>
         </div>
       )}

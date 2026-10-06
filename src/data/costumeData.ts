@@ -203,6 +203,24 @@ export const GARMENTS: Garment[] = [
       lining: '#F5EBDD',
     },
   },
+  {
+    id: 'thuong-phuc-casual',
+    name: 'Quần áo bình thường',
+    gender: 'Nam & Nữ',
+    playScore: 5,
+    eventScore: 2,
+    description: 'Trang phục thường nhật bình thường (Casual Wear) mang phom dáng hiện đại năng động, kế thừa tỷ lệ hình thể và bảng phối sắc từ trang phục truyền thống để tạo nên vẻ ngoài trẻ trung, gần gũi.',
+    distinction: 'Áo phông/polo dáng gọn phối cùng quần suông/khaki hiện đại, có thể tự do tùy biến màu sắc và kết hợp cực kỳ ăn ý với các phụ kiện truyền thống hoặc Gen Z.',
+    collarType: 'Cổ tròn / Cổ bẻ Polo hiện đại',
+    suitableFor: 'Dạo phố hàng ngày, cà phê bạn bè, phong cách Gen Z năng động kết hợp phụ kiện cổ phong.',
+    defaultColors: {
+      dress: '#2563EB',
+      dressBack: '#1D4ED8',
+      dressEdge: '#3B82F6',
+      pants: '#1E293B',
+      lining: '#F8FAFC',
+    },
+  },
 ];
 
 // 2. Đồ đội đầu (5 loại theo file PDF)
