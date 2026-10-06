@@ -60,6 +60,16 @@ export default function AccessoryVisuals({
     wristLeft = { x: 50, y: 330 };
     wristRight = { x: 250, y: 330 };
     feetY = 545;
+  } else if (modelId === 'bach_y_cong_chua') {
+    viewBox = '0 0 340 538';
+    cx = 170;
+    headY = 40;
+    neckY = 110;
+    chestY = 180;
+    waistY = 245;
+    wristLeft = { x: 50, y: 310 };
+    wristRight = { x: 285, y: 310 };
+    feetY = 530;
   } else if (modelId === 'ao_tac_nu_toc_dai') {
     viewBox = '0 0 272 561';
     cx = 136;

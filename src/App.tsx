@@ -42,12 +42,14 @@ import PhuongBaoHoangHau from './components/PhuongBaoHoangHau';
 import AoTacNuTocDai from './components/AoTacNuTocDai';
 import AoDoiKhamLamHong from './components/AoDoiKhamLamHong';
 import NguThanBichThuy from './components/NguThanBichThuy';
+import BachYNu from './components/BachYNu';
 import AccessoryVisuals from './components/AccessoryVisuals';
 
 // Model Registry Definition with Gender Grouping
 export interface ModelDef {
   id: string;
   name: string;
+  subname?: string;
   shortName: string;
   gender: 'nam' | 'nu';
   badge: string;
@@ -68,10 +70,11 @@ export const OUTFIT_MODELS: ModelDef[] = [
   // =================== CỔ PHỤC NAM (7 MẪU) ===================
   {
     id: 'giao_linh_nam',
-    name: 'Giao Lĩnh Nam (Hắc Y Chu Biên)',
-    shortName: 'Giao Lĩnh Nam Mới',
+    name: 'Cổ Phục',
+    subname: 'Tế Nam Giao',
+    shortName: 'Cổ Phục',
     gender: 'nam',
-    badge: 'Đại Triều Phục',
+    badge: 'Tế Nam Giao',
     category: 'giaolinh',
     era: 'Triều Lê - Nguyễn (Thế kỷ XV - XIX)',
     desc: 'Trang phục Giao Lĩnh cổ chéo vạt sang phải viền chu biên (đỏ son), thân áo huyền sắc trang nghiêm, đội Mũ Bình Thiên đính 12 dải lưu miện ngũ sắc và tay cầm thẻ hốt ngọc biểu trưng quyền uy.',
@@ -90,10 +93,11 @@ export const OUTFIT_MODELS: ModelDef[] = [
   },
   {
     id: 'hoang_bao_long_trieu',
-    name: 'Hoàng Bào Long Triều (Hoàng Đế)',
-    shortName: 'Hoàng Bào Thiên Tử',
+    name: 'Long Bào Đại Triều',
+    subname: 'Hoàng Bào Triều Nguyễn',
+    shortName: 'Long Bào Đại Triều',
     gender: 'nam',
-    badge: 'Thiên Tử',
+    badge: 'Hoàng Bào Triều Nguyễn',
     category: 'hoangtrieu',
     era: 'Đại Triều Phục (Lê Sơ - Nguyễn)',
     desc: 'Hoàng Bào chính thống của bậc Thiên Tử sắc vàng hoàng kim lộng lẫy, dệt thêu rồng ẩn mây ngũ sắc, viền cổ ngọc bích đính ngọc trai, gấu áo thêu hoa văn sóng nước Thủy Ba ngũ hành và đội Mũ Xung Thiên / Bình Thiên đính ngọc quý.',
@@ -112,10 +116,11 @@ export const OUTFIT_MODELS: ModelDef[] = [
   },
   {
     id: 'ngu_than_xanh_cham',
-    name: 'Áo Ngũ Thân Tay Chẽn (Xanh Chàm)',
-    shortName: 'Ngũ Thân Xanh Chàm',
+    name: 'Ngũ Thân Nam',
+    subname: '',
+    shortName: 'Ngũ Thân Nam',
     gender: 'nam',
-    badge: 'Quốc Phục Nam',
+    badge: '',
     category: 'nguthan',
     era: 'Triều Nguyễn (Năm 1744 - 1945)',
     desc: 'Áo Dài Ngũ Thân tay chẽn nam giới chuẩn mực sắc xanh chàm thâm trầm, vạt hò chéo cài 5 chiếc cúc vàng tượng trưng cho Ngũ Thường (Nhân, Lễ, Nghĩa, Trí, Tín), quần lụa trắng và đầu đội khăn đóng truyền thống.',
@@ -134,10 +139,11 @@ export const OUTFIT_MODELS: ModelDef[] = [
   },
   {
     id: 'ngu_than_tu_sac',
-    name: 'Áo Ngũ Thân Tử Sắc (Tím Mận)',
-    shortName: 'Ngũ Thân Tử Sắc Nam',
+    name: 'Tấc Nam',
+    subname: '',
+    shortName: 'Tấc Nam',
     gender: 'nam',
-    badge: 'Quý Tộc Nam',
+    badge: '',
     category: 'nguthan',
     era: 'Triều Nguyễn - Quý Tộc',
     desc: 'Áo Ngũ Thân sắc tím mận chín (Tử Sắc) thanh cao dành cho giới thượng lưu và hoàng thân, cài hàng khuy vàng sang trọng, phối cùng khăn đóng tím đồng điệu và quần lụa ngà mềm mại.',
@@ -155,55 +161,12 @@ export const OUTFIT_MODELS: ModelDef[] = [
     ]
   },
   {
-    id: 'ngu_than_bich_thuy',
-    name: 'Áo Ngũ Thân Bích Thủy (Xanh Ngọc Bích)',
-    shortName: 'Ngũ Thân Bích Thủy',
-    gender: 'nam',
-    badge: 'Nho Nhã Nam',
-    category: 'nguthan',
-    era: 'Triều Nguyễn (Năm 1744 - 1945)',
-    desc: 'Áo Dài Ngũ Thân tay chẽn màu xanh ngọc bích (Bích Thủy) thanh tao thoát tục, vạt hò cài 5 cúc mạ vàng óng ả, phối cùng quần lụa đen tuyền trang nhã và phong thái nho nhã của bậc học giả quý tộc.',
-    historicalNote: 'Sắc ngọc bích tượng trưng cho ngũ hành Mộc - đại diện cho mùa xuân, sự sinh sôi nảy nở, khí chất thanh cao quân tử và tấm lòng thanh liêm của giới trí thức xưa.',
-    accentColor: '#0D7482',
-    defaultColors: {
-      tunic: '#0D7482',
-      pants: '#1A1A1A',
-      sash: '#D9B25B'
-    },
-    targets: [
-      { id: 0, label: 'Thân áo ngọc bích' },
-      { id: 1, label: 'Quần lụa đen' },
-      { id: 2, label: 'Cúc & Khăn đóng' }
-    ]
-  },
-  {
-    id: 'ao_doi_kham_lam_hong',
-    name: 'Lễ Phục Nhị Tầng (Đỏ Thắm Phối Lam)',
-    shortName: 'Lễ Phục Nhị Tầng Nam',
-    gender: 'nam',
-    badge: 'Lễ Triều Phục',
-    category: 'hoangtrieu',
-    era: 'Thời Lê Trung Hưng - Nguyễn',
-    desc: 'Trang phục lễ hội nhị tầng phối hợp độc đáo giữa áo khoác vạt lỡ sắc đỏ son thắm tươi bên ngoài và thân áo dài màu xanh lam thẫm bên trong, quần lụa ngà mềm mại và cúc ngọc cài quý phái.',
-    historicalNote: 'Phong cách mặc nhiều tầng lớp áo (nhị tầng / tam tầng y phục) vừa tôn vinh độ đài các phong lưu, vừa thể hiện sự tôn nghiêm và chỉn chu trong các nghi lễ trang trọng của người xưa.',
-    accentColor: '#A3202F',
-    defaultColors: {
-      tunic: '#A3202F',
-      pants: '#23407A',
-      sash: '#F1DECA'
-    },
-    targets: [
-      { id: 0, label: 'Áo ngoài đỏ thắm' },
-      { id: 1, label: 'Lớp trong áo lam' },
-      { id: 2, label: 'Quần lụa ngà' }
-    ]
-  },
-  {
     id: 'ao_tac_do_son_khan',
-    name: 'Áo Tấc Nam Đỏ Son (Có Khăn)',
-    shortName: 'Áo Tấc Nam Đỏ Son',
+    name: 'Viên Lĩnh Nam',
+    subname: '',
+    shortName: 'Viên Lĩnh Nam',
     gender: 'nam',
-    badge: 'Hỷ Phục Nam',
+    badge: '',
     category: 'nguthan',
     era: 'Triều Nguyễn - Lễ Cưới & Đại Lễ',
     desc: 'Áo Tấc nam (áo ngũ thân tay thụng dài một tấc) sắc đỏ son rực rỡ, cổ áo đứng viền trắng bên trong, hàng cúc mạ vàng óng ánh, phối cùng quần lụa màu xanh lam thẫm quý phái và khăn đóng đỏ trang nghiêm.',
@@ -220,14 +183,61 @@ export const OUTFIT_MODELS: ModelDef[] = [
       { id: 2, label: 'Cúc & Khăn đóng' }
     ]
   },
+  {
+    id: 'giao_linh_thien_thanh',
+    name: 'Giao Lĩnh Nam',
+    subname: '',
+    shortName: 'Giao Lĩnh Nam',
+    gender: 'nam',
+    badge: '',
+    category: 'giaolinh',
+    era: 'Thời Lý - Trần - Lê',
+    desc: 'Áo Giao Lĩnh sắc xanh mây trời (Thiên Thanh) thanh thoát, cổ vạt chéo viền sắc ngà kem, đai ngọc đới buông dải thắt nơ mềm mại thướt tha, mang vẻ đẹp tao nhã phong nhã.',
+    historicalNote: 'Màu Thiên Thanh (xanh da trời nhạt) là biểu trưng cho nét đẹp tinh khiết, thanh cao và thanh nhã của các danh gia vọng tộc thời xưa.',
+    accentColor: '#7F9FBA',
+    defaultColors: {
+      tunic: '#B3CEE5',
+      pants: '#F8F9FA',
+      sash: '#FFFDD0'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo mây trời' },
+      { id: 1, label: 'Nội y / Váy lụa' },
+      { id: 2, label: 'Dải thắt lưng ngọc' }
+    ]
+  },
+  {
+    id: 'ao_tac_nu_toc_dai',
+    name: 'Viên Lĩnh Nam',
+    subname: '',
+    shortName: 'Viên Lĩnh Nam',
+    gender: 'nam',
+    badge: '',
+    category: 'nguthan',
+    era: 'Triều Nguyễn (Kinh Kỳ)',
+    desc: 'Áo đỏ son tay thụng viền trắng kem bên trong, cài 5 hạt khuy vàng, phối cùng quần lụa màu xanh lam thẫm quý phái và phong thái lịch thiệp của nam nhân Kinh kỳ.',
+    historicalNote: 'Áo tay thụng dài kết hợp phong thái thanh lịch, vừa giữ được nét e ấp khiêm nhường truyền thống, vừa toát lên vẻ đẹp thanh tân của người Việt.',
+    accentColor: '#A3202F',
+    defaultColors: {
+      tunic: '#A3202F',
+      pants: '#23407A',
+      sash: '#E3B778'
+    },
+    targets: [
+      { id: 0, label: 'Thân áo đỏ son' },
+      { id: 1, label: 'Quần lụa lam thẫm' },
+      { id: 2, label: 'Cúc & Viền ngà' }
+    ]
+  },
 
   // =================== CỔ PHỤC NỮ (7 MẪU) ===================
   {
     id: 'phuong_bao_hoang_hau',
-    name: 'Phượng Bào Ngũ Sắc (Hoàng Hậu / Mệnh Phụ)',
-    shortName: 'Phượng Bào Hoàng Hậu',
+    name: 'Phượng Bào',
+    subname: 'Phụng Bào Triều Nguyễn',
+    shortName: 'Phượng Bào',
     gender: 'nu',
-    badge: 'Mẫu Nghi Thiên Hạ',
+    badge: 'Phụng Bào Triều Nguyễn',
     category: 'hoangtrieu',
     era: 'Triều Lê - Nguyễn (Đại Lễ Cung Đình)',
     desc: 'Hoàng phục / Phượng Bào cao quý bậc nhất của bậc Hoàng Hậu và Mệnh Phụ, thân thêu tường vân ngũ sắc, đai ngọc đới, gấu áo thêu sóng nước Thủy Ba ba tầng và đầu đội Mão Phượng / Mũ Miện Phượng Đình đính ngọc vàng lộng lẫy.',
@@ -246,10 +256,11 @@ export const OUTFIT_MODELS: ModelDef[] = [
   },
   {
     id: 'le_phuc_ngu_sac_hat',
-    name: 'Nhật Bình / Lễ Phục Ngũ Sắc (Có Mũ)',
-    shortName: 'Nhật Bình Nữ (Có Mũ)',
+    name: 'Nhật Bình Nữ',
+    subname: '',
+    shortName: 'Nhật Bình Nữ',
     gender: 'nu',
-    badge: 'Cung Đình Nữ',
+    badge: '',
     category: 'hoangtrieu',
     era: 'Triều Lê - Nguyễn (Hậu Cung & Mệnh Phụ)',
     desc: 'Lễ phục thụng xanh chàm (Lam bảo), cửa tay dệt dải viền ngũ sắc tượng trưng cho ngũ hành (Kim, Mộc, Thủy, Hỏa, Thổ), thường màu ngà dệt ngọc văn và đầu đội Mũ Triều Nghi tròn hoa văn lam bảo trang nghiêm.',
@@ -268,10 +279,11 @@ export const OUTFIT_MODELS: ModelDef[] = [
   },
   {
     id: 'le_phuc_ngu_sac_nohat',
-    name: 'Nhật Bình / Lễ Phục Ngũ Sắc (Búi Tóc)',
-    shortName: 'Nhật Bình Nữ (Búi Tóc)',
+    name: 'Nhật Bình Nữ',
+    subname: '',
+    shortName: 'Nhật Bình Nữ',
     gender: 'nu',
-    badge: 'Yến Tiệc Nữ',
+    badge: '',
     category: 'hoangtrieu',
     era: 'Triều Lê - Nguyễn (Dạo Yến)',
     desc: 'Phiên bản thường triều và dạo yến của Lễ Phục Ngũ Sắc nữ, không đội mũ triều nghi để lộ mái tóc búi cài trâm tao nhã, toát lên phong thái quyền quý nhẹ nhàng, thanh tú và dịu dàng.',
@@ -289,33 +301,58 @@ export const OUTFIT_MODELS: ModelDef[] = [
     ]
   },
   {
-    id: 'giao_linh_thien_thanh',
-    name: 'Áo Giao Lĩnh Nữ Thiên Thanh (Thường Phục)',
-    shortName: 'Giao Lĩnh Nữ Thiên Thanh',
+    id: 'ngu_than_bich_thuy',
+    name: 'Ngũ Thân Nữ',
+    subname: '',
+    shortName: 'Ngũ Thân Nữ',
     gender: 'nu',
-    badge: 'Khuê Các Nữ',
-    category: 'giaolinh',
-    era: 'Thời Lý - Trần - Lê',
-    desc: 'Áo Giao Lĩnh nữ sắc xanh mây trời (Thiên Thanh) thanh thoát, cổ vạt chéo viền sắc ngà kem, đai ngọc đới buông dải thắt nơ mềm mại thướt tha, mang vẻ đẹp tao nhã của các tiểu thư khuê các.',
-    historicalNote: 'Màu Thiên Thanh (xanh da trời nhạt) là biểu trưng cho nét đẹp tinh khiết, thanh cao và thanh nhã của các thiếu nữ dòng dõi danh gia vọng tộc thời xưa.',
-    accentColor: '#7F9FBA',
+    badge: '',
+    category: 'nguthan',
+    era: 'Triều Nguyễn (Năm 1744 - 1945)',
+    desc: 'Áo Dài Ngũ Thân tay chẽn màu xanh ngọc bích (Bích Thủy) thanh tao thoát tục, vạt hò cài 5 cúc mạ vàng óng ả, phối cùng quần lụa đen tuyền trang nhã và phong thái đoan trang của bậc tiểu thư quý tộc.',
+    historicalNote: 'Sắc ngọc bích tượng trưng cho ngũ hành Mộc - đại diện cho mùa xuân, sự sinh sôi nảy nở, khí chất thanh cao và tâm hồn trong sáng của người phụ nữ.',
+    accentColor: '#0D7482',
     defaultColors: {
-      tunic: '#B3CEE5',
-      pants: '#F8F9FA',
-      sash: '#FFFDD0'
+      tunic: '#0D7482',
+      pants: '#1A1A1A',
+      sash: '#D9B25B'
     },
     targets: [
-      { id: 0, label: 'Thân áo mây trời' },
-      { id: 1, label: 'Nội y / Váy lụa' },
-      { id: 2, label: 'Dải thắt lưng ngọc' }
+      { id: 0, label: 'Thân áo ngọc bích' },
+      { id: 1, label: 'Quần lụa đen' },
+      { id: 2, label: 'Cúc & Khăn đóng' }
+    ]
+  },
+  {
+    id: 'ao_doi_kham_lam_hong',
+    name: 'Viên Lĩnh Nữ',
+    subname: '',
+    shortName: 'Viên Lĩnh Nữ',
+    gender: 'nu',
+    badge: '',
+    category: 'hoangtrieu',
+    era: 'Thời Lê Trung Hưng - Nguyễn',
+    desc: 'Trang phục lễ hội nhị tầng phối hợp độc đáo giữa áo khoác vạt lỡ sắc đỏ son thắm tươi bên ngoài và thân áo dài màu xanh lam thẫm bên trong, quần lụa ngà mềm mại và cúc ngọc cài quý phái.',
+    historicalNote: 'Phong cách mặc nhiều tầng lớp áo (nhị tầng / tam tầng y phục) vừa tôn vinh độ đài các phong lưu, vừa thể hiện sự tôn nghiêm và chỉn chu trong các nghi lễ trang trọng của người xưa.',
+    accentColor: '#A3202F',
+    defaultColors: {
+      tunic: '#A3202F',
+      pants: '#23407A',
+      sash: '#F1DECA'
+    },
+    targets: [
+      { id: 0, label: 'Áo ngoài đỏ thắm' },
+      { id: 1, label: 'Lớp trong áo lam' },
+      { id: 2, label: 'Quần lụa ngà' }
     ]
   },
   {
     id: 'giao_linh_thien_thanh_bun',
-    name: 'Áo Giao Lĩnh Nữ Thiên Thanh (Búi Tóc)',
-    shortName: 'Giao Lĩnh Nữ Búi Tóc',
+    name: 'Giao Lĩnh Nữ',
+    subname: '',
+    shortName: 'Giao Lĩnh Nữ',
     gender: 'nu',
-    badge: 'Tao Nhã Nữ',
+    badge: '',
     category: 'giaolinh',
     era: 'Thời Lý - Trần - Lê',
     desc: 'Biến thể Áo Giao Lĩnh Thiên Thanh phối búi tóc mộc mạc cài trâm, vạt áo chéo viền kem thanh lịch buông dài qua gối, toát lên phong thái đoan trang của nàng thơ dạo hoa thưởng ngoạn.',
@@ -334,10 +371,11 @@ export const OUTFIT_MODELS: ModelDef[] = [
   },
   {
     id: 'ao_tac_do_son_bun',
-    name: 'Áo Tấc Nữ Đỏ Son (Tóc Búi Cô Dâu)',
-    shortName: 'Áo Tấc Nữ Hỷ Phục',
+    name: 'Viên Lĩnh Nữ',
+    subname: '',
+    shortName: 'Viên Lĩnh Nữ',
     gender: 'nu',
-    badge: 'Hỷ Phục Nữ',
+    badge: '',
     category: 'nguthan',
     era: 'Triều Nguyễn - Lễ Cưới Cô Dâu',
     desc: 'Biến thể Áo Tấc đỏ son tay thụng phối kiểu tóc búi cài trâm hoa truyền thống, khoe trọn nét duyên dáng rạng rỡ, tươi tắn và quý phái của các cô dâu hay tiểu thư đài các trong ngày vu quy.',
@@ -355,25 +393,26 @@ export const OUTFIT_MODELS: ModelDef[] = [
     ]
   },
   {
-    id: 'ao_tac_nu_toc_dai',
-    name: 'Áo Tấc Nữ Đỏ Son (Tóc Thả Nàng Thơ)',
-    shortName: 'Áo Tấc Nữ Tóc Thả',
+    id: 'bach_y_cong_chua',
+    name: 'Hầu Đồng',
+    subname: 'Khăn Chầu Áo Ngự',
+    shortName: 'Hầu Đồng',
     gender: 'nu',
-    badge: 'Nàng Thơ Kinh Kỳ',
-    category: 'nguthan',
-    era: 'Triều Nguyễn (Nàng Thơ Xứ Huế)',
-    desc: 'Áo Tấc nữ đỏ son tay thụng viền trắng kem bên trong, cài 5 hạt khuy vàng, phối cùng quần lụa màu xanh lam thẫm quý phái và mái tóc dài bồng bềnh buông xõa dịu dàng của các tiểu thư đài các xứ Kinh kỳ.',
-    historicalNote: 'Áo Tấc tay thụng dài kết hợp kiểu tóc dài tự nhiên mang phong thái thanh lịch, vừa giữ được nét e ấp khiêm nhường truyền thống, vừa toát lên vẻ đẹp thanh tân tươi trẻ của người phụ nữ Việt.',
-    accentColor: '#A3202F',
+    badge: 'Khăn Chầu Áo Ngự',
+    category: 'hoangtrieu',
+    era: 'Nghi Lễ Tứ Phủ - Tín Ngưỡng Thờ Mẫu',
+    desc: 'Trang phục nghi lễ Hầu Đồng (Khăn chầu áo ngự) lộng lẫy và linh thiêng, thêu hoa văn sen mây sóng nước, kết hợp dải lụa thắt đai ngọc, chuỗi hạt kim ngọc cùng mão miện trâm cài hoa ngọc uy nghiêm.',
+    historicalNote: 'Nghi lễ Chầu văn Hầu Đồng trong Tín ngưỡng thờ Mẫu Tam phủ của người Việt là Di sản văn hóa phi vật thể đại diện của nhân loại được UNESCO công nhận, mang đậm bản sắc tâm linh và nghệ thuật tạo hình dân gian.',
+    accentColor: '#2E9B73',
     defaultColors: {
-      tunic: '#A3202F',
-      pants: '#23407A',
-      sash: '#E3B778'
+      tunic: '#FFFFFF',
+      pants: '#FAFAFA',
+      sash: '#2E9B73'
     },
     targets: [
-      { id: 0, label: 'Thân áo đỏ son' },
-      { id: 1, label: 'Quần lụa lam thẫm' },
-      { id: 2, label: 'Cúc & Viền ngà' }
+      { id: 0, label: 'Thân áo ngự' },
+      { id: 1, label: 'Quần lụa' },
+      { id: 2, label: 'Đai ngọc' }
     ]
   }
 ];
@@ -678,6 +717,15 @@ export default function App() {
             useCustomColors={customColorsActive}
           />
         );
+      case 'bach_y_cong_chua':
+        return (
+          <BachYNu
+            robeColor={tunicColor}
+            pantsColor={pantsColor}
+            sashColor={sashColor}
+            useCustomColors={customColorsActive}
+          />
+        );
       default:
         return <GiaoLinhNam />;
     }
@@ -747,11 +795,11 @@ export default function App() {
                 Studio Phối Cổ Phục Việt
               </span>
               <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                14 Mẫu Cổ Phục • Bảng Màu • Phụ Kiện • Gen Z
+                {OUTFIT_MODELS.length} Mẫu Cổ Phục • Bảng Màu • Phụ Kiện • Gen Z
               </span>
             </div>
             <span className="text-[11px] text-slate-500 font-normal hidden sm:inline">
-              7 Mẫu Cổ Phục Nam & 7 Mẫu Cổ Phục Nữ Chuẩn Lịch Sử
+              {maleModels.length} Mẫu Cổ Phục Nam & {femaleModels.length} Mẫu Cổ Phục Nữ Chuẩn Lịch Sử
             </span>
           </div>
         </div>
@@ -802,7 +850,8 @@ export default function App() {
                 <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                 <span>
                   Đang thử đồ:{' '}
-                  <strong className="text-slate-900">{currentModel.name}</strong> •{' '}
+                  <strong className="text-slate-900">{currentModel.name}</strong>
+                  {currentModel.subname ? ` (${currentModel.subname})` : ''} •{' '}
                   <span
                     className={`font-semibold ${
                       currentModel.gender === 'nam' ? 'text-blue-700' : 'text-rose-700'
@@ -831,17 +880,19 @@ export default function App() {
                       ) : (
                         <HeartHandshake className="w-3 h-3 text-rose-500 inline" />
                       )}
-                      {currentModel.shortName}
+                      {currentModel.name}
                     </span>
-                    <span
-                      className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
-                        currentModel.gender === 'nam'
-                          ? 'bg-blue-50 text-blue-800 border-blue-200'
-                          : 'bg-rose-50 text-rose-800 border-rose-200'
-                      }`}
-                    >
-                      {currentModel.badge}
-                    </span>
+                    {currentModel.subname ? (
+                      <span
+                        className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+                          currentModel.gender === 'nam'
+                            ? 'bg-blue-50 text-blue-800 border-blue-200'
+                            : 'bg-rose-50 text-rose-800 border-rose-200'
+                        }`}
+                      >
+                        {currentModel.subname}
+                      </span>
+                    ) : null}
                   </div>
 
                   <div className="flex items-center gap-1 bg-white/90 px-1.5 py-0.5 rounded-lg border border-stone-200/80">
@@ -1030,7 +1081,7 @@ export default function App() {
                           <span>Danh mục Cổ Phục ({OUTFIT_MODELS.length} mẫu)</span>
                         </h3>
                         <p className="text-xs text-slate-500">
-                          Phân nhóm theo <strong>7 Mẫu Nam</strong> & <strong>7 Mẫu Nữ</strong>
+                          Phân nhóm theo <strong>{maleModels.length} Mẫu Nam</strong> & <strong>{femaleModels.length} Mẫu Nữ</strong>
                         </p>
                       </div>
                       <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
@@ -1050,7 +1101,7 @@ export default function App() {
                         }`}
                       >
                         <Crown className="w-3.5 h-3.5 text-amber-600" />
-                        <span>Tất cả (14)</span>
+                        <span>Tất cả ({OUTFIT_MODELS.length})</span>
                       </button>
 
                       <button
@@ -1063,7 +1114,7 @@ export default function App() {
                         }`}
                       >
                         <User className="w-3.5 h-3.5" />
-                        <span>👦 Cổ Phục Nam (7)</span>
+                        <span>👦 Cổ Phục Nam ({maleModels.length})</span>
                       </button>
 
                       <button
@@ -1076,7 +1127,7 @@ export default function App() {
                         }`}
                       >
                         <HeartHandshake className="w-3.5 h-3.5" />
-                        <span>👧 Cổ Phục Nữ (7)</span>
+                        <span>👧 Cổ Phục Nữ ({femaleModels.length})</span>
                       </button>
                     </div>
 
@@ -1155,10 +1206,10 @@ export default function App() {
                             </div>
                             <div>
                               <span className="font-bold text-xs text-slate-900 block leading-tight line-clamp-1">
-                                {item.shortName}
+                                {item.name}
                               </span>
-                              <span className="text-[9.5px] text-slate-500 block mt-0.5 line-clamp-1">
-                                {item.badge}
+                              <span className="text-[9.5px] text-slate-500 block mt-0.5 line-clamp-1 min-h-[14px]">
+                                {item.subname || ''}
                               </span>
                             </div>
                           </button>
@@ -1172,6 +1223,11 @@ export default function App() {
                       <div className="text-xs space-y-1">
                         <div className="font-semibold text-slate-900 flex items-center gap-1.5">
                           <span>{currentModel.name}</span>
+                          {currentModel.subname && (
+                            <span className="text-slate-500 text-[11px] font-normal">
+                              ({currentModel.subname})
+                            </span>
+                          )}
                           <span
                             className={`text-[10px] px-2 py-0.2 rounded-full font-bold ${
                               currentModel.gender === 'nam'
@@ -1578,7 +1634,7 @@ export default function App() {
                       </span>
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Giao Lĩnh Nam, Hoàng Bào Long Triều, Ngũ Thân Xanh Chàm, Tử Sắc, Bích Thủy, Nhị Tầng & Áo Tấc Nam
+                      Cổ Phục - Tế Nam Giao, Long Bào Đại Triều, Ngũ Thân Nam, Tấc Nam, Giao Lĩnh Nam & Viên Lĩnh Nam
                     </p>
                   </div>
                 </div>
@@ -1596,9 +1652,11 @@ export default function App() {
                         <User className="w-3.5 h-3.5 text-blue-600" />
                         {item.name}
                       </span>
-                      <span className="text-[10px] font-semibold bg-blue-100 text-blue-800 border border-blue-200 px-2 py-0.5 rounded-full">
-                        {item.badge}
-                      </span>
+                      {item.subname ? (
+                        <span className="text-[10px] font-semibold bg-blue-100 text-blue-800 border border-blue-200 px-2 py-0.5 rounded-full">
+                          {item.subname}
+                        </span>
+                      ) : null}
                     </div>
 
                     {/* Visual Window */}
@@ -1657,11 +1715,11 @@ export default function App() {
                     <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                       <span>Phần II: Bộ Sưu Tập Cổ Phục Nữ</span>
                       <span className="bg-rose-100 text-rose-800 text-[11px] font-semibold px-2 py-0.5 rounded-full">
-                        7 Mẫu Nữ Giới
+                        {femaleModels.length} Mẫu Nữ Giới
                       </span>
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Phượng Bào Hoàng Hậu, Lễ Phục Nhật Bình, Giao Lĩnh Thiên Thanh & Áo Tấc Nữ
+                      Phượng Bào Triều Nguyễn, Nhật Bình Nữ, Ngũ Thân Nữ, Giao Lĩnh Nữ, Viên Lĩnh Nữ & Hầu Đồng
                     </p>
                   </div>
                 </div>
@@ -1679,9 +1737,11 @@ export default function App() {
                         <HeartHandshake className="w-3.5 h-3.5 text-rose-500" />
                         {item.name}
                       </span>
-                      <span className="text-[10px] font-semibold bg-rose-100 text-rose-800 border border-rose-200 px-2 py-0.5 rounded-full">
-                        {item.badge}
-                      </span>
+                      {item.subname ? (
+                        <span className="text-[10px] font-semibold bg-rose-100 text-rose-800 border border-rose-200 px-2 py-0.5 rounded-full">
+                          {item.subname}
+                        </span>
+                      ) : null}
                     </div>
 
                     {/* Visual Window */}
@@ -1742,6 +1802,11 @@ export default function App() {
                   <h3 className="font-bold text-lg text-slate-900">
                     {OUTFIT_MODELS[previewModalIdx].name}
                   </h3>
+                  {OUTFIT_MODELS[previewModalIdx].subname && (
+                    <span className="text-sm text-slate-500 font-medium">
+                      ({OUTFIT_MODELS[previewModalIdx].subname})
+                    </span>
+                  )}
                   <span
                     className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       OUTFIT_MODELS[previewModalIdx].gender === 'nam'
