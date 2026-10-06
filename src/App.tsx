@@ -13,6 +13,7 @@ import {
   HANDHELD, 
   GEN_Z_ACCESSORIES, 
   COLOR_PRESETS,
+  SPECIAL_GARMENTS,
   type Garment,
   type Headwear,
   type Footwear,
@@ -20,16 +21,20 @@ import {
 } from './data/costumeData';
 import { FemaleVienLinh, FemaleNhatBinh, FemaleAoTac, FemaleNguThan } from './components/FemaleCostumes';
 import { MaleGiaoLinh, MaleAoTac, MaleVienLinh, MaleNguThan, MaleHands, MaleShoes } from './components/MaleCostumes';
+import { SpecialLongBaoNam, SpecialQuanPhucNam, SpecialPhuongBaoNu, SpecialBachYNu } from './components/special';
 
 export default function App() {
   // Navigation: 1 = Trang 1 (Phối đồ), 2 = Trang 2 (Cẩm nang thông tin)
   const [activePage, setActivePage] = useState<number>(1);
 
-  // Model Gender: 'male' (Nam) | 'female' (Nữ - hiện tại để trống, cập nhật sau)
+  // Model Gender: 'male' (Nam) | 'female' (Nữ)
   const [modelGender, setModelGender] = useState<'male' | 'female'>('male');
 
-  // Slot 1: Garment selection
+  // Slot 1: Garment selection (Trang phục phổ thông)
   const [selectedGarment, setSelectedGarment] = useState<Garment>(GARMENTS[2]); // Default: Ngũ thân tay chẽn
+
+  // Slot Đặc biệt: Trang phục đặc biệt cố định nguyên bản (null nếu mặc đồ thường)
+  const [selectedSpecialId, setSelectedSpecialId] = useState<string | null>(null);
 
   // Slot 2: Color customization (3 hex colors: lining, dress, pants)
   const [selectedPreset, setSelectedPreset] = useState<ColorPreset>(COLOR_PRESETS[0]);
@@ -75,6 +80,7 @@ export default function App() {
 
   // Apply a color preset
   const handleApplyPreset = (preset: ColorPreset) => {
+    setSelectedSpecialId(null);
     setSelectedPreset(preset);
     setLiningColor(preset.lining);
     setDressColor(preset.dress);
@@ -83,11 +89,18 @@ export default function App() {
 
   // Select garment and apply its characteristic look
   const handleSelectGarment = (g: Garment) => {
+    setSelectedSpecialId(null);
     setSelectedGarment(g);
+  };
+
+  // Select special garment (toggles on/off - chỉ hiện hoặc không hiện)
+  const handleSelectSpecial = (id: string) => {
+    setSelectedSpecialId(prev => (prev === id ? null : id));
   };
 
   // Toggle jewelry
   const handleToggleJewelry = (id: string) => {
+    setSelectedSpecialId(null);
     setSelectedJewelry(prev => 
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
@@ -95,6 +108,7 @@ export default function App() {
 
   // Toggle Gen Z item
   const handleToggleGenZ = (id: string) => {
+    setSelectedSpecialId(null);
     setSelectedGenZ(prev =>
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
@@ -102,6 +116,7 @@ export default function App() {
 
   // Randomize look
   const handleRandomRemix = () => {
+    setSelectedSpecialId(null);
     const validGarments = GARMENTS.filter(g => modelGender === 'female' || g.id !== 'nhat-binh');
     const randomGarment = validGarments[Math.floor(Math.random() * validGarments.length)];
     const randomPreset = COLOR_PRESETS[Math.floor(Math.random() * COLOR_PRESETS.length)];
@@ -131,9 +146,22 @@ export default function App() {
   const handleToggleGender = () => {
     setModelGender(prev => {
       const nextGender = prev === 'male' ? 'female' : 'male';
-      if (nextGender === 'male' && selectedGarment.id === 'nhat-binh') {
-        const fallback = GARMENTS.find(g => g.id === 'ngu-than-tay-chen') || GARMENTS[0];
-        setSelectedGarment(fallback);
+      // Nếu đang mặc trang phục đặc biệt, chuyển sang trang phục đặc biệt tương ứng của giới tính mới
+      if (selectedSpecialId) {
+        if (nextGender === 'female') {
+          if (selectedSpecialId === 'special-long-bao-nam') setSelectedSpecialId('special-phuong-bao-nu');
+          else if (selectedSpecialId === 'special-quan-phuc-nam') setSelectedSpecialId('special-bach-y-nu');
+          else setSelectedSpecialId('special-phuong-bao-nu');
+        } else {
+          if (selectedSpecialId === 'special-phuong-bao-nu') setSelectedSpecialId('special-long-bao-nam');
+          else if (selectedSpecialId === 'special-bach-y-nu') setSelectedSpecialId('special-quan-phuc-nam');
+          else setSelectedSpecialId('special-long-bao-nam');
+        }
+      } else {
+        if (nextGender === 'male' && selectedGarment.id === 'nhat-binh') {
+          const fallback = GARMENTS.find(g => g.id === 'ngu-than-tay-chen') || GARMENTS[0];
+          setSelectedGarment(fallback);
+        }
       }
       return nextGender;
     });
@@ -682,6 +710,20 @@ export default function App() {
 
   // Render SVG Character component
   const renderCharacterSVG = (isLightbox: boolean = false) => {
+    // 1. Kiểm tra nếu đang mặc Trang phục Đặc biệt (nguyên gốc, cố định)
+    if (selectedSpecialId === 'special-long-bao-nam') {
+      return <SpecialLongBaoNam isLightbox={isLightbox} />;
+    }
+    if (selectedSpecialId === 'special-quan-phuc-nam') {
+      return <SpecialQuanPhucNam isLightbox={isLightbox} />;
+    }
+    if (selectedSpecialId === 'special-phuong-bao-nu') {
+      return <SpecialPhuongBaoNu isLightbox={isLightbox} />;
+    }
+    if (selectedSpecialId === 'special-bach-y-nu') {
+      return <SpecialBachYNu isLightbox={isLightbox} />;
+    }
+
     if (modelGender === 'female') {
       return renderFemaleModelSVG(isLightbox);
     }
@@ -1152,24 +1194,49 @@ export default function App() {
                 
                 {/* 1. TAB TRANG PHỤC */}
                 {builderTab === 'garment' && (
-                  <div className="sub-section">
-                    <h3 className="sub-section-title">Kiểu áo ngoài</h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                      {GARMENTS
-                        .filter(g => modelGender === 'female' || g.id !== 'nhat-binh')
-                        .map((g) => {
-                          const isSelected = selectedGarment.id === g.id;
-                          return (
-                            <button
-                              key={g.id}
-                              type="button"
-                              onClick={() => handleSelectGarment(g)}
-                              className={`builder-btn ${isSelected ? 'active' : ''}`}
-                            >
-                              {g.name}
-                            </button>
-                          );
-                        })}
+                  <div>
+                    {/* Phân nhóm 1: Kiểu áo ngoài phổ thông */}
+                    <div className="sub-section">
+                      <h3 className="sub-section-title">Kiểu áo ngoài</h3>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                        {GARMENTS
+                          .filter(g => modelGender === 'female' || g.id !== 'nhat-binh')
+                          .map((g) => {
+                            const isSelected = selectedSpecialId === null && selectedGarment.id === g.id;
+                            return (
+                              <button
+                                key={g.id}
+                                type="button"
+                                onClick={() => handleSelectGarment(g)}
+                                className={`builder-btn ${isSelected ? 'active' : ''}`}
+                              >
+                                {g.name}
+                              </button>
+                            );
+                          })}
+                      </div>
+                    </div>
+
+                    {/* Phân nhóm 2: Trang phục Đặc biệt (Được đẩy xuống để không sát hàng trên, nút đơn giản) */}
+                    <div className="sub-section mt-7">
+                      <h3 className="sub-section-title">Đặc biệt</h3>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                        {SPECIAL_GARMENTS
+                          .filter(sg => (modelGender === 'male' ? sg.gender === 'Nam' : sg.gender === 'Nữ'))
+                          .map((sg) => {
+                            const isSelected = selectedSpecialId === sg.id;
+                            return (
+                              <button
+                                key={sg.id}
+                                type="button"
+                                onClick={() => handleSelectSpecial(sg.id)}
+                                className={`builder-btn ${isSelected ? 'active' : ''}`}
+                              >
+                                {sg.name}
+                              </button>
+                            );
+                          })}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -1225,7 +1292,7 @@ export default function App() {
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                         <button
                           type="button"
-                          onClick={() => setSelectedHeadwear(null)}
+                          onClick={() => { setSelectedSpecialId(null); setSelectedHeadwear(null); }}
                           className={`builder-btn ${selectedHeadwear === null ? 'active' : ''}`}
                         >
                           ✕ Không đội đầu
@@ -1236,7 +1303,7 @@ export default function App() {
                             <button
                               key={hw.id}
                               type="button"
-                              onClick={() => setSelectedHeadwear(hw)}
+                              onClick={() => { setSelectedSpecialId(null); setSelectedHeadwear(hw); }}
                               className={`builder-btn ${isSelected ? 'active' : ''}`}
                             >
                               {hw.name}
@@ -1256,7 +1323,7 @@ export default function App() {
                             <button
                               key={fw.id}
                               type="button"
-                              onClick={() => setSelectedFootwear(fw)}
+                              onClick={() => { setSelectedSpecialId(null); setSelectedFootwear(fw); }}
                               className={`builder-btn ${isSelected ? 'active' : ''}`}
                             >
                               {fw.name}
@@ -1292,7 +1359,7 @@ export default function App() {
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                         <button
                           type="button"
-                          onClick={() => setSelectedHandheld('none')}
+                          onClick={() => { setSelectedSpecialId(null); setSelectedHandheld('none'); }}
                           className={`builder-btn ${selectedHandheld === 'none' ? 'active' : ''}`}
                         >
                           ✕ Không cầm đồ
@@ -1303,7 +1370,7 @@ export default function App() {
                             <button
                               key={hh.id}
                               type="button"
-                              onClick={() => setSelectedHandheld(hh.id)}
+                              onClick={() => { setSelectedSpecialId(null); setSelectedHandheld(hh.id); }}
                               className={`builder-btn ${isSelected ? 'active' : ''}`}
                             >
                               {hh.name}

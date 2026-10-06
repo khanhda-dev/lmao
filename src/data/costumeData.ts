@@ -67,6 +67,50 @@ export interface ColorPreset {
   dressEdge?: string;
 }
 
+export interface SpecialGarment {
+  id: string;
+  name: string;
+  gender: 'Nam' | 'Nữ';
+  title: string;
+  dynasty: string;
+  description: string;
+}
+
+export const SPECIAL_GARMENTS: SpecialGarment[] = [
+  {
+    id: 'special-long-bao-nam',
+    name: 'Long Bào Hoàng Đế',
+    gender: 'Nam',
+    title: 'Đại triều phục Hoàng đế',
+    dynasty: 'Triều Nguyễn',
+    description: 'Trang phục tối cao của bậc Thiên tử với sắc vàng chính hoàng, thêu rồng uốn lượn mây ngũ sắc cùng sóng thuỷ ba và dải ngũ hành lộng lẫy.'
+  },
+  {
+    id: 'special-quan-phuc-nam',
+    name: 'Triều Phục Quan Viên',
+    gender: 'Nam',
+    title: 'Triều phục Văn Võ Đại thần',
+    dynasty: 'Triều Nguyễn',
+    description: 'Triều phục trang trọng của quan viên với thân áo màu xanh sẫm, bổ tử thêu huy hiệu phẩm cấp trước ngực, ngọc đái và dải lụa phụng mệnh uy nghi.'
+  },
+  {
+    id: 'special-phuong-bao-nu',
+    name: 'Phượng Bào Hoàng Hậu',
+    gender: 'Nữ',
+    title: 'Đại triều phục Hoàng Hậu',
+    dynasty: 'Triều Nguyễn',
+    description: 'Trang phục cao quý nhất của bậc Mẫu nghi thiên hạ với sắc cam rực rỡ, vân kiên mây ngũ sắc thêu phượng hoàng và hài phụng mũi cong.'
+  },
+  {
+    id: 'special-bach-y-nu',
+    name: 'Bạch Y Công Chúa',
+    gender: 'Nữ',
+    title: 'Bạch Y Nhật Bình Công Chúa',
+    dynasty: 'Triều Nguyễn',
+    description: 'Áo Nhật Bình sắc trắng tinh khôi thoát tục, thêu chìm hoa sen bạc quý phái, chuỗi ngọc bội ngũ sắc và mũ trâm cài hoa bạch ngọc.'
+  }
+];
+
 // 1. Áo ngoài (5 loại theo file PDF)
 export const GARMENTS: Garment[] = [
   {

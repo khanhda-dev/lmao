@@ -63,15 +63,15 @@ export const FemaleVienLinh: React.FC<FemaleCostumeProps> = ({ dressColor, pants
         strokeLinejoin="round"
       />
 
-      {/* Cổ tròn cong gài khuy sang phải */}
+      {/* Cổ tròn cong gài khuy sang phải - nâng cao ôm khít chân cổ che kín cổ */}
       <path 
-        d="M1758 82.8497H1786V101.85C1786 105.85 1758 105.85 1758 101.85V82.8497Z" 
+        d="M1758 76.8497H1786V101.85C1786 105.85 1758 105.85 1758 101.85V76.8497Z" 
         fill={dressColor} 
         stroke="rgba(0,0,0,0.2)" 
         strokeLinecap="round" 
         strokeLinejoin="round"
       />
-      <path d="M1760 84.3497H1784" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
+      <path d="M1760 78.3497H1784" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
       <path 
         d="M1768 101.85C1756 110.85 1744 122.85 1740 140.85L1739 176.85" 
         stroke="rgba(0,0,0,0.25)" 
@@ -161,21 +161,22 @@ export const FemaleNhatBinh: React.FC<FemaleCostumeProps> = ({ dressColor, linin
       <path d="M264.6 692.05L246.8 692.45L252 728.05L271 727.25L264.6 692.05Z" fill="#F2B01E" />
       <path d="M246.8 692.45L229 692.85L233 728.85L252 728.05L246.8 692.45Z" fill="#4F8A4B" />
 
-      {/* Thân áo Nhật Bình chính */}
+      {/* Thân áo Nhật Bình chính (khoét cổ nửa hình tròn ở giữa) */}
       <path 
-        d="M130 539.85H198C206 539.85 212 544.85 212 552.85L229 760.85C196 768.85 132 768.85 99 760.85L116 552.85C116 544.85 122 539.85 130 539.85Z" 
+        d="M130 539.85H148C148 552.85 155 558.85 164 558.85C173 558.85 180 552.85 180 539.85H198C206 539.85 212 544.85 212 552.85L229 760.85C196 768.85 132 768.85 99 760.85L116 552.85C116 544.85 122 539.85 130 539.85Z" 
         fill={dressColor} 
         stroke="rgba(0,0,0,0.2)" 
         strokeLinecap="round" 
       />
-      <path d="M164 608.85V764.85" stroke="rgba(0,0,0,0.25)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M164 558.85V764.85" stroke="rgba(0,0,0,0.25)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
 
-      {/* Cổ lót trong màu trắng */}
-      <path d="M148 540.85H180V552.85C180 555.85 148 555.85 148 552.85V540.85Z" fill="white" stroke="#D9D4C7" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Cổ lót trong màu trắng khoét nửa hình tròn ôm quanh cổ */}
+      <path d="M148 540.85C148 552.85 155 558.85 164 558.85C173 558.85 180 552.85 180 540.85H148Z" fill="white" stroke="#D9D4C7" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M151 540.85C151 549.85 157 554.85 164 554.85C171 554.85 177 549.85 177 540.85" stroke="#E5DFC9" strokeWidth="1.2" fill="none" strokeLinecap="round" />
 
-      {/* Nẹp cổ hình chữ nhật to bản đặc trưng Nhật Bình thêu hoa văn ngũ hành */}
-      <path d="M137 540.85H191V632.85H137V540.85Z" fill={liningColor || "#3E73C4"} />
-      <path d="M143 540.85H185V626.85H143V540.85Z" fill="#F6EEDC" />
+      {/* Nẹp cổ hình chữ nhật to bản đặc trưng Nhật Bình khoét nửa hình tròn ở cổ thêu hoa văn ngũ hành */}
+      <path d="M137 540.85H148C148 552.85 155 558.85 164 558.85C173 558.85 180 552.85 180 540.85H191V632.85H137V540.85Z" fill={liningColor || "#3E73C4"} />
+      <path d="M143 540.85H150C150 551.85 156 556.85 164 556.85C172 556.85 178 551.85 178 540.85H185V626.85H143V540.85Z" fill="#F6EEDC" />
       <circle cx="155" cy="573.85" r="2" fill="#4F8A4B" />
       <circle cx="173" cy="573.85" r="2" fill="#4F8A4B" />
       <circle cx="164" cy="585.85" r="2" fill="#4F8A4B" />

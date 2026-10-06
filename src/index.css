@@ -127,6 +127,9 @@ main {
 .model.model-female {
   aspect-ratio: 310 / 567;
 }
+.model.model-special {
+  aspect-ratio: 315 / 615;
+}
 .model > svg { 
   width: auto; 
   height: 100%; 
@@ -333,6 +336,9 @@ main {
 }
 #lb-model.model-female {
   aspect-ratio: 310 / 567;
+}
+#lb-model.model-special {
+  aspect-ratio: 315 / 615;
 }
 #lb-model > svg {
   height: 100%;
