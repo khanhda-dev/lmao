@@ -28,7 +28,6 @@ import {
   Headphones,
   Watch,
   Music,
-  Umbrella,
   Fan
 } from 'lucide-react';
 import GiaoLinhNam from './components/GiaoLinhNam';
@@ -38,6 +37,7 @@ import GiaoLinhThienThanh from './components/GiaoLinhThienThanh';
 import NguThanXanhCham from './components/NguThanXanhCham';
 import NguThanTuSac from './components/NguThanTuSac';
 import AoTacDoSon from './components/AoTacDoSon';
+import AoTacNu from './components/AoTacNu';
 import PhuongBaoHoangHau from './components/PhuongBaoHoangHau';
 import AoTacNuTocDai from './components/AoTacNuTocDai';
 import AoDoiKhamLamHong from './components/AoDoiKhamLamHong';
@@ -67,28 +67,28 @@ export interface ModelDef {
 }
 
 export const OUTFIT_MODELS: ModelDef[] = [
-  // =================== CỔ PHỤC NAM (7 MẪU) ===================
+  // =================== CỔ PHỤC NAM (6 MẪU) ===================
   {
     id: 'giao_linh_nam',
-    name: 'Cổ Phục',
+    name: 'Cổn Phục',
     subname: 'Tế Nam Giao',
-    shortName: 'Cổ Phục',
+    shortName: 'Cổn Phục',
     gender: 'nam',
     badge: 'Tế Nam Giao',
     category: 'giaolinh',
     era: 'Triều Lê - Nguyễn (Thế kỷ XV - XIX)',
-    desc: 'Trang phục Giao Lĩnh cổ chéo vạt sang phải viền chu biên (đỏ son), thân áo huyền sắc trang nghiêm, đội Mũ Bình Thiên đính 12 dải lưu miện ngũ sắc và tay cầm thẻ hốt ngọc biểu trưng quyền uy.',
-    historicalNote: 'Áo Giao Lĩnh (cổ giao) là một trong những dạng thức y phục truyền thống tiêu biểu nhất của người Việt, xuất hiện từ thời Lý - Trần và được quy chuẩn hoá trang trọng trong triều đình Lê - Nguyễn.',
-    accentColor: '#8D3435',
+    desc: 'Đại lễ Cổn Phục tế Giao trang nghiêm với áo Giao Lĩnh cổ chéo vạt sang phải viền chu biên (đỏ son), thân áo huyền sắc, đai ngọc đới và đội Mũ Bình Thiên đính 12 dải lưu miện ngũ sắc biểu trưng quyền uy tối thượng.',
+    historicalNote: 'Cổn Phục (hoặc Cổn Miện) là trang phục tế tự tối cao của bậc đế vương dùng trong các đại lễ tế trời đất tại đàn Nam Giao, mang biểu tượng kết nối trời - đất - con người.',
+    accentColor: '#AE3437',
     defaultColors: {
-      tunic: '#1A1A1A',
-      pants: '#8B1A1A',
-      sash: '#8D3435'
+      tunic: '#172B42',
+      pants: '#AE3437',
+      sash: '#E6BE54'
     },
     targets: [
-      { id: 0, label: 'Thân áo (Hắc y)' },
-      { id: 1, label: 'Hạ y (Thường đỏ)' },
-      { id: 2, label: 'Viền cổ & Đai' }
+      { id: 0, label: 'Thân áo (Huyền sắc)' },
+      { id: 1, label: 'Hạ y (Xích thường)' },
+      { id: 2, label: 'Đai ngọc & Chu biên' }
     ]
   },
   {
@@ -206,31 +206,8 @@ export const OUTFIT_MODELS: ModelDef[] = [
       { id: 2, label: 'Dải thắt lưng ngọc' }
     ]
   },
-  {
-    id: 'ao_tac_nu_toc_dai',
-    name: 'Viên Lĩnh Nam',
-    subname: '',
-    shortName: 'Viên Lĩnh Nam',
-    gender: 'nam',
-    badge: '',
-    category: 'nguthan',
-    era: 'Triều Nguyễn (Kinh Kỳ)',
-    desc: 'Áo đỏ son tay thụng viền trắng kem bên trong, cài 5 hạt khuy vàng, phối cùng quần lụa màu xanh lam thẫm quý phái và phong thái lịch thiệp của nam nhân Kinh kỳ.',
-    historicalNote: 'Áo tay thụng dài kết hợp phong thái thanh lịch, vừa giữ được nét e ấp khiêm nhường truyền thống, vừa toát lên vẻ đẹp thanh tân của người Việt.',
-    accentColor: '#A3202F',
-    defaultColors: {
-      tunic: '#A3202F',
-      pants: '#23407A',
-      sash: '#E3B778'
-    },
-    targets: [
-      { id: 0, label: 'Thân áo đỏ son' },
-      { id: 1, label: 'Quần lụa lam thẫm' },
-      { id: 2, label: 'Cúc & Viền ngà' }
-    ]
-  },
 
-  // =================== CỔ PHỤC NỮ (7 MẪU) ===================
+  // =================== CỔ PHỤC NỮ (6 MẪU CHÍNH) ===================
   {
     id: 'phuong_bao_hoang_hau',
     name: 'Phượng Bào',
@@ -255,29 +232,6 @@ export const OUTFIT_MODELS: ModelDef[] = [
     ]
   },
   {
-    id: 'le_phuc_ngu_sac_hat',
-    name: 'Nhật Bình Nữ',
-    subname: '',
-    shortName: 'Nhật Bình Nữ',
-    gender: 'nu',
-    badge: '',
-    category: 'hoangtrieu',
-    era: 'Triều Lê - Nguyễn (Hậu Cung & Mệnh Phụ)',
-    desc: 'Lễ phục thụng xanh chàm (Lam bảo), cửa tay dệt dải viền ngũ sắc tượng trưng cho ngũ hành (Kim, Mộc, Thủy, Hỏa, Thổ), thường màu ngà dệt ngọc văn và đầu đội Mũ Triều Nghi tròn hoa văn lam bảo trang nghiêm.',
-    historicalNote: 'Viền cổ tay ngũ sắc là nét văn hóa đặc thù mang triết lý âm dương ngũ hành của trang phục cung đình và quý tộc Việt cổ, bảo hộ thân chủ và tôn vinh sự cao quý đoan trang của nữ giới.',
-    accentColor: '#1F2A78',
-    defaultColors: {
-      tunic: '#1F2A78',
-      pants: '#F6EEDC',
-      sash: '#E2A93B'
-    },
-    targets: [
-      { id: 0, label: 'Thân áo lam' },
-      { id: 1, label: 'Váy thêu ngà' },
-      { id: 2, label: 'Bổ tử & Đai' }
-    ]
-  },
-  {
     id: 'le_phuc_ngu_sac_nohat',
     name: 'Nhật Bình Nữ',
     subname: '',
@@ -285,10 +239,10 @@ export const OUTFIT_MODELS: ModelDef[] = [
     gender: 'nu',
     badge: '',
     category: 'hoangtrieu',
-    era: 'Triều Lê - Nguyễn (Dạo Yến)',
-    desc: 'Phiên bản thường triều và dạo yến của Lễ Phục Ngũ Sắc nữ, không đội mũ triều nghi để lộ mái tóc búi cài trâm tao nhã, toát lên phong thái quyền quý nhẹ nhàng, thanh tú và dịu dàng.',
-    historicalNote: 'Phong cách tóc búi tự nhiên cài trâm thịnh hành trong các buổi yến tiệc thân mật của hoàng thân và tiểu thư quyền quý, vừa giữ trọn nét tôn nghiêm vừa thể hiện nét đẹp mềm mại của phụ nữ Việt.',
-    accentColor: '#2B4FA0',
+    era: 'Triều Lê - Nguyễn (Hậu Cung & Mệnh Phụ)',
+    desc: 'Lễ phục Nhật Bình xanh chàm (Lam bảo), cổ áo chữ nhật xẻ giữa thêu hoa văn tinh xảo, cửa tay dệt dải viền ngũ sắc tượng trưng cho ngũ hành (Kim, Mộc, Thủy, Hỏa, Thổ), thường màu ngà dệt ngọc văn quý phái.',
+    historicalNote: 'Viền cổ tay ngũ sắc là nét văn hóa đặc thù mang triết lý âm dương ngũ hành của trang phục cung đình và quý tộc Việt cổ, bảo hộ thân chủ và tôn vinh sự cao quý đoan trang của nữ giới.',
+    accentColor: '#1F2A78',
     defaultColors: {
       tunic: '#1F2A78',
       pants: '#F6EEDC',
@@ -370,26 +324,26 @@ export const OUTFIT_MODELS: ModelDef[] = [
     ]
   },
   {
-    id: 'ao_tac_do_son_bun',
-    name: 'Viên Lĩnh Nữ',
-    subname: '',
-    shortName: 'Viên Lĩnh Nữ',
+    id: 'ao_tac_nu',
+    name: 'Tấc Nữ',
+    subname: 'Áo Thụng Tay Rộng',
+    shortName: 'Tấc Nữ',
     gender: 'nu',
-    badge: '',
+    badge: 'Áo Thụng Tay Rộng',
     category: 'nguthan',
-    era: 'Triều Nguyễn - Lễ Cưới Cô Dâu',
-    desc: 'Biến thể Áo Tấc đỏ son tay thụng phối kiểu tóc búi cài trâm hoa truyền thống, khoe trọn nét duyên dáng rạng rỡ, tươi tắn và quý phái của các cô dâu hay tiểu thư đài các trong ngày vu quy.',
-    historicalNote: 'Tay áo thụng dài che kín hai bàn tay khi hành lễ bái gia tiên, thể hiện phong thái đoan trang, khiêm cung và tôn trọng lễ nghĩa gia đình truyền thống.',
+    era: 'Triều Nguyễn - Lễ Cưới & Đại Lễ',
+    desc: 'Áo Tấc nữ (áo ngũ thân tay thụng dài và rộng quá cổ tay), cổ đứng vuông vắn gài 5 cúc bên ngực phải, dáng áo buông xòe thướt tha trang trọng phối cùng kiểu tóc búi cài trâm truyền thống của các cô dâu, tiểu thư quý tộc.',
+    historicalNote: 'Áo Tấc là lễ phục chuẩn mực trang nghiêm bậc nhất của nữ giới thời Nguyễn trong các dịp hỷ sự, vu quy cưới hỏi, lễ tết, cúng tế gia tiên và yến tiệc hoàng triều.',
     accentColor: '#C42B3E',
     defaultColors: {
       tunic: '#A3202F',
-      pants: '#23407A',
+      pants: '#FAFAFA',
       sash: '#E3B778'
     },
     targets: [
-      { id: 0, label: 'Thân áo đỏ son' },
-      { id: 1, label: 'Quần lụa lam thẫm' },
-      { id: 2, label: 'Cúc & Trâm hoa' }
+      { id: 0, label: 'Thân áo Tấc đỏ' },
+      { id: 1, label: 'Quần lụa trắng' },
+      { id: 2, label: 'Cúc & Cổ áo' }
     ]
   },
   {
@@ -416,6 +370,17 @@ export const OUTFIT_MODELS: ModelDef[] = [
     ]
   }
 ];
+
+export const isHeadwearRestrictedModel = (modelId: string) => {
+  return (
+    ['phuong_bao_hoang_hau', 'giao_linh_nam', 'hoang_bao_long_trieu', 'bach_y_cong_chua'].includes(modelId) ||
+    modelId.includes('phuong_bao') ||
+    modelId.includes('long_bao') ||
+    modelId.includes('con_phuc') ||
+    modelId.includes('quan_phuc') ||
+    modelId.includes('hau_dong')
+  );
+};
 
 // Preset Color Palettes (Image 1)
 export interface ColorPalettePreset {
@@ -521,6 +486,9 @@ export default function App() {
     setPantsColor(targetModel.defaultColors.pants);
     setSashColor(targetModel.defaultColors.sash);
     setSelectedColorTarget(0);
+    if (isHeadwearRestrictedModel(targetModel.id) || (targetModel.gender === 'nam' && selectedHeadwear === 'khan_vanh_day')) {
+      setSelectedHeadwear('none');
+    }
   };
 
   const handleSwitchGender = (gender: 'all' | 'nam' | 'nu') => {
@@ -655,6 +623,7 @@ export default function App() {
       case 'phuong_bao_hoang_hau':
         return (
           <PhuongBaoHoangHau
+            showCrown={true}
             robeColor={tunicColor}
             skirtColor={pantsColor}
             sashColor={sashColor}
@@ -699,12 +668,13 @@ export default function App() {
             useCustomColors={customColorsActive}
           />
         );
+      case 'ao_tac_nu':
       case 'ao_tac_do_son_bun':
         return (
-          <AoTacDoSon
-            showBun={true}
+          <AoTacNu
             robeColor={tunicColor}
             pantsColor={pantsColor}
+            sashColor={sashColor}
             useCustomColors={customColorsActive}
           />
         );
@@ -769,7 +739,6 @@ export default function App() {
   const handheldLabels: Record<string, string> = {
     none: 'Không cầm đồ',
     dan_nguyet: 'Đàn nguyệt',
-    o_du: 'Ô (Dù)',
     quat: 'Quạt'
   };
 
@@ -919,24 +888,50 @@ export default function App() {
 
                 {/* Model Graphic Canvas */}
                 <div
-                  className={`relative flex-1 w-full flex items-center justify-center py-2 transition-transform duration-300 ${
+                  className={`relative flex-1 w-full flex items-center justify-center py-2 transition-transform duration-300 overflow-visible ${
                     isZoomed ? 'scale-115' : 'scale-100'
                   }`}
+                  style={{ overflow: 'visible' }}
                 >
-                  {renderModelView(selectedModelIdx)}
-                  <AccessoryVisuals
-                    modelId={currentModel.id}
-                    gender={currentModel.gender}
-                    headwear={selectedHeadwear}
-                    footwear={selectedFootwear}
-                    jewelry={selectedJewelry}
-                    handheld={selectedHandheld}
-                    genz={selectedGenZAccessories}
-                  />
+                  <div
+                    className={`relative w-full h-full flex items-center justify-center transition-all duration-300 overflow-visible ${
+                      currentModel.gender === 'nu' ? 'scale-[0.80]' : 'scale-100'
+                    }`}
+                    style={{ overflow: 'visible' }}
+                  >
+                    {/* Background layer (e.g. Nón Ba Tầm circular hat body behind head) */}
+                    <AccessoryVisuals
+                      layer="back"
+                      modelId={currentModel.id}
+                      gender={currentModel.gender}
+                      headwear={selectedHeadwear}
+                      footwear={selectedFootwear}
+                      jewelry={selectedJewelry}
+                      handheld={selectedHandheld}
+                      genz={selectedGenZAccessories}
+                    />
+
+                    {/* Model Costume Graphic (Layer z-10 in middle) */}
+                    <div className="relative w-full h-full flex items-center justify-center overflow-visible z-10" style={{ zIndex: 10, overflow: 'visible' }}>
+                      {renderModelView(selectedModelIdx)}
+                    </div>
+
+                    {/* Foreground layer (e.g. Quai Thao ribbons, jewelry, handheld, shoes) */}
+                    <AccessoryVisuals
+                      layer="front"
+                      modelId={currentModel.id}
+                      gender={currentModel.gender}
+                      headwear={selectedHeadwear}
+                      footwear={selectedFootwear}
+                      jewelry={selectedJewelry}
+                      handheld={selectedHandheld}
+                      genz={selectedGenZAccessories}
+                    />
+                  </div>
                 </div>
 
                 {/* Applied Accessories Badges Overlay on Model Box */}
-                {(selectedHeadwear !== 'none' ||
+                {((selectedHeadwear !== 'none' && !isHeadwearRestrictedModel(currentModel.id)) ||
                   selectedFootwear !== 'hai_theu' ||
                   selectedJewelry.length > 0 ||
                   selectedHandheld !== 'none' ||
@@ -946,7 +941,7 @@ export default function App() {
                       <SlidersHorizontal className="w-2.5 h-2.5 text-amber-700" />
                       <span>Phụ kiện:</span>
                     </span>
-                    {selectedHeadwear !== 'none' && (
+                    {selectedHeadwear !== 'none' && !isHeadwearRestrictedModel(currentModel.id) && (
                       <span className="bg-amber-100/90 text-amber-900 px-1.5 py-0.2 rounded border border-amber-200">
                         {headwearLabels[selectedHeadwear]}
                       </span>
@@ -1378,33 +1373,64 @@ export default function App() {
                   <div className="space-y-4 max-h-[460px] overflow-y-auto pr-1 animate-in fade-in duration-200">
                     {/* 1. Đồ đội đầu */}
                     <div className="space-y-2">
-                      <span className="text-xs font-semibold text-slate-800 block">Đồ đội đầu</span>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {[
-                          { id: 'none', label: '✕ Không đội đầu' },
-                          { id: 'non_ba_tam', label: 'Nón ba tầm' },
-                          { id: 'non_dau', label: 'Nón dấu' },
-                          { id: 'non_la', label: 'Nón lá' },
-                          { id: 'khan_vanh_day', label: 'Khăn vành dây' },
-                          { id: 'khan_xep', label: 'Khăn xếp' }
-                        ].map((item) => {
-                          const isSelected = selectedHeadwear === item.id;
-                          return (
-                            <button
-                              key={item.id}
-                              type="button"
-                              onClick={() => setSelectedHeadwear(item.id)}
-                              className={`py-2.5 px-3 rounded-xl border text-center text-xs font-medium cursor-pointer transition-all shadow-2xs ${
-                                isSelected
-                                  ? 'bg-[#FFF9EC] border-[#B8860B] text-amber-950 font-bold ring-1 ring-[#B8860B]'
-                                  : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
-                              }`}
-                            >
-                              {item.label}
-                            </button>
-                          );
-                        })}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-slate-800 block">Đồ đội đầu</span>
+                        <span className="text-[10px] text-slate-500">
+                          {isHeadwearRestrictedModel(currentModel.id)
+                            ? '🔒 Mũ mão hoàng gia cố định'
+                            : currentModel.gender === 'nu'
+                            ? '🌸 Dành cho Model Nữ'
+                            : '👦 Dành cho Model Nam'}
+                        </span>
                       </div>
+
+                      {isHeadwearRestrictedModel(currentModel.id) ? (
+                        <div className="bg-amber-50/90 border border-amber-200/80 rounded-xl p-3 flex items-start gap-2 text-xs text-amber-950">
+                          <Crown className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                          <div className="space-y-0.5">
+                            <span className="font-bold block">
+                              Mão miện / Khăn ngự quy chuẩn cố định
+                            </span>
+                            <p className="text-[11px] text-amber-900 leading-relaxed">
+                              Model <strong>{currentModel.name}</strong> (Phượng Bào, Cổn Phục, Long Bào, Hầu Đồng) là cổ phục đại lễ / nghi lễ cung đình trang nghiêm, sử dụng mũ mão & khăn ngự nguyên bản chuẩn di sản lịch sử nên không dùng phụ kiện đội đầu thay thế.
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          {[
+                            { id: 'none', label: '✕ Không đội đầu', forGender: 'all', badge: '' },
+                            { id: 'non_ba_tam', label: 'Nón ba tầm', forGender: 'all', badge: '' },
+                            { id: 'non_dau', label: 'Nón dấu', forGender: 'all', badge: '' },
+                            { id: 'non_la', label: 'Nón lá', forGender: 'all', badge: '' },
+                            { id: 'khan_vanh_day', label: 'Khăn vành dây', forGender: 'nu', badge: 'Chỉ riêng Nữ' },
+                            { id: 'khan_xep', label: 'Khăn xếp', forGender: 'all', badge: '' }
+                          ]
+                            .filter((item) => item.forGender === 'all' || item.forGender === currentModel.gender)
+                            .map((item) => {
+                            const isSelected = selectedHeadwear === item.id;
+                            return (
+                              <button
+                                key={item.id}
+                                type="button"
+                                onClick={() => setSelectedHeadwear(item.id)}
+                                className={`py-2 px-2.5 rounded-xl border text-center text-xs font-medium cursor-pointer transition-all shadow-2xs flex flex-col items-center justify-center gap-0.5 ${
+                                  isSelected
+                                    ? 'bg-[#FFF9EC] border-[#B8860B] text-amber-950 font-bold ring-1 ring-[#B8860B]'
+                                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                                }`}
+                              >
+                                <span>{item.label}</span>
+                                {item.badge && (
+                                  <span className="text-[9px] font-bold px-1.5 py-0.2 bg-rose-100 text-rose-700 rounded-full border border-rose-200">
+                                    {item.badge}
+                                  </span>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
 
                     {/* 2. Giày dép */}
@@ -1465,11 +1491,10 @@ export default function App() {
                     {/* 4. Đồ cầm tay */}
                     <div className="space-y-2 pt-2 border-t border-slate-100">
                       <span className="text-xs font-semibold text-slate-800 block">Đồ cầm tay</span>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      <div className="grid grid-cols-3 gap-2">
                         {[
                           { id: 'none', label: '✕ Không cầm đồ' },
                           { id: 'dan_nguyet', label: 'Đàn nguyệt' },
-                          { id: 'o_du', label: 'Ô (Dù)' },
                           { id: 'quat', label: 'Quạt' }
                         ].map((item) => {
                           const isSelected = selectedHandheld === item.id;
@@ -1634,7 +1659,7 @@ export default function App() {
                       </span>
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Cổ Phục - Tế Nam Giao, Long Bào Đại Triều, Ngũ Thân Nam, Tấc Nam, Giao Lĩnh Nam & Viên Lĩnh Nam
+                      Cổn Phục - Tế Nam Giao, Long Bào Đại Triều, Ngũ Thân Nam, Tấc Nam, Giao Lĩnh Nam & Viên Lĩnh Nam
                     </p>
                   </div>
                 </div>
@@ -1719,7 +1744,7 @@ export default function App() {
                       </span>
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Phượng Bào Triều Nguyễn, Nhật Bình Nữ, Ngũ Thân Nữ, Giao Lĩnh Nữ, Viên Lĩnh Nữ & Hầu Đồng
+                      Phượng Bào Triều Nguyễn, Nhật Bình Nữ, Ngũ Thân Nữ, Viên Lĩnh Nữ, Giao Lĩnh Nữ, Tấc Nữ & Hầu Đồng
                     </p>
                   </div>
                 </div>
@@ -1746,7 +1771,7 @@ export default function App() {
 
                     {/* Visual Window */}
                     <div className="h-80 bg-[#F9F7F2] p-4 flex items-center justify-center relative overflow-hidden">
-                      <div className="w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                      <div className="w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105 scale-[0.80]">
                         {renderModelView(item.originalIdx, false)}
                       </div>
                     </div>
@@ -1831,7 +1856,9 @@ export default function App() {
             </div>
 
             <div className="h-[420px] bg-[#F7F4EE] rounded-2xl flex items-center justify-center p-4 border border-[#E9E3D8]">
-              {renderModelView(previewModalIdx, false)}
+              <div className={`w-full h-full flex items-center justify-center ${OUTFIT_MODELS[previewModalIdx].gender === 'nu' ? 'scale-[0.80]' : 'scale-100'}`}>
+                {renderModelView(previewModalIdx, false)}
+              </div>
             </div>
 
             <p className="text-xs text-slate-600 leading-relaxed">

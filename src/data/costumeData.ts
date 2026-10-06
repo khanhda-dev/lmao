@@ -249,9 +249,9 @@ export const HEADWEAR: Headwear[] = [
   {
     id: 'khan-vanh-day',
     name: 'Khăn vành dây',
-    gender: 'Nữ quý tộc',
-    description: 'Dải vải lụa hoặc gấm dài nhiều mét quấn xếp từng vòng ngay ngắn tạo thành hình vành tròn trang trọng quanh đầu của các bậc mệnh phụ.',
-    matchWith: 'Áo Nhật Bình, Áo Tấc nữ',
+    gender: 'Chỉ dành riêng cho Nữ',
+    description: 'Dải vải lụa hoặc gấm dài nhiều mét quấn xếp từng vòng ngay ngắn tạo thành hình vành tròn trang trọng quanh đầu của các bậc mệnh phụ, hoàng hậu, công chúa (chỉ dành riêng cho phái nữ).',
+    matchWith: 'Áo Nhật Bình, Áo Tấc nữ, Phượng Bào',
   },
   {
     id: 'khan-xep',
@@ -313,12 +313,6 @@ export const HANDHELD: Handheld[] = [
     name: 'Đàn nguyệt',
     description: 'Cây đàn cổ thân tròn tựa mặt trăng khuyết đầy, phím cao ngân vang cung bậc tao nhã đậm chất văn nhân tài tử xứ Việt.',
     vibe: 'Cốt cách văn nhân nghệ sĩ',
-  },
-  {
-    id: 'o-du',
-    name: 'Ô (Dù)',
-    description: 'Chiếc ô giấy dầu truyền thống nan tre hoặc ô vải dù xếp nếp thanh lịch, vừa che nắng nhẹ vừa tạo dáng thướt tha khi chụp ảnh.',
-    vibe: 'Cổ phong thơ mộng',
   },
   {
     id: 'quat',
