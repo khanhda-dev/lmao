@@ -1,0 +1,57 @@
+{
+  "non-ba-tam": {
+    "anchorX": 119.83,
+    "anchorY": 130.672,
+    "bounds": [
+      0,
+      37,
+      241,
+      203
+    ],
+    "referenceGender": "female"
+  },
+  "khan-dong": {
+    "anchorX": 519.83,
+    "anchorY": 130.672,
+    "bounds": [
+      469,
+      74,
+      574,
+      175
+    ],
+    "referenceGender": "female"
+  },
+  "khan-vanh-day": {
+    "anchorX": 919.83,
+    "anchorY": 130.672,
+    "bounds": [
+      853,
+      47,
+      987,
+      160
+    ],
+    "referenceGender": "female"
+  },
+  "non-dau": {
+    "anchorX": 1319.83,
+    "anchorY": 130.672,
+    "bounds": [
+      1200,
+      14,
+      1437,
+      291
+    ],
+    "referenceGender": "female"
+  },
+  "khan-xep": {
+    "anchorX": 1709.68,
+    "anchorY": 90.9824,
+    "bounds": [
+      1657,
+      37,
+      1757,
+      79
+    ],
+    "referenceGender": "male"
+  }
+}

@@ -23,6 +23,7 @@ export interface Headwear {
   description: string;
   matchWith: string;
   gender: string;
+  allowedGender?: 'male' | 'female';
 }
 
 export interface Footwear {
@@ -39,6 +40,7 @@ export interface Jewelry {
   name: string;
   description: string;
   material: string;
+  allowedGender?: 'male' | 'female';
 }
 
 export interface Handheld {
@@ -87,11 +89,11 @@ export const SPECIAL_GARMENTS: SpecialGarment[] = [
   },
   {
     id: 'special-quan-phuc-nam',
-    name: 'Triều Phục Quan Viên',
+    name: 'Cổn Phục (Tế Nam Giao)',
     gender: 'Nam',
-    title: 'Triều phục Văn Võ Đại thần',
+    title: 'Lễ phục tế Trời Đất của Vua',
     dynasty: 'Triều Nguyễn',
-    description: 'Triều phục trang trọng của quan viên với thân áo màu xanh sẫm, bổ tử thêu huy hiệu phẩm cấp trước ngực, ngọc đái và dải lụa phụng mệnh uy nghi.'
+    description: 'Lễ phục thiêng liêng bậc nhất, Vua chỉ mặc khi tế Trời Đất. Đặc trưng bởi thân áo trên màu đen huyền, váy dưới màu đỏ và hệ thống 12 biểu tượng thiêng liêng (Thập nhị chương).'
   },
   {
     id: 'special-phuong-bao-nu',
@@ -103,11 +105,11 @@ export const SPECIAL_GARMENTS: SpecialGarment[] = [
   },
   {
     id: 'special-bach-y-nu',
-    name: 'Bạch Y Công Chúa',
+    name: 'Giá Cô Bơ (Cô Ba Thoải Cung)',
     gender: 'Nữ',
-    title: 'Bạch Y Nhật Bình Công Chúa',
-    dynasty: 'Triều Nguyễn',
-    description: 'Áo Nhật Bình sắc trắng tinh khôi thoát tục, thêu chìm hoa sen bạc quý phái, chuỗi ngọc bội ngũ sắc và mũ trâm cài hoa bạch ngọc.'
+    title: 'Trang phục Hầu đồng thuộc tín ngưỡng Đạo Mẫu',
+    dynasty: 'Tín ngưỡng Đạo Mẫu',
+    description: 'Trang phục Hầu đồng thuộc tín ngưỡng Đạo Mẫu. Nổi bật với sắc trắng tinh khôi của miền sông nước, mặc theo lối "mớ ba mớ bảy" với các lớp áo lụa mỏng bồng bềnh, thướt tha.'
   }
 ];
 
@@ -205,19 +207,19 @@ export const GARMENTS: Garment[] = [
   },
 ];
 
-// 2. Đồ đội đầu (5 loại theo file PDF)
+// 2. Đồ đội đầu; khăn đóng nữ và khăn xếp nam theo minh họa được cung cấp.
 export const HEADWEAR: Headwear[] = [
   {
     id: 'non-ba-tam',
     name: 'Nón ba tầm',
-    gender: 'Nữ',
+    gender: 'Nam & Nữ',
     description: 'Nón phẳng hình đĩa tròn to đường kính 70-80cm dệt từ lá cọ khâu chỉ thao, quai nón bằng sợi tơ thao buông dài rủ hạt châu duyên dáng xứ Kinh Bắc.',
     matchWith: 'Áo Giao Lĩnh, Áo Tứ Thân, Ngũ thân',
   },
   {
     id: 'non-dau',
     name: 'Nón dấu',
-    gender: 'Nam / Quân lại',
+    gender: 'Nam & Nữ',
     description: 'Loại nón chóp nhọn nhỏ có chỏm kim loại bằng đồng sáng bóng trên đỉnh, đặc trưng cho binh lính, lính lệ và các thị vệ nha môn thời phong kiến.',
     matchWith: 'Viên Lĩnh, Ngũ thân tay chẽn nam',
   },
@@ -231,16 +233,25 @@ export const HEADWEAR: Headwear[] = [
   {
     id: 'khan-vanh-day',
     name: 'Khăn vành dây',
-    gender: 'Nữ quý tộc',
+    gender: 'Nam & Nữ',
     description: 'Dải vải lụa hoặc gấm dài nhiều mét quấn xếp từng vòng ngay ngắn tạo thành hình vành tròn trang trọng quanh đầu của các bậc mệnh phụ.',
     matchWith: 'Áo Nhật Bình, Áo Tấc nữ',
   },
   {
     id: 'khan-xep',
     name: 'Khăn xếp',
-    gender: 'Nam & Nữ',
+    gender: 'Nam',
+    allowedGender: 'male',
     description: 'Khăn đóng xếp nếp hình chữ Nhân (人) mang đạo làm người hoặc chữ Nhất (一), thiết kế gọn ghẽ ôm lấy trán tạo thần thái nho nhã đoan chính.',
     matchWith: 'Áo ngũ thân tay chẽn, Áo Tấc',
+  },
+  {
+    id: 'khan-dong',
+    name: 'Khăn đóng',
+    gender: 'Nữ',
+    allowedGender: 'female',
+    description: 'Khăn quấn ôm hai bên đầu, xếp nếp phía trước theo mẫu minh họa dành cho nữ.',
+    matchWith: 'Áo ngũ thân tay chẽn, Áo Tấc, Giao Lĩnh, Viên Lĩnh',
   },
 ];
 
@@ -283,6 +294,7 @@ export const JEWELRY: Jewelry[] = [
   {
     id: 'tram-cai',
     name: 'Trâm cài',
+    allowedGender: 'female',
     description: 'Chiếc trâm ngọc bích hoặc bạc khắc rồng phượng, đính ngọc trai hoặc tua rua đung đưa bên búi tóc tôn lên nét đài các kiêu sa.',
     material: 'Ngọc bích / Bạc thau cổ',
   },
@@ -310,8 +322,15 @@ export const HANDHELD: Handheld[] = [
   },
 ];
 
-// 6. Gen Z (5 phụ kiện theo file PDF)
+// 6. Phụ kiện hiện đại Gen Z
 export const GEN_Z_ACCESSORIES: GenZAccessory[] = [
+  {
+    id: 'sneaker',
+    name: 'Sneaker',
+    category: 'Giày thể thao',
+    description: 'Giày sneaker theo mẫu SVG nguyên bản, kết hợp với Việt phục để tạo phong cách hiện đại.',
+    trendTip: 'Kết hợp cùng trang phục thường hoặc trang phục đặc biệt.',
+  },
   {
     id: 'may-anh',
     name: 'Máy ảnh',
@@ -340,16 +359,9 @@ export const GEN_Z_ACCESSORIES: GenZAccessory[] = [
     description: 'Chiếc headphone over-ear đeo quanh cổ áo, biểu tượng năng động của thế hệ số kết hợp bất ngờ cùng cổ phục truyền thống.',
     trendTip: 'Kết hợp cùng áo tay chẽn và giày sneaker mang đến phong cách Cyber-Vietnamese đỉnh cao.',
   },
-  {
-    id: 'dong-ho',
-    name: 'Đồng hồ',
-    category: 'Công nghệ & Phụ kiện',
-    description: 'Chiếc smartwatch dây da hoặc đồng hồ kim loại thanh mảnh trên cổ tay, lấp ló sau ống tay áo ngũ thân chẽn.',
-    trendTip: 'Lộ nhẹ nơi cổ tay áo chẽn khi tạo dáng cầm quạt hoặc xắn nhẹ gấu tay.',
-  },
 ];
 
-// 7. Phối màu: 6 phong cách, mỗi phong cách có 3 màu hex cho lớp lót trong, áo ngoài, quần/váy
+// 7. Phối màu: mỗi phong cách có 3 màu hex cho lớp lót trong, áo ngoài, quần/váy
 export const COLOR_PRESETS: ColorPreset[] = [
   {
     id: 'hoang-trieu',
@@ -410,5 +422,65 @@ export const COLOR_PRESETS: ColorPreset[] = [
     pants: '#D4AF37',     // Quần (vàng đồng nhẹ)
     dressBack: '#6E523A',
     dressEdge: '#D1AC60',
+  },
+  {
+    id: 'thanh-da-luu-ly',
+    name: 'Thanh Dạ Lưu Ly',
+    tagline: 'Mang vẻ đẹp đài các, thanh lịch, mô phỏng gốm sứ lam ngọc.',
+    lining: '#FFFFFF',
+    dress: '#1E3A5F',
+    pants: '#FFFFFF',
+    dressBack: '#162B47',
+    dressEdge: '#FFFFFF',
+  },
+  {
+    id: 'hoang-thu-kinh-ky',
+    name: 'Hoàng Thu Kinh Kỳ',
+    tagline: 'Tạo cảm giác ấm áp, hoài cổ, mộc mạc của mùa thu Hà Nội.',
+    lining: '#F1DFBE',
+    dress: '#C66B4E',
+    pants: '#111111',
+    dressBack: '#A15139',
+    dressEdge: '#F1DFBE',
+  },
+  {
+    id: 'tu-dang-mong-mo',
+    name: 'Tử Đằng Mộng Mơ',
+    tagline: 'Bảng màu ngọt ngào, bay bổng nhẹ nhàng, rất hợp thị hiếu Gen Z.',
+    lining: '#FADADD',
+    dress: '#C4AFE8',
+    pants: '#FFFFFF',
+    dressBack: '#A88BCF',
+    dressEdge: '#FADADD',
+  },
+  {
+    id: 'thuy-mac-giay-do',
+    name: 'Thủy Mặc Giấy Dó',
+    tagline: 'Phong cách tối giản, nam tính, lấy cảm hứng từ nét bút lông trên tranh thủy mặc.',
+    lining: '#B2B7BC',
+    dress: '#111111',
+    pants: '#FFFFFF',
+    dressBack: '#080808',
+    dressEdge: '#B2B7BC',
+  },
+  {
+    id: 'kim-sa-hoang-toc',
+    name: 'Kim Sa Hoàng Tộc',
+    tagline: 'Tổ hợp "ton-sur-ton" rực rỡ nhất phân khúc với ba sắc độ vàng - cam khác biệt nối tiếp nhau, tạo chiều sâu thị giác cực tốt mà không bị rối mắt. Lớp lót vàng chanh bắt sáng tốt, nổi bật trên nền áo ngoài màu cam rực cháy (giống bộ Phượng bào) và kết thúc bằng quần vàng nghệ ấm áp (như Long bào).',
+    lining: '#FFF36D',
+    dress: '#F58220',
+    pants: '#DFA820',
+    dressBack: '#CB6417',
+    dressEdge: '#FFF36D',
+  },
+  {
+    id: 'huyen-kim-quyen-luc',
+    name: 'Huyền Kim Quyền Lực',
+    tagline: 'Tổ hợp màu sắc sang trọng, bí ẩn, mang hơi hướng lễ phục quý tộc.',
+    lining: '#800020',
+    dress: '#111111',
+    pants: '#D4AF37',
+    dressBack: '#080808',
+    dressEdge: '#800020',
   },
 ];

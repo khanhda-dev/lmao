@@ -1,0 +1,119 @@
+{
+  "female-ao-tac": {
+    "nodeId": "63:430",
+    "name": "Woman/Tac",
+    "width": 290,
+    "height": 519,
+    "headX": 144.217,
+    "handX": 230.095,
+    "handY": 261.079
+  },
+  "female-giao-linh": {
+    "nodeId": "36:430",
+    "name": "Woman/Giao linh",
+    "width": 287,
+    "height": 519,
+    "headX": 143.135,
+    "handX": 229.013,
+    "handY": 261.079
+  },
+  "female-ngu-than-tay-chen": {
+    "nodeId": "71:291",
+    "name": "Woman/Ngu than",
+    "width": 226,
+    "height": 519,
+    "headX": 112.928,
+    "handX": 198.805,
+    "handY": 261.079
+  },
+  "female-nhat-binh": {
+    "nodeId": "57:708",
+    "name": "Woman/Nhat binh",
+    "width": 328,
+    "height": 519,
+    "headX": 163.635,
+    "handX": 249.513,
+    "handY": 261.079
+  },
+  "female-vien-linh": {
+    "nodeId": "62:430",
+    "name": "Woman/Vien linh",
+    "width": 300,
+    "height": 519,
+    "headX": 149.385,
+    "handX": 235.263,
+    "handY": 261.079
+  },
+  "male-ao-tac": {
+    "nodeId": "74:623",
+    "name": "Man/Tac",
+    "width": 285,
+    "height": 561,
+    "headX": 144.253,
+    "handX": 228.032,
+    "handY": 293.498
+  },
+  "male-giao-linh": {
+    "nodeId": "74:291",
+    "name": "Man/Giao linh",
+    "width": 279,
+    "height": 561,
+    "headX": 141.184,
+    "handX": 224.964,
+    "handY": 293.493
+  },
+  "male-ngu-than-tay-chen": {
+    "nodeId": "74:787",
+    "name": "Man/Ngu than",
+    "width": 231,
+    "height": 561,
+    "headX": 117.181,
+    "handX": 200.96,
+    "handY": 293.498
+  },
+  "male-vien-linh": {
+    "nodeId": "74:457",
+    "name": "Man/Vien linh",
+    "width": 272,
+    "height": 561,
+    "headX": 137.431,
+    "handX": 221.21,
+    "handY": 293.498
+  },
+  "special-bach-y-nu": {
+    "nodeId": "177:430",
+    "name": "Woman/Hau dong Khan Chau Ao Ngu",
+    "width": 340,
+    "height": 538,
+    "headX": 170.418,
+    "handX": 256.295,
+    "handY": 280.163
+  },
+  "special-long-bao-nam": {
+    "nodeId": "95:430",
+    "name": "Man/Long bao Dai trieu 1",
+    "width": 288,
+    "height": 602,
+    "headX": 145.431,
+    "handX": 229.21,
+    "handY": 335.012
+  },
+  "special-phuong-bao-nu": {
+    "nodeId": "118:291",
+    "name": "Woman/Phuong Bao Hoang Hau",
+    "width": 300,
+    "height": 568,
+    "headX": 149.635,
+    "handX": 235.513,
+    "handY": 310.97
+  },
+  "special-quan-phuc-nam": {
+    "nodeId": "141:291",
+    "name": "Cổn Phục – Tế Nam Giao",
+    "width": 360,
+    "height": 654,
+    "headX": 158.681,
+    "handX": 242.46,
+    "handY": 325.012
+  }
+}

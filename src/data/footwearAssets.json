@@ -1,0 +1,156 @@
+{
+  "references": {
+    "sneaker-right": {
+      "anchorX": 153.8185,
+      "cuffY": 487.027,
+      "bottom": 522.602
+    },
+    "sneaker-left": {
+      "anchorX": 73.03935,
+      "cuffY": 487.027,
+      "bottom": 522.602
+    },
+    "guoc-moc-right": {
+      "anchorX": 510.3145,
+      "cuffY": 487.027,
+      "bottom": 530.65
+    },
+    "guoc-moc-left": {
+      "anchorX": 428.5435,
+      "cuffY": 487.027,
+      "bottom": 530.65
+    }
+  },
+  "targets": {
+    "female-ao-tac": {
+      "right": {
+        "x": 185.427,
+        "cuffY": 487.027
+      },
+      "left": {
+        "x": 104.009,
+        "cuffY": 487.027
+      }
+    },
+    "female-giao-linh": {
+      "right": {
+        "x": 184.345,
+        "cuffY": 487.53
+      },
+      "left": {
+        "x": 102.927,
+        "cuffY": 487.53
+      }
+    },
+    "female-ngu-than-tay-chen": {
+      "right": {
+        "x": 154.138,
+        "cuffY": 487.027
+      },
+      "left": {
+        "x": 72.72,
+        "cuffY": 487.027
+      }
+    },
+    "female-nhat-binh": {
+      "right": {
+        "x": 204.845,
+        "cuffY": 487.53
+      },
+      "left": {
+        "x": 123.427,
+        "cuffY": 487.53
+      }
+    },
+    "female-vien-linh": {
+      "right": {
+        "x": 190.595,
+        "cuffY": 487.53
+      },
+      "left": {
+        "x": 109.177,
+        "cuffY": 487.53
+      }
+    },
+    "male-ao-tac": {
+      "right": {
+        "x": 190.948,
+        "cuffY": 522.316
+      },
+      "left": {
+        "x": 97.901,
+        "cuffY": 521.243
+      }
+    },
+    "male-giao-linh": {
+      "right": {
+        "x": 187.879,
+        "cuffY": 522.317
+      },
+      "left": {
+        "x": 94.832,
+        "cuffY": 521.244
+      }
+    },
+    "male-ngu-than-tay-chen": {
+      "right": {
+        "x": 163.876,
+        "cuffY": 522.316
+      },
+      "left": {
+        "x": 70.829,
+        "cuffY": 521.243
+      }
+    },
+    "male-vien-linh": {
+      "right": {
+        "x": 184.126,
+        "cuffY": 523.634
+      },
+      "left": {
+        "x": 91.079,
+        "cuffY": 522.451
+      }
+    },
+    "special-bach-y-nu": {
+      "right": {
+        "x": 211.628,
+        "cuffY": 506.112
+      },
+      "left": {
+        "x": 130.21,
+        "cuffY": 506.112
+      }
+    },
+    "special-long-bao-nam": {
+      "right": {
+        "x": 192.126,
+        "cuffY": 563.83
+      },
+      "left": {
+        "x": 99.079,
+        "cuffY": 562.757
+      }
+    },
+    "special-phuong-bao-nu": {
+      "right": {
+        "x": 190.845,
+        "cuffY": 536.918
+      },
+      "left": {
+        "x": 109.427,
+        "cuffY": 536.918
+      }
+    },
+    "special-quan-phuc-nam": {
+      "right": {
+        "x": 205.376,
+        "cuffY": 553.828
+      },
+      "left": {
+        "x": 112.329,
+        "cuffY": 552.755
+      }
+    }
+  }
+}
