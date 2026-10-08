@@ -1,25 +1,14 @@
-.puzzle-page .detective-challenge [data-answer="correct"],
 .puzzle-page .reconstruction-challenge [data-answer="correct"] {
   outline: 2px solid #298445;
   outline-offset: 2px;
 }
-.puzzle-page .detective-challenge [data-answer="incorrect"],
 .puzzle-page .reconstruction-challenge [data-answer="incorrect"] {
   outline: 2px solid #c43b3b;
   outline-offset: 2px;
 }
-.puzzle-page .detective-challenge [data-answer]:focus-visible,
 .puzzle-page .reconstruction-challenge [data-answer]:focus-visible {
   outline-width: 4px;
   outline-offset: 4px;
-}
-.detective-challenge .detective-zone[data-answer="correct"] {
-  border-color: #298445;
-  background: #2984450d;
-}
-.detective-challenge .detective-zone[data-answer="incorrect"] {
-  border-color: #c43b3b;
-  background: #c43b3b0d;
 }
 .detective-challenge .detective-zone[data-answer="incorrect"] > svg {
   position: absolute;
@@ -33,15 +22,13 @@
   height: 24px;
 }
 .reconstruction-challenge .reconstruction-slots button[data-answer="correct"],
-.reconstruction-challenge .reconstruction-options button[data-answer="correct"],
-.detective-challenge .detective-options button[data-answer="correct"] {
+.reconstruction-challenge .reconstruction-options button[data-answer="correct"] {
   border-color: #298445;
   background: #edf7ee;
   color: #206836;
 }
 .reconstruction-challenge .reconstruction-slots button[data-answer="incorrect"],
-.reconstruction-challenge .reconstruction-options button[data-answer="incorrect"],
-.detective-challenge .detective-options button[data-answer="incorrect"] {
+.reconstruction-challenge .reconstruction-options button[data-answer="incorrect"] {
   border-color: #c43b3b;
   background: #fff0ee;
   color: #a62a2a;
@@ -65,3 +52,4 @@
   line-height: 1.35;
 }
 .answer-status svg { flex-shrink: 0; }
+.detective-challenge .answer-status { color: #a62a2a; }

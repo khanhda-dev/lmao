@@ -39,7 +39,7 @@ export function CostumeInfoPanel({level}:{level:Challenge}) {
     ],
     detective:[
       'Chạm vào vùng đầu, thân trước hoặc giày trên nhân vật để mở các lựa chọn thay thế.',
-      'Chọn một món để kiểm tra ngay. Lựa chọn sai có viền đỏ; vùng đã sửa đúng có viền xanh lá.',
+      'Chọn một món để kiểm tra ngay. Chọn sai sẽ hiện dấu × đỏ; vùng đã sửa đúng có dấu ✓.',
       'Thử lại các vùng còn sai. Sửa đúng cả 3 vùng để nhận phần thưởng.',
     ],
     reconstruction:[

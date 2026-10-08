@@ -380,7 +380,7 @@ test('Page 2 shares the Page 1 font and provides readable names and game instruc
  }
 });
 
-test('answer outlines remain visible during keyboard use and clear on replay',async({page})=>{
+test('answer feedback remains visible during keyboard use and clears on replay',async({page})=>{
  await serveBuild(page);await page.goto('/');
  const level=CHALLENGES[3];if(level.type!=='reconstruction')throw Error();
  const choices=Object.fromEntries(level.slots.map(slot=>[slot.id,slot.id==='shoes'?slot.choices.find(c=>c.id!==slot.correctChoice)!.id:slot.correctChoice]));
@@ -392,9 +392,19 @@ test('answer outlines remain visible during keyboard use and clear on replay',as
  await page.locator('.reconstruction-challenge').screenshot({path:'test-results/reconstruction-answer-outlines.png',animations:'disabled'});
  await page.getByRole('button',{name:'Chơi lại',exact:true}).click();await expect(page.locator('.reconstruction-challenge [data-answer]')).toHaveCount(0);await expect(page.getByRole('button',{name:'Nộp phục dựng'})).toBeDisabled();
  await page.getByRole('button',{name:/Màn 3:/}).click();await page.getByTestId('detective-zone-head').click();await page.getByTestId('detective-option-head-glasses').click();
- await page.keyboard.press('Tab');await page.getByTestId('detective-option-head-glasses').focus();await expect(page.getByTestId('detective-option-head-glasses')).toHaveCSS('outline-color','rgb(196, 59, 59)');
+ await page.keyboard.press('Tab');await page.getByTestId('detective-option-head-glasses').focus();
+ await expect(page.getByTestId('detective-option-head-glasses').locator('.answer-status .lucide-x')).toBeVisible();
+ await expect(page.getByTestId('detective-option-head-glasses').locator('.answer-status')).toHaveCSS('color','rgb(166, 42, 42)');
+ await expect(page.getByTestId('detective-option-head-glasses')).not.toHaveCSS('outline-color','rgb(196, 59, 59)');
+ await expect(page.getByTestId('detective-zone-head').locator('.lucide-x')).toHaveCSS('color','rgb(166, 42, 42)');
  await page.getByTestId('detective-zone-chest').click();await page.getByTestId('detective-option-chest-original').click();
  await page.getByTestId('detective-zone-head').click();await expect(page.getByTestId('detective-zone-head')).toHaveAttribute('data-answer','incorrect');await expect(page.getByTestId('detective-zone-chest')).toHaveAttribute('data-answer','correct');
- await page.locator('.detective-challenge').screenshot({path:'test-results/detective-answer-outlines.png',animations:'disabled'});
+ await expect(page.getByTestId('detective-zone-chest')).toHaveCSS('outline-style','none');
+ await expect(page.getByTestId('detective-zone-chest')).toHaveCSS('border-color','rgba(0, 0, 0, 0)');
+ await expect(page.getByTestId('detective-zone-chest').locator('.lucide-check')).toBeVisible();
+ await expect(page.locator('.puzzle-info')).toContainText('Chọn sai sẽ hiện dấu × đỏ');
+ await page.locator('.detective-challenge').screenshot({path:'test-results/detective-answer-icons.png',animations:'disabled'});
+ await page.reload();await openGame(page);await expect(page.getByTestId('detective-progress')).toHaveText('1/3');
+ await expect(page.getByTestId('detective-zone-chest')).toHaveCSS('outline-style','none');
  await page.getByRole('button',{name:'Chơi lại',exact:true}).click();await expect(page.locator('.detective-challenge [data-answer]')).toHaveCount(0);
 });
