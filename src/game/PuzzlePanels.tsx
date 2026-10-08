@@ -3,6 +3,9 @@ import { CHALLENGES } from './challenges';
 import { canPlay } from './progress';
 import { usePuzzleProgress } from './PuzzleProgress';
 import type { Challenge } from './types';
+import AccessoryPreview from './AccessoryPreview';
+import SvgArtwork from './SvgArtwork';
+import {JEWELRY,HANDHELD} from '../data/costumeData';
 
 export function LevelSidebar({level,onSelect}:{level:Challenge;onSelect:(id:string)=>void}) {
   const {progress}=usePuzzleProgress();
@@ -26,12 +29,33 @@ export function LevelSidebar({level,onSelect}:{level:Challenge;onSelect:(id:stri
   </aside>;
 }
 export function CostumeInfoPanel({level}:{level:Challenge}) {
+  const instructions:Record<Challenge['type'],string[]>={
+    assemble:[
+      'Kéo từng mảnh trang phục vào vùng tương ứng trên nhân vật. Mảnh đúng sẽ tự khớp vào vị trí.',
+      'Nếu thả chưa đúng, kéo lại để thử tiếp. Bấm Gợi ý khi cần xem vị trí của một mảnh.',
+      'Ghép đủ các mảnh để nhận phần thưởng và mở màn tiếp theo.',
+    ],
+    'image-grid':[
+      'Ghi nhớ hình mẫu trước khi bảng ảnh được trộn.',
+      'Kéo một ô lên ô khác để đổi chỗ. Bạn cũng có thể chạm lần lượt hai ô. Ô đúng vị trí có viền xanh lá.',
+      'Dùng Xem lại mẫu khi cần; số lượt còn lại hiện trên nút. Xếp đúng cả 9 ô để mở khóa phần thưởng.',
+    ],
+    detective:[
+      'Chạm vào vùng đầu, thân trước hoặc giày trên nhân vật để mở các lựa chọn thay thế.',
+      'Chọn một món để kiểm tra ngay. Chọn sai sẽ hiện dấu × đỏ; vùng đã sửa đúng có dấu ✓.',
+      'Thử lại các vùng còn sai. Sửa đúng cả 3 vùng để nhận phần thưởng.',
+    ],
+    reconstruction:[
+      'Chọn lần lượt 7 nhóm cấu kiện, rồi chọn món bạn muốn mặc trong từng nhóm. Bản phối cập nhật trên nhân vật.',
+      'Chọn đủ 7 món và bấm Nộp phục dựng để chấm đáp án. Nhóm đúng có viền xanh lá, nhóm sai có viền đỏ.',
+      'Mở nhóm có viền đỏ, đổi món rồi nộp lại. Đạt 7/7 để hoàn thành và nhận phần thưởng.',
+    ],
+  };
   return <aside className="puzzle-info">
-    <span className="puzzle-eyebrow"><BookOpen size={14}/> CÂU CHUYỆN BỘ ĐỒ</span>
-    <h2>{level.name}</h2><span className="puzzle-period">{level.period}</span>
-    <p>{level.description}</p><h3>Nhìn đâu để nhận ra?</h3>
-    <ul>{level.features.map(f=><li key={f}>{f}</li>)}</ul>
-    <h3>Khám phá & sử dụng</h3><div className="puzzle-tags">{level.usage.map(u=><span key={u}>{u}</span>)}</div>
+    <span className="puzzle-eyebrow"><BookOpen size={16}/> PHỤC DỰNG BỘ ĐỒ</span>
+    <h2>{level.name}</h2>
+    <h3>Cách chơi</h3>
+    <ol className="puzzle-howto">{instructions[level.type].map(step=><li key={step}>{step}</li>)}</ol>
     {level.type==='assemble'&&<details className="puzzle-reference"><summary>Xem bộ hoàn chỉnh <Sparkles size={14}/></summary><img src={level.thumbnail} alt={`Bộ ${level.name} hoàn chỉnh`}/></details>}
   </aside>;
 }
@@ -41,7 +65,7 @@ export function RewardPreview({level,conceal=false}:{level:Challenge;conceal?:bo
   return <section className="puzzle-rewards" aria-label="Phần thưởng của màn">
     <h3><Gift size={19}/>{earned?'Đã thêm vào tủ đồ của bạn':'Hoàn thành màn này để mở khóa'}</h3>
     <div className="puzzle-reward-grid">{level.rewards.map(reward=><div className={`puzzle-reward ${earned?'earned':''}`} key={`${reward.kind}-${reward.id}`}>
-      <div>{conceal?<Gift size={26}/>:reward.image?<img src={reward.image} alt=""/>:reward.kind==='colors'?<span className="puzzle-color-reward"><i/><i/><i/></span>:<Gift size={26}/>}<span className="puzzle-reward-status">{earned?<Check size={12}/>:<Lock size={12}/>}</span></div>
+      <div>{conceal&&!earned?<Gift size={26}/>:reward.image?<SvgArtwork asset={reward.image}/>:reward.kind==='headwear'?<SvgArtwork asset={`/puzzle/items/${reward.id}.svg`}/>:reward.kind==='colors'?<span className="puzzle-color-reward"><i/><i/><i/></span>:reward.kind==='accessories'&&[...JEWELRY,...HANDHELD].some(item=>item.id===reward.id)?<AccessoryPreview id={reward.id}/>:<Gift size={26}/>}<span className="puzzle-reward-status">{earned?<Check size={12}/>:<Lock size={12}/>}</span></div>
       <strong>{reward.name}</strong>
     </div>)}</div>
   </section>;

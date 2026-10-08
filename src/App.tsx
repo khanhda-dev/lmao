@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Shuffle, Search, Sun, Moon } from 'lucide-react';
+import { Shuffle, Search, Sun, Moon, Lock, Check, ArrowRight, Palette, X } from 'lucide-react';
 import { 
   GARMENTS, 
   HEADWEAR, 
@@ -23,9 +23,12 @@ import { CostumeModel } from './components/CostumeModel';
 import { PieceInfoCard } from './components/PieceInfoCard';
 import PuzzlePage from './game/PuzzlePage';
 import { usePuzzleProgress } from './game/PuzzleProgress';
+import WardrobeCollection from './game/WardrobeCollection';
+import {compatibleCostume,familyVariant} from './game/wardrobeFamilies';
+import './game/wardrobe.css';
 
 export default function App() {
-  const {isUnlocked}=usePuzzleProgress();
+  const {isUnlocked,freshUser,unlockedItems}=usePuzzleProgress();
   // Navigation: 1 = Trang 1 (Phối đồ), 2 = Trang 2 (Cẩm nang thông tin)
   const [activePage, setActivePage] = useState<number>(1);
 
@@ -47,8 +50,8 @@ export default function App() {
   // Slot 3: Traditional accessories
   const [selectedHeadwear, setSelectedHeadwear] = useState<Headwear | null>(HEADWEAR.find(hw => hw.id === 'non-ba-tam') || null); // Default: Nón ba tầm
   const [selectedFootwear, setSelectedFootwear] = useState<Footwear>(FOOTWEAR[0]); // Default: Hài thêu
-  const [selectedJewelry, setSelectedJewelry] = useState<string[]>(['kieng-co']); // Kiềng cổ
-  const [selectedHandheld, setSelectedHandheld] = useState<string>('quat'); // Quạt
+  const [selectedJewelry, setSelectedJewelry] = useState<string[]>(() => isUnlocked('accessories','kieng-co') ? ['kieng-co'] : []);
+  const [selectedHandheld, setSelectedHandheld] = useState<string>(() => isUnlocked('accessories','quat') ? 'quat' : 'none');
 
   // Slot 4: Gen Z modern accessories (5 items from PDF)
   const [selectedGenZ, setSelectedGenZ] = useState<string[]>(['kinh-ram', 'may-anh', 'sneaker']);
@@ -64,12 +67,20 @@ export default function App() {
   const garmentInfo = selectedSpecialId
     ? SPECIAL_GARMENTS.find(item => item.id === selectedSpecialId) : selectedGarment;
   const wornAccessories = [
-    selectedHeadwear,
+    selectedSpecialId ? null : selectedHeadwear,
     selectedGenZ.includes('sneaker') ? null : selectedFootwear,
-    ...JEWELRY.filter(item => selectedJewelry.includes(item.id) && (!item.allowedGender || item.allowedGender === modelGender)),
-    HANDHELD.find(item => item.id === selectedHandheld),
+    ...JEWELRY.filter(item => !selectedSpecialId && selectedJewelry.includes(item.id) && (!item.allowedGender || item.allowedGender === modelGender)),
+    selectedSpecialId ? null : HANDHELD.find(item => item.id === selectedHandheld),
   ].filter(item => item != null);
   const accessoryInfo = wornAccessories.find(item => item.id === focusedAccessoryId) || wornAccessories[0];
+  const accessoryStatus = (kind:'headwear'|'accessories',id:string) => !isUnlocked(kind,id)
+    ? <span className="accessory-status locked" aria-hidden="true"><Lock size={12}/>Chưa mở khóa</span>
+    : unlockedItems[kind].includes(id)
+      ? <span className="accessory-status earned" aria-hidden="true"><Check size={12}/>Đã mở khóa</span> : null;
+  const hasLockedAccessories = HEADWEAR.some(hw=>(!hw.allowedGender||hw.allowedGender===modelGender)&&!isUnlocked('headwear',hw.id))
+    || FOOTWEAR.some(fw=>!isUnlocked('accessories',fw.id))
+    || JEWELRY.some(jw=>(!jw.allowedGender||jw.allowedGender===modelGender)&&!isUnlocked('accessories',jw.id))
+    || HANDHELD.some(hh=>!isUnlocked('accessories',hh.id));
 
   // Update CSS Variables on root whenever colors or footwear changes
   useEffect(() => {
@@ -118,10 +129,11 @@ export default function App() {
 
   // Toggle jewelry
   const handleToggleJewelry = (id: string) => {
+    if(!isUnlocked('accessories',id))return;
     setSelectedSpecialId(null);
     setFocusedAccessoryId(id);
     setSelectedJewelry(prev => 
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+      !selectedSpecialId && prev.includes(id) ? prev.filter(item => item !== id) : [...new Set([...prev, id])]
     );
   };
 
@@ -143,10 +155,10 @@ export default function App() {
     const randomPreset = choose(COLOR_PRESETS.filter(p=>isUnlocked('colors',p.id)));
     const validHeadwear = HEADWEAR.filter(hw => (!hw.allowedGender || hw.allowedGender === modelGender) && isUnlocked('headwear',hw.id));
     const randomHead = specialId ? null : choose([null, ...validHeadwear]);
-    const randomHand = specialId ? 'none' : choose(['none', ...HANDHELD.map(item => item.id)]);
+    const randomHand = specialId ? 'none' : choose(['none', ...HANDHELD.filter(item => isUnlocked('accessories',item.id)).map(item => item.id)]);
     const randomJewelry = specialId ? [] : JEWELRY.filter(item =>
-      (!item.allowedGender || item.allowedGender === modelGender) && Math.random() < 0.5).map(item => item.id);
-    const validFootwear = specialId ? FOOTWEAR.filter(item => ['hai-theu', 'sneaker'].includes(item.id)) : FOOTWEAR;
+      (!item.allowedGender || item.allowedGender === modelGender) && isUnlocked('accessories',item.id) && Math.random() < 0.5).map(item => item.id);
+    const validFootwear = (specialId ? FOOTWEAR.filter(item => ['hai-theu', 'sneaker'].includes(item.id)) : FOOTWEAR).filter(item=>isUnlocked('accessories',item.id));
     const randomFoot = choose(validFootwear);
     const randomGenZ = GEN_Z_ACCESSORIES.filter(item => item.id !== 'sneaker' && Math.random() < 0.5).map(item => item.id);
     if (randomFoot.id === 'sneaker') randomGenZ.push('sneaker');
@@ -176,45 +188,33 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxOpen]);
 
-  // Toggle gender
+  // Family rewards are shared; select only a real compatible variant.
   const handleToggleGender = () => {
-    const nextGender = modelGender === 'male' ? 'female' : 'male';
-    // A locked ceremonial counterpart falls back to a supported regular garment.
-    if(nextGender==='male' && selectedGarment.id==='nhat-binh')setSelectedGarment(GARMENTS.find(g=>g.id==='ngu-than-tay-chen')!);
-    setSelectedJewelry(prev => prev.filter(id => {
-      const item = JEWELRY.find(jw => jw.id === id);
-      return !item?.allowedGender || item.allowedGender === nextGender;
-    }));
-    setSelectedHeadwear(prev => prev?.allowedGender && prev.allowedGender !== nextGender
-      ? HEADWEAR.find(hw => hw.id === (nextGender === 'female' ? 'khan-dong' : 'khan-xep')) || null : prev);
-    setModelGender(prev => {
-      const nextGender = prev === 'male' ? 'female' : 'male';
-      // Nếu đang mặc trang phục đặc biệt, chuyển sang trang phục đặc biệt tương ứng của giới tính mới
-      if (selectedSpecialId) {
-        if (nextGender === 'female') {
-          if (selectedSpecialId === 'special-long-bao-nam') setSelectedSpecialId(isUnlocked('costumes','special-phuong-bao-nu')?'special-phuong-bao-nu':null);
-          else if (selectedSpecialId === 'special-quan-phuc-nam') setSelectedSpecialId(isUnlocked('costumes','special-bach-y-nu')?'special-bach-y-nu':null);
-          else setSelectedSpecialId(isUnlocked('costumes','special-phuong-bao-nu')?'special-phuong-bao-nu':null);
-        } else {
-          if (selectedSpecialId === 'special-phuong-bao-nu') setSelectedSpecialId(isUnlocked('costumes','special-long-bao-nam')?'special-long-bao-nam':null);
-          else if (selectedSpecialId === 'special-bach-y-nu') setSelectedSpecialId(isUnlocked('costumes','special-quan-phuc-nam')?'special-quan-phuc-nam':null);
-          else setSelectedSpecialId(isUnlocked('costumes','special-long-bao-nam')?'special-long-bao-nam':null);
-        }
-      } else {
-        if (nextGender === 'male' && selectedGarment.id === 'nhat-binh') {
-          const fallback = GARMENTS.find(g => g.id === 'ngu-than-tay-chen') || GARMENTS[0];
-          setSelectedGarment(fallback);
-        }
-      }
-      return nextGender;
-    });
+    const nextGender=modelGender==='male'?'female':'male';
+    if(!compatibleCostume(selectedGarment.id,nextGender))setSelectedGarment(GARMENTS.find(g=>compatibleCostume(g.id,nextGender)&&isUnlocked('costumes',g.id))!);
+    const current=selectedSpecialId||selectedGarment.id;
+    const next=familyVariant(current,nextGender);
+    if(next&&isUnlocked('costumes',next)){
+      setSelectedSpecialId(next.startsWith('special-')?next:null);
+      if(!next.startsWith('special-'))setSelectedGarment(GARMENTS.find(g=>g.id===next)!);
+    }else{
+      setSelectedSpecialId(null);
+      setSelectedGarment(GARMENTS.find(g=>compatibleCostume(g.id,nextGender)&&isUnlocked('costumes',g.id))!);
+    }
+    setSelectedHeadwear(prev=>prev&&(!prev.allowedGender||prev.allowedGender===nextGender)&&isUnlocked('headwear',prev.id)?prev:null);
+    setSelectedJewelry(prev=>prev.filter(id=>{const j=JEWELRY.find(j=>j.id===id);return !j?.allowedGender||j.allowedGender===nextGender;}));
+    setModelGender(nextGender);
   };
 
   const tryChallengeReward = (id:string) => {
     if(!isUnlocked('costumes',id))return;
     const special=SPECIAL_GARMENTS.find(g=>g.id===id);
     const garment=GARMENTS.find(g=>g.id===id);
-    if(special){setModelGender(special.gender==='Nam'?'male':'female');setSelectedSpecialId(id);}
+    if(special){
+      const gender=special.gender==='Nam'?'male':'female';
+      if(!compatibleCostume(selectedGarment.id,gender))setSelectedGarment(GARMENTS.find(g=>compatibleCostume(g.id,gender)&&isUnlocked('costumes',g.id))!);
+      setModelGender(gender);setSelectedSpecialId(id);
+    }
     else if(garment){setSelectedSpecialId(null);setSelectedGarment(garment);if(garment.gender==='Nữ')setModelGender('female');}
     else return;
     setSelectedGenZ([]);setSelectedFootwear(FOOTWEAR[0]);setBuilderTab('garment');setActivePage(1);
@@ -232,7 +232,7 @@ export default function App() {
       handheldId={selectedHandheld}
       jewelry={selectedJewelry}
       genZ={selectedGenZ}
-      footwearId={selectedGenZ.includes('sneaker') ? 'sneaker' : selectedSpecialId ? FOOTWEAR[0].id : selectedFootwear.id}
+      footwearId={selectedGenZ.includes('sneaker') ? 'sneaker' : selectedFootwear.id}
     />
   );
 
@@ -291,6 +291,7 @@ export default function App() {
 
       {/* Main Content Area */}
       <main>
+        {freshUser&&<div className="fresh-user-note">Chế độ thử người dùng mới · tiến trình thật được giữ nguyên. <a href={window.location.pathname}>Thoát chế độ thử</a></div>}
         {/* ===== TRANG 1: PHỐI ĐỒ & BẢNG ĐIỀU KHIỂN ===== */}
         <section className={`page ${activePage === 1 ? 'active' : ''}`}>
           <div className="split">
@@ -365,59 +366,22 @@ export default function App() {
                 {/* 1. TAB TRANG PHỤC */}
                 {builderTab === 'garment' && (
                   <div>
-                    {/* Phân nhóm 1: Kiểu áo ngoài phổ thông */}
-                    <div className="sub-section">
-                      <h3 className="sub-section-title">Kiểu áo ngoài</h3>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                        {GARMENTS
-                          .filter(g => modelGender === 'female' || g.id !== 'nhat-binh')
-                          .map((g) => {
-                            const isSelected = selectedSpecialId === null && selectedGarment.id === g.id;
-                            return (
-                              <button
-                                key={g.id}
-                                type="button"
-                                onClick={() => handleSelectGarment(g)}
-                                disabled={!isUnlocked('costumes',g.id)}
-                                title={!isUnlocked('costumes',g.id)?'Hoàn thành thử thách để mở khóa':g.name}
-                                className={`builder-btn ${isSelected ? 'active' : ''}`}
-                              >
-                                {g.name}
-                              </button>
-                            );
-                          })}
-                      </div>
-                    </div>
-
-                    {/* Phân nhóm 2: Trang phục Đặc biệt (Được đẩy xuống để không sát hàng trên, nút đơn giản) */}
-                    <div className="sub-section mt-7">
-                      <h3 className="sub-section-title">Đặc biệt</h3>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                        {SPECIAL_GARMENTS
-                          .filter(sg => (modelGender === 'male' ? sg.gender === 'Nam' : sg.gender === 'Nữ'))
-                          .map((sg) => {
-                            const isSelected = selectedSpecialId === sg.id;
-                            return (
-                              <button
-                                key={sg.id}
-                                type="button"
-                                onClick={() => handleSelectSpecial(sg.id)}
-                                disabled={!isUnlocked('costumes',sg.id)}
-                                title={!isUnlocked('costumes',sg.id)?'Hoàn thành thử thách để mở khóa':sg.name}
-                                className={`builder-btn ${isSelected ? 'active' : ''}`}
-                              >
-                                {sg.name}
-                              </button>
-                            );
-                          })}
-                      </div>
-                    </div>
-                    <button type="button" className="builder-btn mt-4" onClick={()=>setActivePage(2)}>Đến thử thách để mở thêm đồ →</button>
+                    <WardrobeCollection gender={modelGender} selected={selectedSpecialId||selectedGarment.id} onExplore={()=>setActivePage(2)} onSelect={item=>{
+                      const garment=GARMENTS.find(g=>g.id===item.id);
+                      if(garment)handleSelectGarment(garment);else handleSelectSpecial(item.id);
+                    }}/>
                     <PieceInfoCard item={garmentInfo} />
                   </div>
                 )}
 
                 {/* 2. TAB MÀU SẮC */}
+                {builderTab === 'color' && selectedSpecialId && (
+                  <div className="color-unavailable" role="status">
+                    <Palette size={36} aria-hidden="true" />
+                    <h3>Chưa hỗ trợ đổi màu</h3>
+                    <p>{garmentInfo?.name} hiện giữ màu sắc nguyên bản. Chọn trang phục khác để sử dụng bảng màu.</p>
+                  </div>
+                )}
                 {builderTab === 'color' && !selectedSpecialId && (
                   <div className="sub-section">
                     <h3 className="sub-section-title">Phong cách phối màu (Lót trong · Áo ngoài · Quần)</h3>
@@ -462,30 +426,33 @@ export default function App() {
                 )}
 
                 {/* 3. TAB PHỤ KIỆN */}
-                {builderTab === 'accessory' && !selectedSpecialId && (
+                {builderTab === 'accessory' && (
                   <div className="space-y-6">
+                    {selectedSpecialId&&<p className="accessory-outfit-note">Đồ đội đầu, trang sức và đồ cầm tay dùng với trang phục thường. Chọn một món sẽ chuyển về trang phục thường của bạn.</p>}
                     {/* Phân nhóm 1: Đồ đội đầu */}
                     <div className="sub-section">
                       <h3 className="sub-section-title">Đồ đội đầu</h3>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                         {HEADWEAR.filter(hw => !hw.allowedGender || hw.allowedGender === modelGender).map((hw) => {
-                          const isSelected = selectedHeadwear?.id === hw.id;
+                          const isSelected = !selectedSpecialId && selectedHeadwear?.id === hw.id;
                           return (
                             <button
                               key={hw.id}
                               type="button"
                               onClick={() => {
-                                setSelectedSpecialId(null);
                                 if(!isUnlocked('headwear',hw.id))return;
-                                setSelectedHeadwear(prev => prev?.id === hw.id ? null : hw);
+                                setSelectedSpecialId(null);
+                                setSelectedHeadwear(prev => !selectedSpecialId && prev?.id === hw.id ? null : hw);
                                 setFocusedAccessoryId(hw.id);
                               }}
                               disabled={!isUnlocked('headwear',hw.id)}
                               title={!isUnlocked('headwear',hw.id)?'Hoàn thành thử thách để mở khóa':hw.name}
+                              aria-label={hw.name}
                               aria-pressed={isSelected}
-                              className={`builder-btn ${isSelected ? 'active' : ''}`}
+                              data-accessory-option={hw.id}
+                              className={`builder-btn accessory-option ${!isUnlocked('headwear',hw.id)?'accessory-locked':''} ${isSelected ? 'active' : ''}`}
                             >
-                              {hw.name}
+                              <span>{hw.name}</span>{accessoryStatus('headwear',hw.id)}
                             </button>
                           );
                         })}
@@ -503,13 +470,19 @@ export default function App() {
                               key={fw.id}
                               type="button"
                               onClick={() => {
+                                if(!isUnlocked('accessories',fw.id))return;
                                 setSelectedFootwear(fw);
                                 setFocusedAccessoryId(fw.id);
                                 setSelectedGenZ(prev => prev.filter(id => id !== 'sneaker'));
                               }}
-                              className={`builder-btn ${isSelected ? 'active' : ''}`}
+                              disabled={!isUnlocked('accessories',fw.id)}
+                              title={!isUnlocked('accessories',fw.id)?'Hoàn thành thử thách để mở khóa':fw.name}
+                              aria-label={fw.name}
+                              aria-pressed={isSelected}
+                              data-accessory-option={fw.id}
+                              className={`builder-btn accessory-option ${!isUnlocked('accessories',fw.id)?'accessory-locked':''} ${isSelected ? 'active' : ''}`}
                             >
-                              {fw.name}
+                              <span>{fw.name}</span>{accessoryStatus('accessories',fw.id)}
                             </button>
                           );
                         })}
@@ -521,15 +494,20 @@ export default function App() {
                       <h3 className="sub-section-title">Trang sức</h3>
                       <div className="grid grid-cols-2 gap-2.5">
                         {JEWELRY.filter(jw => !jw.allowedGender || jw.allowedGender === modelGender).map((jw) => {
-                          const isChecked = selectedJewelry.includes(jw.id);
+                          const isChecked = !selectedSpecialId && selectedJewelry.includes(jw.id);
                           return (
                             <button
                               key={jw.id}
                               type="button"
                               onClick={() => handleToggleJewelry(jw.id)}
-                              className={`builder-btn ${isChecked ? 'active' : ''}`}
+                              disabled={!isUnlocked('accessories',jw.id)}
+                              title={!isUnlocked('accessories',jw.id)?'Hoàn thành thử thách để mở khóa':jw.name}
+                              aria-label={jw.name}
+                              aria-pressed={isChecked}
+                              data-accessory-option={jw.id}
+                              className={`builder-btn accessory-option ${!isUnlocked('accessories',jw.id)?'accessory-locked':''} ${isChecked ? 'active' : ''}`}
                             >
-                              {jw.name}
+                              <span>{jw.name}</span>{accessoryStatus('accessories',jw.id)}
                             </button>
                           );
                         })}
@@ -541,25 +519,31 @@ export default function App() {
                       <h3 className="sub-section-title">Đồ cầm tay</h3>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                         {HANDHELD.map((hh) => {
-                          const isSelected = selectedHandheld === hh.id;
+                          const isSelected = !selectedSpecialId && selectedHandheld === hh.id;
                           return (
                             <button
                               key={hh.id}
                               type="button"
                               onClick={() => {
+                                if(!isUnlocked('accessories',hh.id))return;
                                 setSelectedSpecialId(null);
-                                setSelectedHandheld(prev => prev === hh.id ? 'none' : hh.id);
+                                setSelectedHandheld(prev => !selectedSpecialId && prev === hh.id ? 'none' : hh.id);
                                 setFocusedAccessoryId(hh.id);
                               }}
+                              disabled={!isUnlocked('accessories',hh.id)}
+                              title={!isUnlocked('accessories',hh.id)?'Hoàn thành thử thách để mở khóa':hh.name}
+                              aria-label={hh.name}
                               aria-pressed={isSelected}
-                              className={`builder-btn ${isSelected ? 'active' : ''}`}
+                              data-accessory-option={hh.id}
+                              className={`builder-btn accessory-option ${!isUnlocked('accessories',hh.id)?'accessory-locked':''} ${isSelected ? 'active' : ''}`}
                             >
-                              {hh.name}
+                              <span>{hh.name}</span>{accessoryStatus('accessories',hh.id)}
                             </button>
                           );
                         })}
                       </div>
                     </div>
+                    {hasLockedAccessories&&<button type="button" className="accessory-explore" onClick={()=>setActivePage(2)}>Đến thử thách để mở thêm phụ kiện <ArrowRight size={15}/></button>}
                     <PieceInfoCard item={accessoryInfo} />
                   </div>
                 )}
@@ -613,8 +597,10 @@ export default function App() {
           {/* Nút chuyển giới tính và nút đóng trong Lightbox */}
           <div className="absolute top-3.5 right-4 z-60 flex items-center gap-3">
             {renderGenderToggle(true)}
-            <button className="btn lb-close !static shadow-md" onClick={() => setLightboxOpen(false)}>
-              Đóng (Esc)
+            <button type="button" className="lb-close" aria-label="Đóng (Esc)" onClick={() => setLightboxOpen(false)}>
+              <X size={18} aria-hidden="true" />
+              <span>Đóng</span>
+              <kbd aria-hidden="true">Esc</kbd>
             </button>
           </div>
           <div className="lb-body">

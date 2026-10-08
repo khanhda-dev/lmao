@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="231" height="561" viewBox="0 0 231 561" fill="none">
+<g id="Man/Ngu than">
+<g id="Core/Man">
+<rect width="46" height="35" transform="translate(92.5 191.486)" fill="#CD7C45" />
+<g id="Arm/Top/L">
+<g id="Arm/Bottom/R">
+<g id="Guide_2">
+<line id="vertical line_2" y1="-0.25" x2="32" y2="-0.25" transform="matrix(1.45705e-07 -1 -1 -1.31134e-08 38.2241 234.498)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_2" y1="-0.25" x2="31.0197" y2="-0.25" transform="matrix(-1 0 0 1 53.7339 218.498)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_2" x="-0.25" y="0.25" width="31.5" height="31.4334" rx="15.7167" transform="matrix(-1 0 0 1 54.2144 202.498)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<path id="ng_sleeve_L" d="M85.5 108.486C57.5 109.486 33.5 118.486 23.5 138.486C17.5 168.486 11.5 218.486 7.5 258.486C5.5 278.486 3.5 290.486 1.5 298.486L55.5 302.486C57.5 273.486 63.5 243.486 75.5 208.486L85.5 158.486V108.486Z" fill="#3F5A86" stroke="#2C4268" stroke-linecap="round" stroke-linejoin="round" />
+<path id="ng_cuff_L" d="M1.5 298.486L55.5 302.486" stroke="#2C4268" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g id="Guide_3">
+<line id="vertical line_3" y1="-0.25" x2="30" y2="-0.25" transform="matrix(1.55418e-07 -1 -1 -1.22938e-08 54.7144 152.498)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_3" y1="-0.25" x2="29.081" y2="-0.25" transform="matrix(-1 0 0 1 69.2554 137.498)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_3" x="-0.25" y="0.25" width="29.5" height="29.4376" rx="14.7188" transform="matrix(-1 0 0 1 69.6743 122.498)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<g id="Arm/Top/R">
+<g id="Arm/Bottom/R_2">
+<g id="Guide_5">
+<line id="vertical line_5" x1="192.2" y1="234.498" x2="192.2" y2="202.498" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_5" x1="176.94" y1="218.248" x2="207.96" y2="218.248" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_5" x="176.21" y="202.748" width="31.5" height="31.4334" rx="15.7167" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<path id="ng_sleeve_R" d="M145.2 108.486C173.2 109.486 197.2 118.486 207.2 138.486C213.2 168.486 219.2 218.486 223.2 258.486C225.2 278.486 227.2 290.486 229.2 298.486L175.2 302.486C173.2 273.486 167.2 243.486 155.2 208.486L145.2 158.486V108.486Z" fill="#3F5A86" stroke="#2C4268" stroke-linecap="round" stroke-linejoin="round" />
+<path id="ng_cuff_R" d="M229.2 298.486L175.2 302.486" stroke="#2C4268" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g id="Guide_6">
+<line id="vertical line_6" x1="175.71" y1="152.498" x2="175.71" y2="122.498" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_6" x1="161.419" y1="137.248" x2="190.5" y2="137.248" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_6" x="160.75" y="122.748" width="29.5" height="29.4376" rx="14.7188" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<g id="Belly">
+<g id="Leg/R">
+<path id="Rectangle 4213" d="M142.4 247.255C154.228 246.203 164.574 254.945 165.509 266.782L173.799 371.691C174.734 383.528 165.904 393.977 154.077 395.03C142.25 396.083 131.903 387.341 130.968 375.503L122.679 270.595L122.642 270.041C122.02 258.434 130.758 248.292 142.4 247.255Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<g id="Knee/R">
+<g id="Foot/R">
+<path id="Rectangle 4215" d="M163.876 508.66C152.238 508.66 142.802 518.095 142.802 529.734C142.802 541.373 152.238 550.808 163.876 550.808C175.515 550.808 184.951 541.373 184.951 529.734C184.951 518.095 175.515 508.66 163.876 508.66Z" fill="#FDBA90" stroke="#FDBA90" />
+<g id="Rectangle 4215_2">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M191.062 530.743C190.33 530.093 189.385 529.734 188.406 529.734H142.444C140.235 529.734 138.444 531.525 138.444 533.734V548.808H211.398L191.062 530.743Z" fill="white" />
+<path d="M138.444 556.348C138.444 558.557 140.235 560.348 142.444 560.348H213.863C217.541 560.348 219.269 555.801 216.519 553.358L211.398 548.808H138.444V556.348Z" fill="#131313" />
+</g>
+<g id="Guide_7">
+<line id="vertical line_7" x1="163.983" y1="548.223" x2="163.983" y2="505.667" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_7" x1="143.607" y1="526.695" x2="184.86" y2="526.695" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_7" x="142.552" y="505.917" width="42.0565" height="41.968" rx="20.984" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<path id="Rectangle 4214" d="M151.313 356.96C163.306 356.118 173.755 365.055 174.784 377.034L187.21 521.689L187.257 522.23L186.712 522.231L139.709 522.315L139.237 522.316L139.209 521.844L130.879 380.21C130.171 368.171 139.283 357.803 151.313 356.96Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<path id="Rectangle 4216" d="M152.534 356.286C141.212 356.286 132.034 365.465 132.034 376.786C132.034 388.108 141.212 397.286 152.534 397.286C163.856 397.286 173.034 388.108 173.034 376.786C173.034 365.465 163.856 356.286 152.534 356.286Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<g id="Guide_8">
+<line id="vertical line_8" x1="152.716" y1="395.02" x2="152.716" y2="357.388" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_8" x1="134.727" y1="375.954" x2="171.205" y2="375.954" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_8" x="133.824" y="357.638" width="37.1314" height="37.053" rx="18.5265" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<g id="Guide_9">
+<line id="vertical line_9" x1="142.627" y1="279.336" x2="142.627" y2="249.498" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_9" x1="128.415" y1="264.167" x2="157.339" y2="264.167" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_9" x="127.75" y="249.748" width="29.3382" height="29.2761" rx="14.638" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<g id="Leg/L">
+<path id="Rectangle 4213_2" d="M92.3052 247.365C80.4779 246.312 70.1317 255.055 69.1963 266.892L60.907 371.8C59.9716 383.638 68.8014 394.087 80.6287 395.14C92.4561 396.193 102.802 387.45 103.738 375.613L112.027 270.705L112.064 270.151C112.686 258.544 103.948 248.402 92.3052 247.365Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<g id="Knee/R_2">
+<g id="Foot/R_2">
+<path id="Rectangle 4215_3" d="M70.8291 508.77C82.4678 508.77 91.9033 518.205 91.9033 529.844C91.9032 541.483 82.4678 550.918 70.8291 550.918C59.1903 550.918 49.755 541.483 49.7549 529.844C49.7549 518.205 59.1903 508.77 70.8291 508.77Z" fill="#FDBA90" stroke="#FDBA90" />
+<g id="Rectangle 4215_4">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M43.6432 530.89C44.3753 530.24 45.3205 529.881 46.2998 529.881H92.2617C94.4709 529.881 96.2617 531.672 96.2617 533.881V548.808H23.4731L43.6432 530.89Z" fill="white" />
+<path d="M96.2617 556.495C96.2617 558.704 94.4709 560.495 92.2617 560.495H20.8429C17.1642 560.495 15.4361 555.948 18.1863 553.505L23.4731 548.808H96.2617V556.495Z" fill="#131313" />
+</g>
+<g id="Guide_10">
+<line id="vertical line_10" y1="-0.25" x2="42.5565" y2="-0.25" transform="matrix(1.45705e-07 -1 -1 -1.31134e-08 70.4724 548.333)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_10" y1="-0.25" x2="41.2529" y2="-0.25" transform="matrix(-1 0 0 1 91.0989 527.055)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_10" x="-0.25" y="0.25" width="42.0565" height="41.968" rx="20.984" transform="matrix(-1 0 0 1 91.9031 505.776)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<path id="Rectangle 4214_2" d="M83.3927 357.069C71.3998 356.228 60.9495 365.164 59.9189 377.142L47.5803 520.591L47.5335 521.133L48.0767 521.134L95.0799 521.242L95.5517 521.243L95.5799 520.772L103.828 380.32C104.535 368.28 95.4233 357.913 83.3927 357.069Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<path id="Rectangle 4216_2" d="M82.1719 356.396C93.4937 356.396 102.672 365.575 102.672 376.896C102.672 388.218 93.4937 397.396 82.1719 397.396C70.85 397.396 61.6719 388.218 61.6719 376.896C61.6719 365.575 70.85 356.396 82.1719 356.396Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<g id="Guide_11">
+<line id="vertical line_11" y1="-0.25" x2="37.6314" y2="-0.25" transform="matrix(1.45705e-07 -1 -1 -1.31134e-08 81.7397 395.13)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_11" y1="-0.25" x2="36.4786" y2="-0.25" transform="matrix(-1 0 0 1 99.9788 376.314)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_11" x="-0.25" y="0.25" width="37.1314" height="37.053" rx="18.5265" transform="matrix(-1 0 0 1 100.632 357.498)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<g id="Guide_12">
+<line id="vertical line_12" y1="-0.25" x2="29.8382" y2="-0.25" transform="matrix(1.45705e-07 -1 -1 -1.31134e-08 91.8289 279.446)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_12" y1="-0.25" x2="28.9241" y2="-0.25" transform="matrix(-1 0 0 1 106.291 264.527)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_12" x="-0.25" y="0.25" width="29.3382" height="29.2761" rx="14.638" transform="matrix(-1 0 0 1 106.705 249.608)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<path id="Rectangle 4212" d="M141.458 185.618C154.989 185.618 165.958 196.587 165.958 210.118V279.884H68.4043V210.118C68.4043 196.587 79.3733 185.618 92.9043 185.618H141.458Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<g id="Guide_13">
+<line id="vertical line_13" x1="117.145" y1="249.608" x2="117.145" y2="235.656" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_13" x1="110.634" y1="242.382" x2="124.158" y2="242.382" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_13" x="110.456" y="235.906" width="13.4519" height="13.4229" rx="6.71144" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+<path id="ng_robe" d="M85.5 108.486H149.5C161.5 109.486 169.5 116.486 169.5 130.486C167.5 178.486 171.5 248.486 177.5 308.486C181.5 378.486 185.5 448.486 187.5 488.486C149.5 498.486 85.5 498.486 47.5 488.486C49.5 448.486 53.5 378.486 57.5 308.486C63.5 248.486 67.5 178.486 65.5 130.486C65.5 116.486 73.5 109.486 85.5 108.486Z" fill="#3F5A86" stroke="#2C4268" stroke-linecap="round" stroke-linejoin="round" />
+<path id="ng_closure" d="M111.5 126.486C95.5 138.486 81.5 154.486 75.5 178.486L73.5 218.486" stroke="#1F3252" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+<circle id="ng_button" cx="104.3" cy="132.186" r="2.6" fill="#D9B25B" />
+<circle id="ng_button_2" cx="95.7001" cy="140.686" r="2.6" fill="#D9B25B" />
+<circle id="ng_button_3" cx="82.9999" cy="158.886" r="2.6" fill="#D9B25B" />
+<circle id="ng_button_4" cx="74.4999" cy="198.486" r="2.6" fill="#D9B25B" />
+<circle id="ng_button_5" cx="73.9999" cy="213.486" r="2.6" fill="#D9B25B" />
+</g>
+<path id="ng_stand_collar" d="M97.5 102.486H137.5V122.486C137.5 127.486 97.5 127.486 97.5 122.486V102.486Z" fill="#3F5A86" stroke="#2C4268" stroke-linecap="round" stroke-linejoin="round" />
+<path id="ng_collar_lining" d="M99.5 104.486H135.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+</g>
+</svg>

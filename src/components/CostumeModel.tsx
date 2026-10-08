@@ -23,7 +23,7 @@ export function CostumeModel({ gender, garmentId, garmentName, specialId, isLigh
   const key = (specialId || `${gender}-${garmentId}`) as keyof typeof assets;
   const asset = assets[key];
   const original = sources[`../assets/costumes/${key}.svg`];
-  const customHeadwear = !specialId && headwearId ? { id: headwearId, x: asset.headX, female: gender === 'female' } : undefined;
+  const customHeadwear = !specialId && headwearId ? { id: headwearId, x: asset.headX, female: gender === 'female',costumeKey:key } : undefined;
   const hatBounds = customHeadwear ? headwearBounds(customHeadwear) : undefined;
   const handheldSelection = { id: handheldId, costumeKey: key };
   const itemBounds = !specialId ? handheldPlacement(handheldSelection) : undefined;
@@ -99,7 +99,7 @@ export function CostumeModel({ gender, garmentId, garmentName, specialId, isLigh
       </g>
       <g data-original-costume={asset.nodeId} dangerouslySetInnerHTML={{ __html: markup }} />
       {!specialId && <>
-        <HeadwearArt id={headwearId} x={asset.headX} female={female} />
+        <HeadwearArt id={headwearId} x={asset.headX} female={female} costumeKey={key}/>
         {hasHandheld && <>
           <HandheldArt selection={handheldSelection} layer="front" />
           <g fill="none" data-hand-grip="true" dangerouslySetInnerHTML={{ __html: hand }} />

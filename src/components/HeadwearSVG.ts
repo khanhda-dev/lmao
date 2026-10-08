@@ -1,10 +1,17 @@
 import assets from '../data/headwearAssets.json';
+import rigs from '../data/costumeAssets.json';
 
 const sources = import.meta.glob('../assets/headwear/*.svg', {
   query: '?raw', import: 'default', eager: true,
 }) as Record<string, string>;
 
-export type CustomHeadwear = { id: string; female: boolean; x: number };
+export type CustomHeadwear = { id: string; female: boolean; x: number; costumeKey?:keyof typeof rigs };
+export function nonLaPlacement(selection:CustomHeadwear){
+ const rig=selection.costumeKey?rigs[selection.costumeKey]:undefined;
+ const baseline=selection.female?261.079:293.498;
+ const faceAnchor=(selection.female?46.9872:60.4683)+(rig?rig.handY-baseline:0);
+ return {x:selection.x,y:faceAnchor-24,scale:selection.female?0.82:1};
+}
 
 // Bind scarf fabric to the outfit palette; retain the reference's layered folds.
 // Hair behind the khăn vành dây and all other hats keep their original paint.
@@ -41,8 +48,7 @@ function placement({ id, female, x }: CustomHeadwear) {
 
 export function headwearBounds(selection: CustomHeadwear) {
   if (selection.id === 'non-la') {
-    const y = selection.female ? 7 : 21;
-    const scale = selection.female ? 0.82 : 1;
+    const {y,scale}=nonLaPlacement(selection);
     return { left: selection.x - 94*scale, top: y - 56*scale,
       right: selection.x + 94*scale, bottom: y + 20*scale };
   }

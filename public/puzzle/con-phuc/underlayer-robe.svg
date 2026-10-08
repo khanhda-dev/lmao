@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="231" height="561" viewBox="0 0 231 561" fill="none">
+<g id="Man/Ngu than">
+<g id="Core/Man">
+<g id="Belly">
+<path id="ng_robe" d="M85.5 108.486H149.5C161.5 109.486 169.5 116.486 169.5 130.486C167.5 178.486 171.5 248.486 177.5 308.486C181.5 378.486 185.5 448.486 187.5 488.486C149.5 498.486 85.5 498.486 47.5 488.486C49.5 448.486 53.5 378.486 57.5 308.486C63.5 248.486 67.5 178.486 65.5 130.486C65.5 116.486 73.5 109.486 85.5 108.486Z" fill="#3F5A86" stroke="#2C4268" stroke-linecap="round" stroke-linejoin="round" />
+<path id="ng_closure" d="M111.5 126.486C95.5 138.486 81.5 154.486 75.5 178.486L73.5 218.486" stroke="#1F3252" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+<circle id="ng_button" cx="104.3" cy="132.186" r="2.6" fill="#D9B25B" />
+<circle id="ng_button_2" cx="95.7001" cy="140.686" r="2.6" fill="#D9B25B" />
+<circle id="ng_button_3" cx="82.9999" cy="158.886" r="2.6" fill="#D9B25B" />
+<circle id="ng_button_4" cx="74.4999" cy="198.486" r="2.6" fill="#D9B25B" />
+<circle id="ng_button_5" cx="73.9999" cy="213.486" r="2.6" fill="#D9B25B" />
+</g>
+<path id="ng_stand_collar" d="M97.5 102.486H137.5V122.486C137.5 127.486 97.5 127.486 97.5 122.486V102.486Z" fill="#3F5A86" stroke="#2C4268" stroke-linecap="round" stroke-linejoin="round" />
+<path id="ng_collar_lining" d="M99.5 104.486H135.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+</g>
+</svg>

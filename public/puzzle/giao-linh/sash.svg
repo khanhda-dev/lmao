@@ -1,1 +1,10 @@
-<svg width="99" height="102" viewBox="94 170 99 102" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><mask id="gltt_bun_mask" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="131" y="64" width="24" height="39"><path d="M143.047 65.1282C149.185 65.1284 154.16 70.1041 154.16 76.2415V90.8743C154.16 97.0116 149.185 101.986 143.047 101.987C136.91 101.987 131.934 97.0117 131.934 90.8743V76.2415C131.934 70.104 136.91 65.1282 143.047 65.1282Z" fill="#F8DAC3" stroke="#F8DAC3"/></mask></defs><g data-puzzle-part="sash"><path d="M96.5 172.85H190.5L189.5 190.85H97.5L96.5 172.85Z" fill="#FFFDD0" stroke="#E6DFA8" stroke-linecap="round" stroke-linejoin="round"/><path d="M108.5 186.85L100.5 264.85L108.5 269.85L114.5 187.85L108.5 186.85Z" fill="#FFFDD0" stroke="#E6DFA8" stroke-linecap="round" stroke-linejoin="round"/><path d="M114.5 186.85L119.5 250.85L127.5 248.85L121.5 185.85L114.5 186.85Z" fill="#FFFDD0" stroke="#E6DFA8" stroke-linecap="round" stroke-linejoin="round"/><path d="M105.5 181.85C105.5 175.85 117.5 175.85 117.5 181.85C117.5 187.85 105.5 187.85 105.5 181.85Z" fill="#FFFDD0" stroke="#E6DFA8" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="99" height="102" viewBox="94 170 99 102" fill="none">
+<g id="Woman/Giao linh">
+<g id="belly">
+<path id="giaolinh_sash" d="M96.5 172.85H190.5L189.5 190.85H97.5L96.5 172.85Z" fill="#FFFDD0" stroke="#E6DFA8" stroke-linecap="round" stroke-linejoin="round" />
+<path id="giaolinh_tie_ribbon_1" d="M108.5 186.85L100.5 264.85L108.5 269.85L114.5 187.85L108.5 186.85Z" fill="#FFFDD0" stroke="#E6DFA8" stroke-linecap="round" stroke-linejoin="round" />
+<path id="giaolinh_tie_ribbon_2" d="M114.5 186.85L119.5 250.85L127.5 248.85L121.5 185.85L114.5 186.85Z" fill="#FFFDD0" stroke="#E6DFA8" stroke-linecap="round" stroke-linejoin="round" />
+<path id="giaolinh_tie_knot" d="M105.5 181.85C105.5 175.85 117.5 175.85 117.5 181.85C117.5 187.85 105.5 187.85 105.5 181.85Z" fill="#FFFDD0" stroke="#E6DFA8" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+</g>
+</svg>

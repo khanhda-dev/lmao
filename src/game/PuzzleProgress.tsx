@@ -3,7 +3,9 @@ import { CHALLENGES } from './challenges';
 import { canPlay, emptyProgress, isUnlocked, normalizeProgress, placePiece, resetLevel, startGrid, swapGrid, previewGrid, markGridSeen,startChallenge,answerDetective,chooseReconstruction,submitReconstruction, STORAGE_KEY } from './progress';
 import type { UnlockKind } from './types';
 
+const freshUser=import.meta.env.DEV&&new URLSearchParams(window.location.search).get('fresh-user')==='1';
 function readProgress() {
+  if(freshUser)return emptyProgress();
   try { return normalizeProgress(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null')); }
   catch { return emptyProgress(); }
 }
@@ -11,16 +13,18 @@ function useProgressStore() {
   const [progress,setProgress] = useState(readProgress);
   const [storageError,setStorageError] = useState(false);
   useEffect(() => {
+    if(freshUser)return;
     try { localStorage.setItem(STORAGE_KEY,JSON.stringify(progress)); setStorageError(false); }
     catch { setStorageError(true); }
   },[progress]);
   useEffect(() => {
+    if(freshUser)return;
     const sync = (event: StorageEvent) => { if (event.key === STORAGE_KEY) setProgress(readProgress()); };
     window.addEventListener('storage',sync);
     return () => window.removeEventListener('storage',sync);
   },[]);
   return {
-    progress, storageError,
+    progress, storageError, freshUser,
     place:(level:string,piece:string) => setProgress(p=>placePiece(p,level,piece)),
     reset:(level:string) => setProgress(p=>resetLevel(p,level)),
     startGrid:(id:string)=>setProgress(p=>startGrid(p,id)),

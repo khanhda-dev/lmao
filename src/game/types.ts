@@ -22,7 +22,7 @@ export type WardrobeLook = {headwear:string;footwear:string;jewelry:string[];han
 export type DetectiveOption = {id:string;label:string;look:Partial<WardrobeLook>};
 export type DetectiveError = {id:string;label:string;bounds:[number,number,number,number];genzKeys?:string[];correctOption:string;options:DetectiveOption[];learning:string};
 export type DetectiveChallengeData = ChallengeMeta & {type:'detective';modelId:string;dimensions:[number,number];initialLook:WardrobeLook;errors:DetectiveError[]};
-export type ReconstructionChoice = {id:string;label:string;asset:string;wardrobeItemId?:string};
+export type ReconstructionChoice = {id:string;label:string;asset:string;equippedAsset?:string;wardrobeItemId?:string};
 export type ReconstructionSlot = {id:string;label:string;correctChoice:string;choices:ReconstructionChoice[]};
 export type ReconstructionChallengeData = ChallengeMeta & {type:'reconstruction';costume:PuzzleLevel;scenario:{character:string;occasion:string;mission:string};slots:ReconstructionSlot[]};
 export type Challenge = AssembleChallengeData | ImageGridChallengeData | DetectiveChallengeData | ReconstructionChallengeData;
@@ -33,7 +33,7 @@ export type ChallengeRun = GridRun | DetectiveRun | ReconstructionRun;
 export type BestResult = {actions:number;previews:number;total:number;completedAt:number};
 export type UnlockedItems = Record<UnlockKind,string[]>;
 export type Progress = {
-  version:2;completed:string[];placed:Record<string,string[]>;activeLevel:string;
+  version:3;completed:string[];placed:Record<string,string[]>;activeLevel:string;unlockedCostumeFamilies:string[];
   runs:Record<string,ChallengeRun>;best:Record<string,BestResult>;unlockedItems:UnlockedItems;
   migrated:boolean;
 };

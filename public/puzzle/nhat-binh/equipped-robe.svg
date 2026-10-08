@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="328" height="519" viewBox="0 0 328 519" fill="none">
+<g id="Woman/Nhat binh">
+<g id="belly">
+<path id="nb_robe" d="M130 91.8497H198C206 91.8497 212 96.8497 212 104.85L229 312.85C196 320.85 132 320.85 99 312.85L116 104.85C116 96.8497 122 91.8497 130 91.8497Z" fill="#1F2A78" stroke="#161F5C" stroke-linecap="round" />
+<path id="nb_robe_center_seam" d="M164 160.85V316.85" stroke="#161F5C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+<path id="nb_inner_collar" d="M148 92.8497H180V104.85C180 107.85 148 107.85 148 104.85V92.8497Z" fill="white" stroke="#D9D4C7" stroke-linecap="round" stroke-linejoin="round" />
+<path id="nb_bib_border" d="M137 92.8497H191V184.85H137V92.8497Z" fill="#3E73C4" />
+<path id="nb_bib_inner" d="M143 92.8497H185V178.85H143V92.8497Z" fill="#F6EEDC" />
+<circle id="nb_bib_leaf" cx="155" cy="125.85" r="2" fill="#4F8A4B" />
+<circle id="nb_bib_leaf_2" cx="173" cy="125.85" r="2" fill="#4F8A4B" />
+<circle id="nb_bib_leaf_3" cx="164" cy="137.85" r="2" fill="#4F8A4B" />
+<circle id="nb_bib_leaf_4" cx="155" cy="151.85" r="2" fill="#4F8A4B" />
+<circle id="nb_bib_leaf_5" cx="173" cy="151.85" r="2" fill="#4F8A4B" />
+<circle id="nb_bib_leaf_6" cx="164" cy="170.85" r="2" fill="#4F8A4B" />
+<circle id="nb_bib_flower_big" cx="164" cy="117.85" r="4" fill="#D63A2E" />
+<circle id="nb_bib_flower_big_c" cx="164" cy="117.85" r="1.7" fill="#F2B01E" />
+<circle id="nb_bib_flower" cx="154" cy="137.85" r="3" fill="#F2B01E" />
+<circle id="nb_bib_flower_c" cx="154" cy="137.85" r="1.2" fill="#D63A2E" />
+<circle id="nb_bib_flower_2" cx="174" cy="137.85" r="3" fill="#F2B01E" />
+<circle id="nb_bib_flower_c_2" cx="174" cy="137.85" r="1.2" fill="#D63A2E" />
+<circle id="nb_bib_flower_low" cx="164" cy="156.85" r="3.8" fill="#D63A2E" />
+<circle id="nb_bib_flower_low_c" cx="164" cy="156.85" r="1.5" fill="#F2B01E" />
+<circle id="nb_bib_flower_b" cx="154" cy="166.85" r="2.4" fill="#D63A2E" />
+<circle id="nb_bib_flower_b_c" cx="154" cy="166.85" r="1" fill="#F2B01E" />
+<circle id="nb_bib_flower_b_2" cx="174" cy="166.85" r="2.4" fill="#D63A2E" />
+<circle id="nb_bib_flower_b_c_2" cx="174" cy="166.85" r="1" fill="#F2B01E" />
+</g>
+</g>
+</svg>

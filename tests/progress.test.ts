@@ -5,10 +5,32 @@ import { COSTUME_PUZZLES } from '../src/game/levels';
 import { correctTiles,isSolved,shuffleTiles,swapTiles,validTiles } from '../src/game/imageGrid';
 import { canPlay,emptyProgress,isCorrectDrop,isUnlocked,normalizeProgress,placePiece,resetLevel,startGrid,swapGrid,previewGrid,targetOf,startChallenge,answerDetective,chooseReconstruction,submitReconstruction } from '../src/game/progress';
 import { challengeSolved,detectiveLook } from '../src/game/challengeLogic';
-import { GARMENTS,SPECIAL_GARMENTS,HEADWEAR,COLOR_PRESETS } from '../src/data/costumeData';
+import { GARMENTS,SPECIAL_GARMENTS,HEADWEAR,COLOR_PRESETS,FOOTWEAR,JEWELRY,HANDHELD } from '../src/data/costumeData';
+import {compatibleCostume,familyVariant} from '../src/game/wardrobeFamilies';
 
 function tutorial(){let p=emptyProgress();for(const part of COSTUME_PUZZLES[0].pieces)p=placePiece(p,'giao-linh',part.id);return p;}
 function gridCompleted(){let p=startGrid(tutorial(),'nhat-binh');for(let i=0;i<9;i++){const run=p.runs['nhat-binh'];if(run.type==='image-grid')p=swapGrid(p,'nhat-binh',run.tiles.indexOf(i),i);}return p;}
+
+test('jewelry and handheld rewards unlock by stage for both genders and backfill existing saves',()=>{
+ const stages=[['quat'],['kieng-co'],['o-du','tram-cai'],['dan-nguyet']];
+ const all=stages.flat();
+ let p=emptyProgress();
+ for(const id of all)assert.equal(isUnlocked(p,'accessories',id),false,id);
+ p=tutorial();
+ for(let stage=0;stage<4;stage++){
+  if(stage===1)p=gridCompleted();
+  if(stage===2){const c=CHALLENGES[2];if(c.type!=='detective')throw Error();p=startChallenge(p,c.id);for(const error of c.errors)p=answerDetective(p,c.id,error.id,error.correctOption);}
+  if(stage===3){const c=CHALLENGES[3];if(c.type!=='reconstruction')throw Error();p=startChallenge(p,c.id);for(const slot of c.slots)p=chooseReconstruction(p,c.id,slot.id,slot.correctChoice);p=submitReconstruction(p,c.id);}
+  for(const [index,ids] of stages.entries())for(const id of ids)assert.equal(isUnlocked(p,'accessories',id),index<=stage,id);
+  // Every stage includes an accessory that the male model can wear.
+  assert.ok(stages[stage].some(id=>HANDHELD.some(item=>item.id===id)||JEWELRY.some(item=>item.id===id&&item.allowedGender!=='female')));
+  const legacy=JSON.parse(JSON.stringify(p));legacy.unlockedItems.accessories=['guoc-moc'];
+  const backfilled=normalizeProgress(legacy);
+  assert.deepEqual(backfilled.best,p.best);
+  for(const id of stages.slice(0,stage+1).flat())assert.ok(isUnlocked(backfilled,'accessories',id));
+  assert.ok(isUnlocked(resetLevel(backfilled,CHALLENGES[stage].id),'accessories',stages[stage][0]));
+ }
+});
 test('tutorial still unlocks its wardrobe and sequential prerequisites',()=>{
   let p=emptyProgress();assert.ok(isUnlocked(p,'costumes','nhat-binh'));
   assert.equal(canPlay(p,CHALLENGES[1]),false);assert.equal(placePiece(p,'con-phuc','hat'),p);
@@ -33,9 +55,9 @@ test('grid completion, preview limit, partial persistence, reset and best result
   assert.ok(isUnlocked(p,'headwear','khan-vanh-day'));const replay=p.runs['nhat-binh'];if(replay.type!=='image-grid')throw Error();
   assert.equal(isSolved(replay.tiles),false);assert.equal(replay.moves,0);assert.equal(replay.previewsUsed,0);
 });
-test('v1 migration preserves every earned item while resetting revised game types',()=>{
+test('v1 migration preserves completions and rewards across the new family system',()=>{
   const p=normalizeProgress({version:1,completed:['giao-linh','nhat-binh','con-phuc'],placed:{'giao-linh':['robe']},activeLevel:'con-phuc'});
-  assert.deepEqual(p.completed,['giao-linh']);assert.deepEqual(p.placed['giao-linh'],['robe']);assert.ok(p.migrated);
+  assert.deepEqual(p.completed,['giao-linh','nhat-binh','hoang-bao','con-phuc']);assert.deepEqual(p.placed['giao-linh'],['robe']);assert.ok(p.migrated);
   for(const id of ['special-quan-phuc-nam','special-long-bao-nam','giao-linh'])assert.ok(isUnlocked(p,'costumes',id));
   assert.ok(isUnlocked(p,'costumes','special-quan-phuc-nam'));assert.ok(isUnlocked(p,'colors','thuy-mac-giay-do'));
   assert.deepEqual(normalizeProgress(JSON.parse(JSON.stringify(p))).unlockedItems,p.unlockedItems);
@@ -78,7 +100,7 @@ test('reconstruction rejects incomplete/unknown choices, scores aggregate, allow
   p=submitReconstruction(p,c.id);assert.equal(p.best[c.id].actions,1);assert.ok(isUnlocked(p,'costumes','special-quan-phuc-nam'));assert.ok(isUnlocked(p,'colors','thuy-mac-giay-do'));
 });
 test('all rewards exist in the current wardrobe and defaults remain playable',()=>{
-  const registries={costumes:[...GARMENTS,...SPECIAL_GARMENTS],headwear:HEADWEAR,colors:COLOR_PRESETS,accessories:[]};
+  const registries={costumes:[...GARMENTS,...SPECIAL_GARMENTS],headwear:HEADWEAR,colors:COLOR_PRESETS,accessories:[...FOOTWEAR,...JEWELRY,...HANDHELD]};
   for(const c of CHALLENGES)for(const reward of c.rewards)assert.ok(registries[reward.kind].some(item=>item.id===reward.id),reward.id);
   const p=emptyProgress();assert.ok(isUnlocked(p,'costumes','nhat-binh'));assert.ok(isUnlocked(p,'colors',COLOR_PRESETS[0].id));assert.ok(isUnlocked(p,'headwear','non-ba-tam'));
 });
@@ -87,4 +109,21 @@ test('previous v2 item names migrate to current real items and ceremonial full m
   assert.ok(p.unlockedItems.costumes.includes('giao-linh'));assert.ok(p.unlockedItems.costumes.includes('special-long-bao-nam'));assert.ok(p.unlockedItems.costumes.includes('special-quan-phuc-nam'));
   assert.ok(p.unlockedItems.headwear.includes('khan-vanh-day'));assert.ok(p.unlockedItems.colors.includes('kim-sa-hoang-toc'));assert.deepEqual(p.unlockedItems.accessories,[]);
   assert.deepEqual(normalizeProgress(JSON.parse(JSON.stringify(p))).unlockedItems,p.unlockedItems);
+});
+test('fresh collection, paired rewards, actual gender compatibility and old gender IDs',()=>{
+ const fresh=emptyProgress();
+ for(const id of ['giao-linh','ao-tac','special-long-bao-nam','special-phuong-bao-nu','special-quan-phuc-nam','special-bach-y-nu'])assert.equal(isUnlocked(fresh,'costumes',id),false);
+ assert.equal(compatibleCostume('nhat-binh','male'),false);assert.equal(compatibleCostume('nhat-binh','female'),true);
+ assert.equal(familyVariant('nhat-binh','male'),undefined);
+ const migrated=normalizeProgress({version:2,unlockedItems:{costumes:['giao-linh-female','special-long-bao-nam','special-quan-phuc-nam']}});
+ for(const id of ['giao-linh','special-long-bao-nam','special-phuong-bao-nu','special-quan-phuc-nam','special-bach-y-nu'])assert.ok(isUnlocked(migrated,'costumes',id),id);
+ assert.equal(familyVariant('special-long-bao-nam','female'),'special-phuong-bao-nu');
+ assert.equal(familyVariant('special-quan-phuc-nam','female'),'special-bach-y-nu');
+ const grid=gridCompleted();assert.ok(isUnlocked(grid,'costumes','ao-tac'));assert.ok(compatibleCostume('ao-tac','female'));assert.ok(compatibleCostume('ao-tac','male'));
+ assert.deepEqual(normalizeProgress(JSON.parse(JSON.stringify(migrated))).unlockedCostumeFamilies,migrated.unlockedCostumeFamilies);
+});
+
+test('legacy explicit earned items and best records survive family migration',()=>{
+ const p=normalizeProgress({version:1,completed:['giao-linh','nhat-binh'],unlockedItems:{costumes:['special-phuong-bao-nu'],accessories:['guoc-moc']},best:{'nhat-binh':{actions:6,previews:1,total:5,completedAt:42}}});
+ assert.ok(isUnlocked(p,'costumes','special-long-bao-nam'));assert.ok(isUnlocked(p,'costumes','special-phuong-bao-nu'));assert.ok(isUnlocked(p,'accessories','guoc-moc'));assert.equal(p.best['nhat-binh'].actions,6);assert.equal(p.best['nhat-binh'].completedAt,42);
 });

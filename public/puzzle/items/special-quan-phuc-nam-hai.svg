@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="654" viewBox="0 0 360 654" fill="none">
+<g id="Cá»n Phá»¥c â Táº¿ Nam Giao">
+<g id="Core/Man">
+<g id="Lower body â legs, narrow red skirt and hem behind arms">
+<g id="Leg/R">
+<g id="Knee/R">
+<g id="Foot/R">
+<path id="Rectangle 4215" d="M205.376 540.172C193.738 540.172 184.302 549.607 184.302 561.246C184.302 572.885 193.738 582.32 205.376 582.32C217.015 582.32 226.451 572.885 226.451 561.246C226.451 549.607 217.015 540.172 205.376 540.172Z" fill="#FDBA90" stroke="#FDBA90" />
+<g id="Rectangle 4215_2">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M232.562 562.255C231.83 561.605 230.885 561.246 229.906 561.246H183.944C181.735 561.246 179.944 563.036 179.944 565.246V580.32H252.898L232.562 562.255Z" fill="#141414" />
+<path d="M179.944 587.86C179.944 590.069 181.735 591.86 183.944 591.86H255.363C259.041 591.86 260.769 587.313 258.019 584.87L252.898 580.32H179.944V587.86Z" fill="white" />
+</g>
+<g id="Guide">
+<line id="vertical line" x1="205.483" y1="579.735" x2="205.483" y2="537.178" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line" x1="185.107" y1="558.207" x2="226.36" y2="558.207" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline" x="184.053" y="537.428" width="42.0565" height="41.968" rx="20.984" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+</g>
+</g>
+<g id="Leg/L">
+<g id="Knee/R_2">
+<g id="Foot/R_2">
+<path id="Rectangle 4215_3" d="M112.333 540.282C123.972 540.282 133.408 549.717 133.408 561.356C133.408 572.995 123.972 582.43 112.333 582.43C100.695 582.43 91.2594 572.995 91.2593 561.356C91.2593 549.717 100.695 540.282 112.333 540.282Z" fill="#FDBA90" stroke="#FDBA90" />
+<g id="Rectangle 4215_4">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M85.1476 562.402C85.8797 561.752 86.8249 561.393 87.8042 561.393H133.766C135.975 561.393 137.766 563.184 137.766 565.393V580.32H64.9775L85.1476 562.402Z" fill="#141414" />
+<path d="M137.766 588.007C137.766 590.216 135.975 592.007 133.766 592.007H62.3473C58.6686 592.007 56.9405 587.46 59.6907 585.017L64.9775 580.32H137.766V588.007Z" fill="white" />
+</g>
+<g id="Guide_4">
+<line id="vertical line_4" y1="-0.25" x2="42.5565" y2="-0.25" transform="matrix(1.45705e-07 -1 -1 -1.31134e-08 111.977 579.845)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_4" y1="-0.25" x2="41.2529" y2="-0.25" transform="matrix(-1 0 0 1 132.603 558.567)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_4" x="-0.25" y="0.25" width="42.0565" height="41.968" rx="20.984" transform="matrix(-1 0 0 1 133.407 537.288)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+</g>
+</g>
+<path id="con_phuc_boot_gold_R" d="M193 572.039C201 564.039 209 580.039 217 572.039C225 564.039 233 580.039 241 572.039M197 582.039C207 576.039 217 588.039 227 582.039C235 577.039 243 587.039 251 581.039" stroke="#555555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path id="con_phuc_boot_gold_L" d="M124 572.309C116 564.309 108 580.309 100 572.309C92 564.309 84 580.309 76 572.309M120 582.309C110 576.309 100 588.309 90 582.309C82 577.309 74 587.309 66 581.309" stroke="#555555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_141_291">
+<rect width="300" height="430" fill="white" transform="translate(9 140)" />
+</clipPath>
+<clipPath id="clip1_141_291">
+<rect width="32" height="20" fill="white" transform="translate(142 300)" />
+</clipPath>
+<clipPath id="clip2_141_291">
+<rect width="138" height="88" fill="white" transform="translate(89.6836)" />
+</clipPath>
+</defs>
+</svg>

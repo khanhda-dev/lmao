@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="288" height="602" viewBox="0 0 288 602" fill="none">
+<g id="Man/Long bao Dai trieu 1">
+<g id="Core/Man">
+<g id="Belly">
+<g id="Leg/R">
+<g id="Knee/R">
+<g id="Foot/R">
+<path id="Rectangle 4215" d="M192.126 550.174C180.488 550.174 171.052 559.609 171.052 571.248C171.052 582.887 180.488 592.322 192.126 592.322C203.765 592.322 213.201 582.887 213.201 571.248C213.201 559.609 203.765 550.174 192.126 550.174Z" fill="#FDBA90" stroke="#FDBA90" />
+<g id="Rectangle 4215_2">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M219.312 572.257C218.58 571.607 217.635 571.248 216.656 571.248H170.694C168.485 571.248 166.694 573.039 166.694 575.248V590.322H239.648L219.312 572.257Z" fill="#141414" />
+<path d="M166.694 597.862C166.694 600.071 168.485 601.862 170.694 601.862H242.113C245.791 601.862 247.519 597.315 244.769 594.872L239.648 590.322H166.694V597.862Z" fill="white" />
+</g>
+<g id="Guide_7">
+<line id="vertical line_7" x1="192.233" y1="589.737" x2="192.233" y2="547.181" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_7" x1="171.857" y1="568.209" x2="213.11" y2="568.209" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_7" x="170.802" y="547.431" width="42.0565" height="41.968" rx="20.984" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+</g>
+</g>
+<g id="Leg/L">
+<g id="Knee/R_2">
+<g id="Foot/R_2">
+<path id="Rectangle 4215_3" d="M99.0791 550.284C110.718 550.284 120.153 559.719 120.153 571.358C120.153 582.997 110.718 592.432 99.0791 592.432C87.4403 592.432 78.005 582.997 78.0049 571.358C78.0049 559.719 87.4403 550.284 99.0791 550.284Z" fill="#FDBA90" stroke="#FDBA90" />
+<g id="Rectangle 4215_4">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M71.8932 572.404C72.6253 571.754 73.5705 571.395 74.5498 571.395H120.512C122.721 571.395 124.512 573.186 124.512 575.395V590.322H51.7231L71.8932 572.404Z" fill="#141414" />
+<path d="M124.512 598.009C124.512 600.218 122.721 602.009 120.512 602.009H49.0929C45.4142 602.009 43.6861 597.462 46.4363 595.019L51.7231 590.322H124.512V598.009Z" fill="white" />
+</g>
+<g id="Guide_10">
+<line id="vertical line_10" y1="-0.25" x2="42.5565" y2="-0.25" transform="matrix(1.45705e-07 -1 -1 -1.31134e-08 98.7224 589.847)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_10" y1="-0.25" x2="41.2529" y2="-0.25" transform="matrix(-1 0 0 1 119.349 568.569)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_10" x="-0.25" y="0.25" width="42.0565" height="41.968" rx="20.984" transform="matrix(-1 0 0 1 120.153 547.29)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+</g>
+</g>
+<path id="lb_boot_gold_R" d="M179.75 582.001C187.75 574.001 195.75 590.001 203.75 582.001C211.75 574.001 219.75 590.001 227.75 582.001M183.75 592.001C193.75 586.001 203.75 598.001 213.75 592.001C221.75 587.001 229.75 597.001 237.75 591.001" stroke="#F2C94C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path id="lb_boot_gold_L" d="M111.45 582.001C103.45 574.001 95.45 590.001 87.45 582.001C79.45 574.001 71.45 590.001 63.45 582.001M107.45 592.001C97.45 586.001 87.45 598.001 77.45 592.001C69.45 587.001 61.45 597.001 53.45 591.001" stroke="#F2C94C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+</g>
+</g>
+</svg>

@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1844" height="602" viewBox="0 0 1844 602" fill="none"><g data-headwear-layer="rear" /><g data-headwear-layer="front"><path d="M1658 51C1669 41 1687 38 1707 38C1727 38 1745 41 1756 51V70C1756 72.6667 1754.33 74.3333 1751 75C1721.67 79 1692.33 79 1663 75C1659.67 74.3333 1658 72.6667 1658 70V51Z" fill="#172224" />
-<path d="M1658 51C1670 45 1682.33 41.6667 1695 41L1704 51C1690.67 53.6667 1675.33 58 1658 64V51Z" fill="#233134" />
-<path d="M1660 62C1691.33 56.6667 1722.67 56.6667 1754 62M1660 66C1691.33 60.6667 1722.67 60.6667 1754 66M1661 70C1691.67 65.3333 1722.33 65.3333 1753 70" stroke="#2E3C3E" stroke-width="1.2" stroke-linecap="round" />
-<path d="M1703 51C1718.33 49.6666 1734.33 51.6666 1751 57" stroke="#243335" stroke-width="1.1" stroke-linecap="round" />
-</g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1844" height="602" viewBox="0 0 1844 602" fill="none"><g data-headwear-layer="rear" /><g data-headwear-layer="front"><g transform="translate(1655 37)"><g id="KhÄn xáº¿p / vÃ nh Äen vÃ  náº¿p quáº¥n ngang">
+<path id="Vector" d="M3 14C14 4 32 1 52 1C72 1 90 4 101 14V33C101 35.6667 99.3333 37.3333 96 38C66.6667 42 37.3333 42 8 38C4.66667 37.3333 3 35.6667 3 33V14Z" fill="#172224" />
+<path id="Vector_2" d="M3 14C15 8 27.3333 4.66667 40 4L49 14C35.6667 16.6667 20.3333 21 3 27V14Z" fill="#233134" />
+<path id="Vector_3" d="M5 25C36.3333 19.6667 67.6667 19.6667 99 25M5 29C36.3333 23.6667 67.6667 23.6667 99 29M6 33C36.6667 28.3333 67.3333 28.3333 98 33" stroke="#2E3C3E" stroke-width="1.2" stroke-linecap="round" />
+<path id="Vector_4" d="M48 14C63.3333 12.6667 79.3333 14.6667 96 20" stroke="#243335" stroke-width="1.1" stroke-linecap="round" />
+</g>
+</g></g></svg>
