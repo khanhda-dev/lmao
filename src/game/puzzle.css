@@ -93,5 +93,6 @@
 .puzzle-howto li+li{margin-top:14px}.puzzle-howto li::marker{font-weight:700;color:#973b39}
 .puzzle-info .puzzle-howto-note{font-size:13px;margin:20px 0 0;padding-top:15px;border-top:1px solid var(--line)}
 .puzzle-info h3{font-size:17px}.puzzle-modal h3{font-size:20px}.puzzle-reward strong{font-size:14px}.puzzle-reward{width:120px}
+.puzzle-reward .svg-artwork{width:calc(100% - 16px);height:calc(100% - 16px)}
 .puzzle-level strong{font-size:16px}.detective-options strong,.reconstruction-options strong{font-size:14px}
 @media(max-width:600px){.puzzle-sidebar nav .puzzle-level{min-width:205px}.reconstruction-context strong{font-size:18px}.puzzle-info h2{font-size:26px}.puzzle-piece-caption{font-size:10px}.puzzle-board-label{font-size:8px}}

@@ -220,13 +220,73 @@ test('teammate wardrobe renderer, default UI, gender, random, zoom and accessori
   const model=page.locator('.page.active .model');await expect(model).toHaveAttribute('data-costume','female-nhat-binh');
   await page.screenshot({path:'test-results/wardrobe-khanh-desktop.png',animations:'disabled'});
   await page.getByRole('button',{name:'Màu sắc',exact:true}).click();await page.getByRole('button',{name:/Sen Hồng Đồng Nội/}).click();await expect.poll(()=>page.evaluate(()=>document.documentElement.style.getPropertyValue('--dress'))).toBe('#DE6B83');
-  await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();await expect(page.getByRole('button',{name:'Khăn vành dây',exact:true})).toBeDisabled();await page.getByRole('button',{name:'Khăn đóng',exact:true}).click();await page.getByRole('button',{name:'Đàn nguyệt',exact:true}).click();
+  await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();await expect(page.getByRole('button',{name:'Khăn vành dây',exact:true})).toBeDisabled();await page.getByRole('button',{name:'Khăn đóng',exact:true}).click();await expect(page.getByRole('button',{name:'Đàn nguyệt',exact:true})).toBeDisabled();
   await page.getByRole('button',{name:'Phóng to',exact:true}).click();await expect(page.getByRole('dialog',{name:'Phóng to ảnh'})).toBeVisible();await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Trang phục',exact:true}).click();await expect(page.getByRole('button',{name:'Phượng Bào Hoàng Hậu',exact:true})).toBeDisabled();await page.getByRole('button',{name:'Ngũ thân tay chẽn',exact:true}).click();await expect(model).toHaveAttribute('data-costume','female-ngu-than-tay-chen');
   await page.getByRole('button',{name:/Đang chọn nữ/}).click();await expect(model).toHaveAttribute('data-costume','male-ngu-than-tay-chen');
   await expect(page.getByRole('button',{name:'Long Bào Hoàng Đế',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Cổn Phục (Tế Nam Giao)',exact:true})).toBeDisabled();
   for(let i=0;i<12;i++){await page.getByRole('button',{name:'Ngẫu nhiên',exact:true}).click();await expect(model).not.toHaveAttribute('data-costume',/special-|male-giao-linh/);}
   await openGame(page);await page.getByRole('tab',{name:'Trang 1',exact:true}).click();await expect(model).toBeVisible();expect(errors).toEqual([]);
+});
+
+test('accessory rewards gate fresh looks, backfill saved stages and equip on male and female models',async({page})=>{
+ const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+ await serveBuild(page);await page.goto('/');
+ await expect(page.getByRole('heading',{name:'Tủ đồ của bạn',exact:true})).toHaveCSS('font-weight','700');
+ const stages=[['quat'],['kieng-co'],['o-du','tram-cai'],['dan-nguyet']];
+ const names:Record<string,string>={'quat':'Quạt','kieng-co':'Kiềng cổ','o-du':'Ô (Dù)','tram-cai':'Trâm cài','dan-nguyet':'Đàn nguyệt'};
+ const model=page.locator('.page.active .model');
+ await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();
+ for(const id of stages.flat()){
+  await expect(page.getByRole('button',{name:names[id],exact:true})).toBeDisabled();
+  await expect(model.locator(`[data-accessory^="${id}"]`)).toHaveCount(0);
+ }
+ for(let i=0;i<8;i++){
+  await page.getByRole('button',{name:'Ngẫu nhiên',exact:true}).click();
+  for(const id of stages.flat())await expect(model.locator(`[data-accessory^="${id}"]`)).toHaveCount(0);
+ }
+ for(let stage=0;stage<4;stage++){
+  await page.evaluate(({key,completed})=>localStorage.setItem(key,JSON.stringify({version:3,completed,unlockedItems:{accessories:['guoc-moc']},best:{'giao-linh':{actions:4,previews:0,completedAt:42}}})),{key:STORAGE_KEY,completed:CHALLENGES.slice(0,stage+1).map(c=>c.id)});
+  await page.reload();await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();
+  for(const [index,ids] of stages.entries())for(const id of ids){
+   const button=page.getByRole('button',{name:names[id],exact:true});
+   if(index<=stage){await expect(button).toBeEnabled();await expect(button).toContainText('Đã mở khóa');}
+   else await expect(button).toBeDisabled();
+  }
+  await page.getByRole('button',{name:/Đang chọn nữ/}).click();
+  await expect(page.getByRole('button',{name:'Trâm cài',exact:true})).toHaveCount(0);
+  for(const id of stages.slice(0,stage+1).flat().filter(id=>id!=='tram-cai')){
+   const button=page.getByRole('button',{name:names[id],exact:true});
+   await expect(button).toBeEnabled();
+   if(await button.getAttribute('aria-pressed')!=='true')await button.click();
+   await expect(model.locator(`[data-accessory^="${id}"]`).last()).toBeVisible();
+  }
+  await page.getByRole('button',{name:/Đang chọn nam/}).click();
+  if(stage>=2){await page.getByRole('button',{name:'Trâm cài',exact:true}).click();await expect(model.locator('[data-accessory="tram-cai"]')).toBeVisible();}
+  await openGame(page);
+  await page.getByRole('button',{name:new RegExp(`Màn ${stage+1}:`)}).click();
+  const rewards=page.getByRole('region',{name:'Phần thưởng của màn'});
+  for(const id of stages[stage]){
+   const card=rewards.locator('.puzzle-reward').filter({hasText:names[id]});
+   // A restored completion without a solved replay still conceals the final illustration.
+   if(stage===3){await expect(card).toContainText('Nam & Nữ');continue;}
+   await expect(card.locator('.svg-artwork')).toBeVisible();
+   const bbox=await card.locator('.svg-artwork > g').evaluate(group=>(group as SVGGElement).getBBox().width);
+   expect(bbox).toBeGreaterThan(0);
+  }
+  if(stage===2)await rewards.screenshot({path:'test-results/accessory-rewards-desktop.png',animations:'disabled'});
+ }
+ await page.getByRole('tab',{name:'Trang 1',exact:true}).click();
+ await page.getByRole('button',{name:/Đang chọn nữ/}).click();
+ await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();
+ await page.screenshot({path:'test-results/accessory-rewards-male.png',animations:'disabled'});
+ await page.setViewportSize({width:390,height:844});
+ await page.screenshot({path:'test-results/accessory-rewards-mobile.png',fullPage:true,animations:'disabled'});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+ const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)!),STORAGE_KEY);
+ expect(saved.unlockedItems.accessories).toEqual(expect.arrayContaining(stages.flat()));
+ expect(saved.best['giao-linh'].completedAt).toBe(42);
+ expect(errors).toEqual([]);
 });
 
 test('starter collection and actual paired gender variants unlock together and persist',async({page})=>{

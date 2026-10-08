@@ -3,6 +3,8 @@ import { CHALLENGES } from './challenges';
 import { canPlay } from './progress';
 import { usePuzzleProgress } from './PuzzleProgress';
 import type { Challenge } from './types';
+import AccessoryPreview from './AccessoryPreview';
+import {JEWELRY,HANDHELD} from '../data/costumeData';
 
 export function LevelSidebar({level,onSelect}:{level:Challenge;onSelect:(id:string)=>void}) {
   const {progress}=usePuzzleProgress();
@@ -53,7 +55,7 @@ export function CostumeInfoPanel({level}:{level:Challenge}) {
     <h2>{level.name}</h2>
     <h3>Cách chơi</h3>
     <ol className="puzzle-howto">{instructions[level.type].map(step=><li key={step}>{step}</li>)}</ol>
-    <p className="puzzle-howto-note">Phần thưởng đã mở sẽ được giữ khi bạn chơi lại. Trang phục nằm ở tab Trang phục; các món đội đầu và giày nằm ở tab Phụ kiện.</p>
+    <p className="puzzle-howto-note">Phần thưởng đã mở sẽ được giữ khi bạn chơi lại. Trang phục nằm ở tab Trang phục; đồ đội đầu, giày, trang sức và đồ cầm tay nằm ở tab Phụ kiện.</p>
     {level.type==='assemble'&&<details className="puzzle-reference"><summary>Xem bộ hoàn chỉnh <Sparkles size={14}/></summary><img src={level.thumbnail} alt={`Bộ ${level.name} hoàn chỉnh`}/></details>}
   </aside>;
 }
@@ -63,7 +65,7 @@ export function RewardPreview({level,conceal=false}:{level:Challenge;conceal?:bo
   return <section className="puzzle-rewards" aria-label="Phần thưởng của màn">
     <h3><Gift size={19}/>{earned?'Đã thêm vào tủ đồ của bạn':'Hoàn thành màn này để mở khóa'}</h3>
     <div className="puzzle-reward-grid">{level.rewards.map(reward=><div className={`puzzle-reward ${earned?'earned':''}`} key={`${reward.kind}-${reward.id}`}>
-      <div>{conceal?<Gift size={26}/>:reward.image?<img src={reward.image} alt=""/>:reward.kind==='colors'?<span className="puzzle-color-reward"><i/><i/><i/></span>:<Gift size={26}/>}<span className="puzzle-reward-status">{earned?<Check size={12}/>:<Lock size={12}/>}</span></div>
+      <div>{conceal?<Gift size={26}/>:reward.image?<img src={reward.image} alt=""/>:reward.kind==='colors'?<span className="puzzle-color-reward"><i/><i/><i/></span>:reward.kind==='accessories'&&[...JEWELRY,...HANDHELD].some(item=>item.id===reward.id)?<AccessoryPreview id={reward.id}/>:<Gift size={26}/>}<span className="puzzle-reward-status">{earned?<Check size={12}/>:<Lock size={12}/>}</span></div>
       <strong>{reward.name}</strong>
     </div>)}</div>
   </section>;

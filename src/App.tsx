@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Shuffle, Search, Sun, Moon, Lock, Check, ArrowRight } from 'lucide-react';
+import { Shuffle, Search, Sun, Moon, Lock, Check, ArrowRight, Palette, X } from 'lucide-react';
 import { 
   GARMENTS, 
   HEADWEAR, 
@@ -50,8 +50,8 @@ export default function App() {
   // Slot 3: Traditional accessories
   const [selectedHeadwear, setSelectedHeadwear] = useState<Headwear | null>(HEADWEAR.find(hw => hw.id === 'non-ba-tam') || null); // Default: Nón ba tầm
   const [selectedFootwear, setSelectedFootwear] = useState<Footwear>(FOOTWEAR[0]); // Default: Hài thêu
-  const [selectedJewelry, setSelectedJewelry] = useState<string[]>(['kieng-co']); // Kiềng cổ
-  const [selectedHandheld, setSelectedHandheld] = useState<string>('quat'); // Quạt
+  const [selectedJewelry, setSelectedJewelry] = useState<string[]>(() => isUnlocked('accessories','kieng-co') ? ['kieng-co'] : []);
+  const [selectedHandheld, setSelectedHandheld] = useState<string>(() => isUnlocked('accessories','quat') ? 'quat' : 'none');
 
   // Slot 4: Gen Z modern accessories (5 items from PDF)
   const [selectedGenZ, setSelectedGenZ] = useState<string[]>(['kinh-ram', 'may-anh', 'sneaker']);
@@ -78,7 +78,9 @@ export default function App() {
     : unlockedItems[kind].includes(id)
       ? <span className="accessory-status earned" aria-hidden="true"><Check size={12}/>Đã mở khóa</span> : null;
   const hasLockedAccessories = HEADWEAR.some(hw=>(!hw.allowedGender||hw.allowedGender===modelGender)&&!isUnlocked('headwear',hw.id))
-    || FOOTWEAR.some(fw=>!isUnlocked('accessories',fw.id));
+    || FOOTWEAR.some(fw=>!isUnlocked('accessories',fw.id))
+    || JEWELRY.some(jw=>(!jw.allowedGender||jw.allowedGender===modelGender)&&!isUnlocked('accessories',jw.id))
+    || HANDHELD.some(hh=>!isUnlocked('accessories',hh.id));
 
   // Update CSS Variables on root whenever colors or footwear changes
   useEffect(() => {
@@ -127,6 +129,7 @@ export default function App() {
 
   // Toggle jewelry
   const handleToggleJewelry = (id: string) => {
+    if(!isUnlocked('accessories',id))return;
     setSelectedSpecialId(null);
     setFocusedAccessoryId(id);
     setSelectedJewelry(prev => 
@@ -152,9 +155,9 @@ export default function App() {
     const randomPreset = choose(COLOR_PRESETS.filter(p=>isUnlocked('colors',p.id)));
     const validHeadwear = HEADWEAR.filter(hw => (!hw.allowedGender || hw.allowedGender === modelGender) && isUnlocked('headwear',hw.id));
     const randomHead = specialId ? null : choose([null, ...validHeadwear]);
-    const randomHand = specialId ? 'none' : choose(['none', ...HANDHELD.map(item => item.id)]);
+    const randomHand = specialId ? 'none' : choose(['none', ...HANDHELD.filter(item => isUnlocked('accessories',item.id)).map(item => item.id)]);
     const randomJewelry = specialId ? [] : JEWELRY.filter(item =>
-      (!item.allowedGender || item.allowedGender === modelGender) && Math.random() < 0.5).map(item => item.id);
+      (!item.allowedGender || item.allowedGender === modelGender) && isUnlocked('accessories',item.id) && Math.random() < 0.5).map(item => item.id);
     const validFootwear = (specialId ? FOOTWEAR.filter(item => ['hai-theu', 'sneaker'].includes(item.id)) : FOOTWEAR).filter(item=>isUnlocked('accessories',item.id));
     const randomFoot = choose(validFootwear);
     const randomGenZ = GEN_Z_ACCESSORIES.filter(item => item.id !== 'sneaker' && Math.random() < 0.5).map(item => item.id);
@@ -372,6 +375,13 @@ export default function App() {
                 )}
 
                 {/* 2. TAB MÀU SẮC */}
+                {builderTab === 'color' && selectedSpecialId && (
+                  <div className="color-unavailable" role="status">
+                    <Palette size={36} aria-hidden="true" />
+                    <h3>Chưa hỗ trợ đổi màu</h3>
+                    <p>{garmentInfo?.name} hiện giữ màu sắc nguyên bản. Chọn trang phục khác để sử dụng bảng màu.</p>
+                  </div>
+                )}
                 {builderTab === 'color' && !selectedSpecialId && (
                   <div className="sub-section">
                     <h3 className="sub-section-title">Phong cách phối màu (Lót trong · Áo ngoài · Quần)</h3>
@@ -490,10 +500,14 @@ export default function App() {
                               key={jw.id}
                               type="button"
                               onClick={() => handleToggleJewelry(jw.id)}
+                              disabled={!isUnlocked('accessories',jw.id)}
+                              title={!isUnlocked('accessories',jw.id)?'Hoàn thành thử thách để mở khóa':jw.name}
+                              aria-label={jw.name}
                               aria-pressed={isChecked}
-                              className={`builder-btn ${isChecked ? 'active' : ''}`}
+                              data-accessory-option={jw.id}
+                              className={`builder-btn accessory-option ${!isUnlocked('accessories',jw.id)?'accessory-locked':''} ${isChecked ? 'active' : ''}`}
                             >
-                              {jw.name}
+                              <span>{jw.name}</span>{accessoryStatus('accessories',jw.id)}
                             </button>
                           );
                         })}
@@ -511,14 +525,19 @@ export default function App() {
                               key={hh.id}
                               type="button"
                               onClick={() => {
+                                if(!isUnlocked('accessories',hh.id))return;
                                 setSelectedSpecialId(null);
                                 setSelectedHandheld(prev => !selectedSpecialId && prev === hh.id ? 'none' : hh.id);
                                 setFocusedAccessoryId(hh.id);
                               }}
+                              disabled={!isUnlocked('accessories',hh.id)}
+                              title={!isUnlocked('accessories',hh.id)?'Hoàn thành thử thách để mở khóa':hh.name}
+                              aria-label={hh.name}
                               aria-pressed={isSelected}
-                              className={`builder-btn ${isSelected ? 'active' : ''}`}
+                              data-accessory-option={hh.id}
+                              className={`builder-btn accessory-option ${!isUnlocked('accessories',hh.id)?'accessory-locked':''} ${isSelected ? 'active' : ''}`}
                             >
-                              {hh.name}
+                              <span>{hh.name}</span>{accessoryStatus('accessories',hh.id)}
                             </button>
                           );
                         })}
@@ -578,8 +597,10 @@ export default function App() {
           {/* Nút chuyển giới tính và nút đóng trong Lightbox */}
           <div className="absolute top-3.5 right-4 z-60 flex items-center gap-3">
             {renderGenderToggle(true)}
-            <button className="btn lb-close !static shadow-md" onClick={() => setLightboxOpen(false)}>
-              Đóng (Esc)
+            <button type="button" className="lb-close" aria-label="Đóng (Esc)" onClick={() => setLightboxOpen(false)}>
+              <X size={18} aria-hidden="true" />
+              <span>Đóng</span>
+              <kbd aria-hidden="true">Esc</kbd>
             </button>
           </div>
           <div className="lb-body">
