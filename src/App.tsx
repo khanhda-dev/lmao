@@ -21,8 +21,11 @@ import {
 } from './data/costumeData';
 import { CostumeModel } from './components/CostumeModel';
 import { PieceInfoCard } from './components/PieceInfoCard';
+import PuzzlePage from './game/PuzzlePage';
+import { usePuzzleProgress } from './game/PuzzleProgress';
 
 export default function App() {
+  const {isUnlocked}=usePuzzleProgress();
   // Navigation: 1 = Trang 1 (Phối đồ), 2 = Trang 2 (Cẩm nang thông tin)
   const [activePage, setActivePage] = useState<number>(1);
 
@@ -91,6 +94,7 @@ export default function App() {
 
   // Apply a color preset
   const handleApplyPreset = (preset: ColorPreset) => {
+    if(!isUnlocked('colors',preset.id))return;
     setSelectedSpecialId(null);
     setSelectedPreset(preset);
     setLiningColor(preset.lining);
@@ -100,12 +104,14 @@ export default function App() {
 
   // Select garment and apply its characteristic look
   const handleSelectGarment = (g: Garment) => {
+    if(!isUnlocked('costumes',g.id))return;
     setSelectedSpecialId(null);
     setSelectedGarment(g);
   };
 
   // Select special garment (toggles on/off - chỉ hiện hoặc không hiện)
   const handleSelectSpecial = (id: string) => {
+    if(!isUnlocked('costumes',id))return;
     setSelectedSpecialId(prev => (prev === id ? null : id));
     setSelectedFootwear(FOOTWEAR[0]);
   };
@@ -129,13 +135,13 @@ export default function App() {
   // Randomize look
   const handleRandomRemix = () => {
     const choose = <T,>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
-    const validGarments = GARMENTS.filter(g => modelGender === 'female' || g.id !== 'nhat-binh');
-    const validSpecials = SPECIAL_GARMENTS.filter(g => g.gender === (modelGender === 'female' ? 'Nữ' : 'Nam'));
+    const validGarments = GARMENTS.filter(g => (modelGender === 'female' || g.id !== 'nhat-binh') && isUnlocked('costumes',g.id));
+    const validSpecials = SPECIAL_GARMENTS.filter(g => g.gender === (modelGender === 'female' ? 'Nữ' : 'Nam') && isUnlocked('costumes',g.id));
     const outfitId = choose([...validGarments.map(g => g.id), ...validSpecials.map(g => g.id)]);
     const randomGarment = validGarments.find(g => g.id === outfitId);
     const specialId = randomGarment ? null : outfitId;
-    const randomPreset = choose(COLOR_PRESETS);
-    const validHeadwear = HEADWEAR.filter(hw => !hw.allowedGender || hw.allowedGender === modelGender);
+    const randomPreset = choose(COLOR_PRESETS.filter(p=>isUnlocked('colors',p.id)));
+    const validHeadwear = HEADWEAR.filter(hw => (!hw.allowedGender || hw.allowedGender === modelGender) && isUnlocked('headwear',hw.id));
     const randomHead = specialId ? null : choose([null, ...validHeadwear]);
     const randomHand = specialId ? 'none' : choose(['none', ...HANDHELD.map(item => item.id)]);
     const randomJewelry = specialId ? [] : JEWELRY.filter(item =>
@@ -173,6 +179,8 @@ export default function App() {
   // Toggle gender
   const handleToggleGender = () => {
     const nextGender = modelGender === 'male' ? 'female' : 'male';
+    // A locked ceremonial counterpart falls back to a supported regular garment.
+    if(nextGender==='male' && selectedGarment.id==='nhat-binh')setSelectedGarment(GARMENTS.find(g=>g.id==='ngu-than-tay-chen')!);
     setSelectedJewelry(prev => prev.filter(id => {
       const item = JEWELRY.find(jw => jw.id === id);
       return !item?.allowedGender || item.allowedGender === nextGender;
@@ -184,13 +192,13 @@ export default function App() {
       // Nếu đang mặc trang phục đặc biệt, chuyển sang trang phục đặc biệt tương ứng của giới tính mới
       if (selectedSpecialId) {
         if (nextGender === 'female') {
-          if (selectedSpecialId === 'special-long-bao-nam') setSelectedSpecialId('special-phuong-bao-nu');
-          else if (selectedSpecialId === 'special-quan-phuc-nam') setSelectedSpecialId('special-bach-y-nu');
-          else setSelectedSpecialId('special-phuong-bao-nu');
+          if (selectedSpecialId === 'special-long-bao-nam') setSelectedSpecialId(isUnlocked('costumes','special-phuong-bao-nu')?'special-phuong-bao-nu':null);
+          else if (selectedSpecialId === 'special-quan-phuc-nam') setSelectedSpecialId(isUnlocked('costumes','special-bach-y-nu')?'special-bach-y-nu':null);
+          else setSelectedSpecialId(isUnlocked('costumes','special-phuong-bao-nu')?'special-phuong-bao-nu':null);
         } else {
-          if (selectedSpecialId === 'special-phuong-bao-nu') setSelectedSpecialId('special-long-bao-nam');
-          else if (selectedSpecialId === 'special-bach-y-nu') setSelectedSpecialId('special-quan-phuc-nam');
-          else setSelectedSpecialId('special-long-bao-nam');
+          if (selectedSpecialId === 'special-phuong-bao-nu') setSelectedSpecialId(isUnlocked('costumes','special-long-bao-nam')?'special-long-bao-nam':null);
+          else if (selectedSpecialId === 'special-bach-y-nu') setSelectedSpecialId(isUnlocked('costumes','special-quan-phuc-nam')?'special-quan-phuc-nam':null);
+          else setSelectedSpecialId(isUnlocked('costumes','special-long-bao-nam')?'special-long-bao-nam':null);
         }
       } else {
         if (nextGender === 'male' && selectedGarment.id === 'nhat-binh') {
@@ -200,6 +208,16 @@ export default function App() {
       }
       return nextGender;
     });
+  };
+
+  const tryChallengeReward = (id:string) => {
+    if(!isUnlocked('costumes',id))return;
+    const special=SPECIAL_GARMENTS.find(g=>g.id===id);
+    const garment=GARMENTS.find(g=>g.id===id);
+    if(special){setModelGender(special.gender==='Nam'?'male':'female');setSelectedSpecialId(id);}
+    else if(garment){setSelectedSpecialId(null);setSelectedGarment(garment);if(garment.gender==='Nữ')setModelGender('female');}
+    else return;
+    setSelectedGenZ([]);setSelectedFootwear(FOOTWEAR[0]);setBuilderTab('garment');setActivePage(1);
   };
 
   // One original-vector renderer for the stage and the enlarged view.
@@ -360,6 +378,8 @@ export default function App() {
                                 key={g.id}
                                 type="button"
                                 onClick={() => handleSelectGarment(g)}
+                                disabled={!isUnlocked('costumes',g.id)}
+                                title={!isUnlocked('costumes',g.id)?'Hoàn thành thử thách để mở khóa':g.name}
                                 className={`builder-btn ${isSelected ? 'active' : ''}`}
                               >
                                 {g.name}
@@ -382,6 +402,8 @@ export default function App() {
                                 key={sg.id}
                                 type="button"
                                 onClick={() => handleSelectSpecial(sg.id)}
+                                disabled={!isUnlocked('costumes',sg.id)}
+                                title={!isUnlocked('costumes',sg.id)?'Hoàn thành thử thách để mở khóa':sg.name}
                                 className={`builder-btn ${isSelected ? 'active' : ''}`}
                               >
                                 {sg.name}
@@ -390,6 +412,7 @@ export default function App() {
                           })}
                       </div>
                     </div>
+                    <button type="button" className="builder-btn mt-4" onClick={()=>setActivePage(2)}>Đến thử thách để mở thêm đồ →</button>
                     <PieceInfoCard item={garmentInfo} />
                   </div>
                 )}
@@ -406,6 +429,8 @@ export default function App() {
                             key={preset.id}
                             type="button"
                             onClick={() => handleApplyPreset(preset)}
+                            disabled={!isUnlocked('colors',preset.id)}
+                            title={!isUnlocked('colors',preset.id)?'Hoàn thành thử thách để mở khóa':preset.name}
                             className={`builder-btn flex flex-col items-center gap-2 p-3 ${isSelected ? 'active' : ''}`}
                           >
                             {/* Dải 3 màu trực quan như ô màu tóc trong ảnh mẫu */}
@@ -451,9 +476,12 @@ export default function App() {
                               type="button"
                               onClick={() => {
                                 setSelectedSpecialId(null);
+                                if(!isUnlocked('headwear',hw.id))return;
                                 setSelectedHeadwear(prev => prev?.id === hw.id ? null : hw);
                                 setFocusedAccessoryId(hw.id);
                               }}
+                              disabled={!isUnlocked('headwear',hw.id)}
+                              title={!isUnlocked('headwear',hw.id)?'Hoàn thành thử thách để mở khóa':hw.name}
                               aria-pressed={isSelected}
                               className={`builder-btn ${isSelected ? 'active' : ''}`}
                             >
@@ -564,11 +592,9 @@ export default function App() {
           </div>
         </section>
 
-        {/* ===== TRANG 2: ĐỂ TRỐNG ===== */}
-        <section className={`page ${activePage === 2 ? 'active' : ''}`}>
-          <div className="card h-full min-h-0 flex items-center justify-center p-8 text-slate-400">
-            {/* Để trống cho người dùng thêm nội dung sau */}
-          </div>
+        {/* ===== TRANG 2: VIỆT PHỤC CHALLENGE ===== */}
+        <section className={`page page2-challenges ${activePage === 2 ? 'active' : ''}`}>
+          {activePage===2 && <PuzzlePage onTryOutfit={tryChallengeReward}/>}
         </section>
       </main>
 
