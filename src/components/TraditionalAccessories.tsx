@@ -1,11 +1,13 @@
 import React from 'react';
+import {nonLaPlacement,type CustomHeadwear} from './HeadwearSVG';
 
 // Supplemental vector artwork for the existing options that had no model layer.
 // All coordinates are relative to the original Figma head/hand attachment points.
-export function HeadwearArt({ id, x, female }: { id?: string; x: number; female: boolean }) {
+export function HeadwearArt({ id, x, female,costumeKey }: { id?: string; x: number; female: boolean;costumeKey?:CustomHeadwear['costumeKey'] }) {
   if (id !== 'non-la') return null;
   // Keep the front brim above the forehead, with both eyes fully visible.
-  return <g transform={`translate(${x} ${female ? 7 : 21}) scale(${female ? 0.82 : 1})`} fill="none" strokeLinejoin="round" data-accessory={id}>
+  const placement=nonLaPlacement({id,x,female,costumeKey});
+  return <g transform={`translate(${x} ${placement.y}) scale(${placement.scale})`} fill="none" strokeLinejoin="round" data-accessory={id}>
     {id === 'non-la' && <g>
       <path d="M-89 5 L0-52 L89 5 Q0 28-89 5Z" fill="#EBD5A0" stroke="#A58146" strokeWidth="1.5" />
       <path d="M-89 5 Q0-7 89 5 M-64-11 Q0 0 64-11 M-40-27 Q0-19 40-27" stroke="#C4A971" />

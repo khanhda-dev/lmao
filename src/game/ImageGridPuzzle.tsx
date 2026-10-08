@@ -60,7 +60,7 @@ export default function ImageGridPuzzle({image,gridSize,title,aspectRatio,previe
     <div className="image-grid-stage">
       <div ref={board} className={`image-grid-board ${solved?'solved':''}`} data-testid="image-grid-board" role="group" aria-label="Bảng ảnh 3×3" style={{aspectRatio,gridTemplateColumns:`repeat(${gridSize},1fr)`,gridTemplateRows:`repeat(${gridSize},1fr)`}}>
         {run.tiles.map((tile,index)=><button type="button" key={index} data-testid={`grid-cell-${index}`} data-tile-id={tile} disabled={preview||solved}
-          aria-label={`Ô ${index+1}`} aria-pressed={selected===index} className={`image-grid-tile ${selected===index?'selected':''} ${drag?.index===index?'held':''} ${drag&&drag.over===index&&drag.index!==index?'drop-target':''}`}
+          data-correct={tile===index} aria-label={`Ô ${index+1}${tile===index?' · đúng vị trí':''}`} aria-pressed={selected===index} className={`image-grid-tile ${tile===index?'correct':''} ${selected===index?'selected':''} ${drag?.index===index?'held':''} ${drag&&drag.over===index&&drag.index!==index?'drop-target':''}`}
           style={background(tile)} onPointerDown={e=>start(e,index)} onPointerMove={e=>{if(pointer.current===e.pointerId&&drag)setDrag({...drag,x:e.clientX,y:e.clientY,over:cell(e.clientX,e.clientY)});}}
           onPointerUp={end} onPointerCancel={()=>{pointer.current=null;setDrag(null);}} onLostPointerCapture={()=>{pointer.current=null;setDrag(null);}}
           onClick={e=>{if(e.detail===0)select(index);}} onKeyDown={e=>{if(e.key==='Escape')setSelected(null);}}/>) }

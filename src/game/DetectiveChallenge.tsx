@@ -1,6 +1,8 @@
 import { useEffect,useRef,useState } from 'react';
 import { Check,MousePointer2,RotateCcw,Search } from 'lucide-react';
 import { CostumeModel } from '../components/CostumeModel';
+import SvgArtwork from './SvgArtwork';
+import AccessoryPreview from './AccessoryPreview';
 import { applyDetectiveOption,detectiveLook } from './challengeLogic';
 import type { DetectiveChallengeData,DetectiveRun,WardrobeLook } from './types';
 
@@ -27,7 +29,7 @@ export default function DetectiveChallenge({level,run,onInitialize,onAnswer,onRe
       </div>
       <div className="detective-tray" onKeyDown={event=>{if(event.key==='Escape'){setActive(null);lastZone.current?.focus();}}}>
         {error&&!fixed.includes(error.id)?<><span className="puzzle-eyebrow">CHỌN MÓN THAY THẾ</span><h3>{error.label}</h3><div className="detective-options">{error.options.map((item,index)=>{
-          const preview=applyDetectiveOption(look,error,item.look);
+          const preview=applyDetectiveOption(look,error,item.look),accessory=item.look.genz?.[0];
           return <button ref={index===0?option:undefined} key={item.id} data-testid={`detective-option-${item.id}`} onClick={()=>{
             onAnswer(error.id,item.id);
             if(item.id===error.correctOption){
@@ -37,7 +39,7 @@ export default function DetectiveChallenge({level,run,onInitialize,onAnswer,onRe
               if(fixed.length+1===level.total)onComplete();
             }
             else setFeedback('Chi tiết này chưa phù hợp với bản phối đang phục hồi. Thử phương án khác nhé.');
-          }}><span className="detective-option-art" style={{aspectRatio:error.bounds[2]/error.bounds[3]}}><span className="detective-option-crop" style={{width:`${level.dimensions[0]/error.bounds[2]*100}%`,left:`${-error.bounds[0]/error.bounds[2]*100}%`,top:`${-error.bounds[1]/error.bounds[3]*100}%`}}><WardrobeFigure level={level} look={preview}/></span></span><strong>{item.label}</strong></button>;
+          }}><span className={`detective-option-art preview-category-${error.id}`} style={{aspectRatio:error.bounds[2]/error.bounds[3]}}>{error.id==='feet'?<SvgArtwork asset={`/puzzle/items/special-long-bao-nam-${item.look.footwear==='hai-theu'?'hai':item.look.footwear}.svg`}/>:accessory?<AccessoryPreview id={accessory}/>:<span className="detective-option-crop" style={{width:`${level.dimensions[0]/error.bounds[2]*100}%`,left:`${-error.bounds[0]/error.bounds[2]*100}%`,top:`${-error.bounds[1]/error.bounds[3]*100}%`}}><WardrobeFigure level={level} look={preview}/></span>}</span><strong>{item.label}</strong></button>;
         })}</div></>:<div className="detective-empty"><Search size={28}/><h3>{complete?'Bản phối đã được phục hồi':'Bạn phát hiện chi tiết nào?'}</h3><p>{complete?'Ba chi tiết đã được thay. Phần thưởng đang chờ trong tủ đồ.':'Chạm vào nhân vật để mở khay thay đồ. Chọn sai vẫn có thể thử tiếp.'}</p></div>}
       </div>
     </div>

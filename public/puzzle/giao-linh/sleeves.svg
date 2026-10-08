@@ -1,1 +1,12 @@
-<svg width="289" height="191" viewBox="-1 88 289 191" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><mask id="gltt_bun_mask" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="131" y="64" width="24" height="39"><path d="M143.047 65.1282C149.185 65.1284 154.16 70.1041 154.16 76.2415V90.8743C154.16 97.0116 149.185 101.986 143.047 101.987C136.91 101.987 131.934 97.0117 131.934 90.8743V76.2415C131.934 70.104 136.91 65.1282 143.047 65.1282Z" fill="#F8DAC3" stroke="#F8DAC3"/></mask></defs><g data-puzzle-part="sleeves"><path d="M125.5 90.8497L109.5 91.8497C89.5 89.8497 73.5 94.8497 67.5 105.85L46.5 172.85C35.5 209.85 21.5 239.85 1.5 262.85C19.5 280.85 49.5 280.85 73.5 264.85L83.5 244.85L94.5 212.85L102.5 188.85L103.5 144.85L109.5 104.85L125.5 90.8497Z" fill="#B3CEE5"/><path d="M1.5 262.85C19.5 280.85 49.5 280.85 73.5 264.85" stroke="#FFFDD0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M161.5 90.8497L177.5 91.8497C197.5 89.8497 213.5 94.8497 219.5 105.85L240.5 172.85C251.5 209.85 265.5 239.85 285.5 262.85C267.5 280.85 237.5 280.85 213.5 264.85L203.5 244.85L192.5 212.85L184.5 188.85L183.5 144.85L177.5 104.85L161.5 90.8497Z" fill="#B3CEE5"/><path d="M285.5 262.85C267.5 280.85 237.5 280.85 213.5 264.85" stroke="#FFFDD0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="289" height="191" viewBox="-1 88 289 191" fill="none">
+<g id="Woman/Giao linh">
+<g id="Arm/Top/L">
+<path id="giaolinh_sleeve_L" d="M125.5 90.8497L109.5 91.8497C89.5 89.8497 73.5 94.8497 67.5 105.85L46.5 172.85C35.5 209.85 21.5 239.85 1.5 262.85C19.5 280.85 49.5 280.85 73.5 264.85L83.5 244.85L94.5 212.85L102.5 188.85L103.5 144.85L109.5 104.85L125.5 90.8497Z" fill="#B3CEE5" />
+<path id="giaolinh_cuff_L" d="M1.5 262.85C19.5 280.85 49.5 280.85 73.5 264.85" stroke="#FFFDD0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+<g id="Arm/Top/R">
+<path id="giaolinh_sleeve_R" d="M161.5 90.8497L177.5 91.8497C197.5 89.8497 213.5 94.8497 219.5 105.85L240.5 172.85C251.5 209.85 265.5 239.85 285.5 262.85C267.5 280.85 237.5 280.85 213.5 264.85L203.5 244.85L192.5 212.85L184.5 188.85L183.5 144.85L177.5 104.85L161.5 90.8497Z" fill="#B3CEE5" />
+<path id="giaolinh_cuff_R" d="M285.5 262.85C267.5 280.85 237.5 280.85 213.5 264.85" stroke="#FFFDD0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+</g>
+</svg>

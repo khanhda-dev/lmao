@@ -33,7 +33,7 @@ export type ChallengeRun = GridRun | DetectiveRun | ReconstructionRun;
 export type BestResult = {actions:number;previews:number;total:number;completedAt:number};
 export type UnlockedItems = Record<UnlockKind,string[]>;
 export type Progress = {
-  version:2;completed:string[];placed:Record<string,string[]>;activeLevel:string;
+  version:3;completed:string[];placed:Record<string,string[]>;activeLevel:string;unlockedCostumeFamilies:string[];
   runs:Record<string,ChallengeRun>;best:Record<string,BestResult>;unlockedItems:UnlockedItems;
   migrated:boolean;
 };

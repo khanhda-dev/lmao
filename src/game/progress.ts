@@ -3,25 +3,28 @@ import { COSTUME_PUZZLES } from './levels';
 import { isSolved,shuffleTiles,swapTiles,validTiles } from './imageGrid';
 import { freshDetective,freshReconstruction,reconstructionAccuracy } from './challengeLogic';
 import { migrateReward } from './rewardMigration';
+import {COSTUME_FAMILIES,costumeFamily,starterCostume} from './wardrobeFamilies';
 import type { Challenge,GridRun,Point,Progress,PuzzleLevel,PuzzlePiece,UnlockKind } from './types';
 
 // Keep the original storage key and migrate its content without losing earned items.
 export const STORAGE_KEY='viet-phuc-remix:puzzle:v1';
-export const emptyProgress=():Progress=>({version:2,completed:[],placed:{},activeLevel:CHALLENGES[0].id,runs:{},best:{},unlockedItems:{costumes:[],headwear:[],accessories:[],colors:[]},migrated:false});
+export const emptyProgress=():Progress=>({version:3,completed:[],placed:{},activeLevel:CHALLENGES[0].id,unlockedCostumeFamilies:[],runs:{},best:{},unlockedItems:{costumes:[],headwear:[],accessories:[],colors:[]},migrated:false});
 export const canPlay=(p:Progress,c:Pick<Challenge,'id'|'prerequisites'>)=>c.prerequisites.every(id=>p.completed.includes(id));
 const count=(input:unknown)=>typeof input==='number'&&Number.isFinite(input)&&input>=0?Math.floor(input):0;
 function earn(p:Progress,c:Challenge):Progress{
   const unlockedItems={...p.unlockedItems};
   for(const reward of c.rewards)unlockedItems[reward.kind]=[...new Set([...unlockedItems[reward.kind],reward.id])];
-  return {...p,unlockedItems};
+  const families=c.rewards.filter(r=>r.kind==='costumes').flatMap(r=>{const id=costumeFamily(r.id);return id?[id]:[];});
+  return {...p,unlockedItems,unlockedCostumeFamilies:[...new Set([...p.unlockedCostumeFamilies,...families])]};
 }
 export function normalizeProgress(input:unknown):Progress{
   let result=emptyProgress();
   if(!input||typeof input!=='object')return result;
   const saved=input as Omit<Partial<Progress>,'version'>&{version?:number};
-  if(saved.version!==2&&(saved.version as number)!==1)return result;
+  if(![1,2,3].includes(saved.version as number))return result;
   const legacy=(saved.version as number)===1;
-  result.migrated=legacy||saved.migrated===true;
+  result.migrated=saved.version!==3||saved.migrated===true;
+  result.unlockedCostumeFamilies=COSTUME_FAMILIES.filter(f=>Array.isArray(saved.unlockedCostumeFamilies)&&saved.unlockedCostumeFamilies.includes(f.id)).map(f=>f.id);
   const completed=Array.isArray(saved.completed)?saved.completed:[];
   if(legacy){
     // Old assembly rewards remain earned. New mechanics receive a fresh run.
@@ -30,13 +33,16 @@ export function normalizeProgress(input:unknown):Progress{
       if(challenge)result=earn(result,challenge);
       if(costume.id==='con-phuc')result=earn(result,CHALLENGES.find(c=>c.id==='hoang-bao')!);
     }
-  }else{
+  }
+  {
     for(const kind of Object.keys(result.unlockedItems) as UnlockKind[]){
       const ids=saved.unlockedItems?.[kind];
       if(Array.isArray(ids))for(const id of ids){
         if(typeof id!=='string')continue;
         const mapped=migrateReward(kind,id);
-        if(rewardLevel(mapped.kind,mapped.id))result.unlockedItems[mapped.kind]=[...new Set([...result.unlockedItems[mapped.kind],mapped.id])];
+        const family=mapped.kind==='costumes'?costumeFamily(mapped.id):undefined;
+        if(family)result.unlockedCostumeFamilies=[...new Set([...result.unlockedCostumeFamilies,family])];
+        if(family||rewardLevel(mapped.kind,mapped.id))result.unlockedItems[mapped.kind]=[...new Set([...result.unlockedItems[mapped.kind],family?COSTUME_FAMILIES.find(f=>f.id===family)!.variants.find(v=>v===mapped.id)||COSTUME_FAMILIES.find(f=>f.id===family)!.variants[0]:mapped.id])];
       }
     }
   }
@@ -56,11 +62,11 @@ export function normalizeProgress(input:unknown):Progress{
       for(const slot of challenge.slots)if(slot.choices.some(choice=>choice.id===run.choices?.[slot.id]))choices[slot.id]=run.choices[slot.id];
       result.runs[challenge.id]={type:'reconstruction',choices,submissions:count(run.submissions),lastAccuracy:typeof run.lastAccuracy==='number'&&count(run.submissions)>0?reconstructionAccuracy(challenge,choices):null};
     }
-    if(completed.includes(challenge.id)&&(!legacy||challenge.id==='giao-linh')){
+    if(completed.includes(challenge.id)||(legacy&&challenge.id==='hoang-bao'&&completed.includes('con-phuc'))){
       result.completed.push(challenge.id);result=earn(result,challenge);
     }
     const best=saved.best?.[challenge.id];
-    if(!legacy&&best&&result.completed.includes(challenge.id))result.best[challenge.id]={actions:count(best.actions),previews:count(best.previews),total:challenge.total,completedAt:count(best.completedAt)};
+    if(best&&result.completed.includes(challenge.id))result.best[challenge.id]={actions:count(best.actions),previews:count(best.previews),total:challenge.total,completedAt:count(best.completedAt)};
   }
   const active=CHALLENGES.find(c=>c.id===saved.activeLevel&&canPlay(result,c));
   if(active)result.activeLevel=active.id;
@@ -135,6 +141,9 @@ export function submitReconstruction(p:Progress,id:string):Progress{
   const next={...p,runs:{...p.runs,[id]:{...run,submissions:run.submissions+1,lastAccuracy}}};
   return lastAccuracy===c.total?finishChallenge(next,c,run.submissions+1):next;
 }
-export function isUnlocked(p:Progress,kind:UnlockKind,id:string){return !rewardLevel(kind,id)||p.unlockedItems[kind].includes(id);}
+export function isUnlocked(p:Progress,kind:UnlockKind,id:string){
+ if(kind==='costumes')return starterCostume(id)||!!costumeFamily(id)&&p.unlockedCostumeFamilies.includes(costumeFamily(id)!);
+ return !rewardLevel(kind,id)||p.unlockedItems[kind].includes(id);
+}
 export function targetOf(level:PuzzleLevel,piece:PuzzlePiece):Point{return{x:level.figure.x+(piece.bounds[0]+piece.bounds[2]/2)*level.scale,y:level.figure.y+(piece.bounds[1]+piece.bounds[3]/2)*level.scale};}
 export function isCorrectDrop(level:PuzzleLevel,piece:PuzzlePiece,center:Point){const target=targetOf(level,piece);return Math.hypot(center.x-target.x,center.y-target.y)<=52;}

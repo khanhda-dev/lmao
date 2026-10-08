@@ -24,7 +24,7 @@ export const RECONSTRUCTION_SLOTS:ReconstructionSlot[]=[
     {id:'ha-y-vien-vang',label:'Hạ y có viền vàng',asset:'/puzzle/nhat-binh/lower.svg'},
     {id:'huan-thuong',label:'Huân thường đỏ',asset:'/puzzle/con-phuc/lower.svg'}]},
   {id:'shoes',label:'Giày / hài',correctChoice:'hai-den',choices:[
-    {id:'guoc-moc',label:'Guốc mộc',asset:'/puzzle/items/guoc-moc.svg',wardrobeItemId:'guoc-moc'},
-    {id:'hai-den',label:'Hài đen',asset:'/puzzle/con-phuc/shoes.svg'},
-    {id:'sneaker',label:'Sneaker',asset:'/puzzle/items/sneaker.svg',wardrobeItemId:'sneaker'}]},
+    {id:'guoc-moc',label:'Guốc mộc',asset:'/puzzle/items/special-quan-phuc-nam-guoc-moc.svg',wardrobeItemId:'guoc-moc'},
+    {id:'hai-den',label:'Hài đen',asset:'/puzzle/items/special-quan-phuc-nam-hai.svg'},
+    {id:'sneaker',label:'Sneaker',asset:'/puzzle/items/special-quan-phuc-nam-sneaker.svg',wardrobeItemId:'sneaker'}]},
 ];
