@@ -209,6 +209,48 @@
       225
     ]
   },
+  "/puzzle/con-phuc/underlayer-lower.svg": {
+    "bounds": [
+      47.53350067138672,
+      185.6179962158203,
+      139.7235107421875,
+      336.697998046875
+    ],
+    "viewport": [
+      0,
+      0,
+      231,
+      561
+    ]
+  },
+  "/puzzle/con-phuc/underlayer-robe.svg": {
+    "bounds": [
+      47.5,
+      102.48600006103516,
+      140,
+      393.5
+    ],
+    "viewport": [
+      0,
+      0,
+      231,
+      561
+    ]
+  },
+  "/puzzle/con-phuc/underlayer-sleeves.svg": {
+    "bounds": [
+      1.5,
+      108.48600006103516,
+      227.6999969482422,
+      194
+    ],
+    "viewport": [
+      0,
+      0,
+      231,
+      561
+    ]
+  },
   "/puzzle/con-phuc/underlayer.svg": {
     "bounds": [
       1.5,
@@ -243,6 +285,20 @@
       248.18402099609375,
       224.97703552246094,
       62.8262939453125
+    ],
+    "viewport": [
+      0,
+      0,
+      287,
+      519
+    ]
+  },
+  "/puzzle/giao-linh/equipped-lower.svg": {
+    "bounds": [
+      65.5,
+      172.85000610351562,
+      156,
+      322.5
     ],
     "viewport": [
       0,
@@ -495,6 +551,48 @@
       -0.0000155777670443058,
       328,
       518.1179809570312
+    ],
+    "viewport": [
+      0,
+      0,
+      328,
+      519
+    ]
+  },
+  "/puzzle/nhat-binh/equipped-lower.svg": {
+    "bounds": [
+      86,
+      172.85000610351562,
+      156,
+      322.5
+    ],
+    "viewport": [
+      0,
+      0,
+      328,
+      519
+    ]
+  },
+  "/puzzle/nhat-binh/equipped-robe.svg": {
+    "bounds": [
+      99,
+      91.84970092773438,
+      130,
+      227.00030517578125
+    ],
+    "viewport": [
+      0,
+      0,
+      328,
+      519
+    ]
+  },
+  "/puzzle/nhat-binh/equipped-sleeves.svg": {
+    "bounds": [
+      0,
+      91.76724243164062,
+      328,
+      189.082763671875
     ],
     "viewport": [
       0,

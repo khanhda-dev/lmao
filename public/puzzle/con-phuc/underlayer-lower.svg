@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="231" height="561" viewBox="0 0 231 561" fill="none">
+<g id="Man/Ngu than">
+<g id="Core/Man">
+<g id="Belly">
+<g id="Leg/R">
+<path id="Rectangle 4213" d="M142.4 247.255C154.228 246.203 164.574 254.945 165.509 266.782L173.799 371.691C174.734 383.528 165.904 393.977 154.077 395.03C142.25 396.083 131.903 387.341 130.968 375.503L122.679 270.595L122.642 270.041C122.02 258.434 130.758 248.292 142.4 247.255Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<g id="Knee/R">
+<path id="Rectangle 4214" d="M151.313 356.96C163.306 356.118 173.755 365.055 174.784 377.034L187.21 521.689L187.257 522.23L186.712 522.231L139.709 522.315L139.237 522.316L139.209 521.844L130.879 380.21C130.171 368.171 139.283 357.803 151.313 356.96Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<path id="Rectangle 4216" d="M152.534 356.286C141.212 356.286 132.034 365.465 132.034 376.786C132.034 388.108 141.212 397.286 152.534 397.286C163.856 397.286 173.034 388.108 173.034 376.786C173.034 365.465 163.856 356.286 152.534 356.286Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<g id="Guide_8">
+<line id="vertical line_8" x1="152.716" y1="395.02" x2="152.716" y2="357.388" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_8" x1="134.727" y1="375.954" x2="171.205" y2="375.954" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_8" x="133.824" y="357.638" width="37.1314" height="37.053" rx="18.5265" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<g id="Guide_9">
+<line id="vertical line_9" x1="142.627" y1="279.336" x2="142.627" y2="249.498" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_9" x1="128.415" y1="264.167" x2="157.339" y2="264.167" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_9" x="127.75" y="249.748" width="29.3382" height="29.2761" rx="14.638" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<g id="Leg/L">
+<path id="Rectangle 4213_2" d="M92.3052 247.365C80.4779 246.312 70.1317 255.055 69.1963 266.892L60.907 371.8C59.9716 383.638 68.8014 394.087 80.6287 395.14C92.4561 396.193 102.802 387.45 103.738 375.613L112.027 270.705L112.064 270.151C112.686 258.544 103.948 248.402 92.3052 247.365Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<g id="Knee/R_2">
+<path id="Rectangle 4214_2" d="M83.3927 357.069C71.3998 356.228 60.9495 365.164 59.9189 377.142L47.5803 520.591L47.5335 521.133L48.0767 521.134L95.0799 521.242L95.5517 521.243L95.5799 520.772L103.828 380.32C104.535 368.28 95.4233 357.913 83.3927 357.069Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<path id="Rectangle 4216_2" d="M82.1719 356.396C93.4937 356.396 102.672 365.575 102.672 376.896C102.672 388.218 93.4937 397.396 82.1719 397.396C70.85 397.396 61.6719 388.218 61.6719 376.896C61.6719 365.575 70.85 356.396 82.1719 356.396Z" fill="#F2F2EC" stroke="#F2F2EC" />
+<g id="Guide_11">
+<line id="vertical line_11" y1="-0.25" x2="37.6314" y2="-0.25" transform="matrix(1.45705e-07 -1 -1 -1.31134e-08 81.7397 395.13)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_11" y1="-0.25" x2="36.4786" y2="-0.25" transform="matrix(-1 0 0 1 99.9788 376.314)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_11" x="-0.25" y="0.25" width="37.1314" height="37.053" rx="18.5265" transform="matrix(-1 0 0 1 100.632 357.498)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<g id="Guide_12">
+<line id="vertical line_12" y1="-0.25" x2="29.8382" y2="-0.25" transform="matrix(1.45705e-07 -1 -1 -1.31134e-08 91.8289 279.446)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<line id="horizontal line_12" y1="-0.25" x2="28.9241" y2="-0.25" transform="matrix(-1 0 0 1 106.291 264.527)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" stroke-dasharray="1 1" />
+<rect id="outline_12" x="-0.25" y="0.25" width="29.3382" height="29.2761" rx="14.638" transform="matrix(-1 0 0 1 106.705 249.608)" stroke="#F96D00" stroke-opacity="0.03" stroke-width="0.5" />
+</g>
+</g>
+<path id="Rectangle 4212" d="M141.458 185.618C154.989 185.618 165.958 196.587 165.958 210.118V279.884H68.4043V210.118C68.4043 196.587 79.3733 185.618 92.9043 185.618H141.458Z" fill="#F2F2EC" stroke="#F2F2EC" />
+</g>
+</g>
+</g>
+</svg>

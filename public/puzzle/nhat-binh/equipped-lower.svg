@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="328" height="519" viewBox="0 0 328 519" fill="none">
+<g id="Woman/Nhat binh">
+<g id="belly">
+<path id="nb_skirt" d="M122 172.85H206C210 264.85 234 394.85 242 490.85C206 496.85 122 496.85 86 490.85C94 394.85 118 264.85 122 172.85Z" fill="#F6EEDC" stroke="#E5DFC9" stroke-linecap="round" stroke-linejoin="round" />
+<circle id="nb_skirt_flower" cx="141" cy="374.85" r="2.6" fill="#3E73C4" />
+<circle id="nb_skirt_flower_c" cx="141" cy="374.85" r="1" fill="#D63A2E" />
+<circle id="nb_skirt_flower_2" cx="186" cy="374.85" r="2.6" fill="#3E73C4" />
+<circle id="nb_skirt_flower_c_2" cx="186" cy="374.85" r="1" fill="#D63A2E" />
+<circle id="nb_skirt_flower_3" cx="164" cy="412.85" r="2.6" fill="#3E73C4" />
+<circle id="nb_skirt_flower_c_3" cx="164" cy="412.85" r="1" fill="#D63A2E" />
+<path id="nb_hem_band" d="M89 452.85H239L242 492.85H86L89 452.85Z" fill="#E2A93B" />
+<path id="nb_hem_trim_top" d="M89 452.85H239" stroke="#213C8A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+<path id="nb_hem_trim_bottom" d="M86.5 488.85H241.5" stroke="#213C8A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+<circle id="nb_hem_dot" cx="101" cy="470.85" r="2.3" fill="#D63A2E" />
+<circle id="nb_hem_dot_2" cx="126" cy="470.85" r="2.3" fill="#3E73C4" />
+<circle id="nb_hem_dot_3" cx="151" cy="470.85" r="2.3" fill="#D63A2E" />
+<circle id="nb_hem_dot_4" cx="176" cy="470.85" r="2.3" fill="#3E73C4" />
+<circle id="nb_hem_dot_5" cx="201" cy="470.85" r="2.3" fill="#D63A2E" />
+<circle id="nb_hem_dot_6" cx="226" cy="470.85" r="2.3" fill="#3E73C4" />
+</g>
+</g>
+</svg>

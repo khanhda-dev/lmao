@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="231" height="561" viewBox="0 0 231 561" fill="none">
+<g id="Man/Ngu than">
+<g id="Core/Man">
+<g id="Arm/Top/L">
+<path id="ng_sleeve_L" d="M85.5 108.486C57.5 109.486 33.5 118.486 23.5 138.486C17.5 168.486 11.5 218.486 7.5 258.486C5.5 278.486 3.5 290.486 1.5 298.486L55.5 302.486C57.5 273.486 63.5 243.486 75.5 208.486L85.5 158.486V108.486Z" fill="#3F5A86" stroke="#2C4268" stroke-linecap="round" stroke-linejoin="round" />
+<path id="ng_cuff_L" d="M1.5 298.486L55.5 302.486" stroke="#2C4268" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+<g id="Arm/Top/R">
+<path id="ng_sleeve_R" d="M145.2 108.486C173.2 109.486 197.2 118.486 207.2 138.486C213.2 168.486 219.2 218.486 223.2 258.486C225.2 278.486 227.2 290.486 229.2 298.486L175.2 302.486C173.2 273.486 167.2 243.486 155.2 208.486L145.2 158.486V108.486Z" fill="#3F5A86" stroke="#2C4268" stroke-linecap="round" stroke-linejoin="round" />
+<path id="ng_cuff_R" d="M229.2 298.486L175.2 302.486" stroke="#2C4268" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+</g>
+</g>
+</svg>

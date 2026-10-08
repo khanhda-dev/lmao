@@ -73,4 +73,25 @@ for costume in ['special-quan-phuc-nam','special-long-bao-nam']:
 
 # Khăn xếp is precisely the canonical Figma export, including fold geometry.
 save(load('src/assets/headwear/khan-xep.svg'),'public/puzzle/items/khan-xep.svg')
+
+# Reconstruction swaps each clothing slot instead of painting over a complete
+# starter outfit. Shoes remain a separate slot, including with alternate skirts.
+starter=load('src/assets/costumes/male-ngu-than-tay-chen.svg')
+starter_ids={n.get('id','') for n in starter.iter()}
+for slot,ids in {
+    'robe':{i for i in starter_ids if i.startswith('ng_') and not ('sleeve' in i or 'cuff' in i)},
+    'sleeves':{i for i in starter_ids if i.startswith('ng_') and ('sleeve' in i or 'cuff' in i)},
+    'lower':{'Leg/R','Leg/L','Rectangle 4212'},
+}.items():
+    save(extract(starter,ids,{'Foot/R','Foot/R_2'}),f'public/puzzle/con-phuc/underlayer-{slot}.svg')
+
+save(extract(giao,{'giaolinh_skirt'}),'public/puzzle/giao-linh/equipped-lower.svg')
+nhat=load('src/assets/costumes/female-nhat-binh.svg')
+nhat_ids={n.get('id','') for n in nhat.iter()}
+for slot,ids in {
+    'robe':{i for i in nhat_ids if i.startswith('nb_') and not any(s in i for s in ['sleeve','cuff','skirt','hem'])},
+    'sleeves':{i for i in nhat_ids if i.startswith('nb_') and ('sleeve' in i or 'cuff' in i)},
+    'lower':{i for i in nhat_ids if i.startswith('nb_') and ('skirt' in i or 'hem' in i)},
+}.items():
+    save(extract(nhat,ids),f'public/puzzle/nhat-binh/equipped-{slot}.svg')
 print('Repaired canonical hands, stable underlayer and shared footwear exports.')

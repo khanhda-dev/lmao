@@ -346,6 +346,37 @@ test('reconstruction base survives every choice and normalized accessories fit d
  const widths=await page.locator('.detective-option-art svg').evaluateAll(svgs=>svgs.map(s=>s.getBoundingClientRect().width));expect(widths.every(w=>w>90)).toBe(true);
 });
 
+test('mixed reconstruction replaces starter clothing, separates shoes and keeps scarf above the eyes',async({page})=>{
+ const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+ await serveBuild(page);await page.goto('/');
+ await page.evaluate(key=>localStorage.setItem(key,JSON.stringify({version:3,completed:['giao-linh','nhat-binh','hoang-bao'],activeLevel:'con-phuc'})),STORAGE_KEY);
+ await page.reload();await openGame(page);
+ const select=async(slot:string,id:string)=>{await page.getByTestId(`reconstruction-slot-${slot}`).click();await page.getByTestId(`reconstruction-choice-${id}`).click();};
+ await select('hat','mien-quan');await select('robe','ao-sam');await select('sleeves','tay-ngu-sac');
+ await expect(page.locator('[data-fallback-slot="robe"], [data-fallback-slot="sleeves"]')).toHaveCount(0);
+ await expect(page.locator('.costume-base [fill="#3F5A86"]')).toHaveCount(0);
+ await page.locator('.reconstruction-stage').screenshot({path:'test-results/reconstruction-mixed-sleeves.png',animations:'disabled'});
+ await select('sleeves','tay-rong');await select('belt','dai-do');await select('front','te-tat');await select('lower','ha-y-trang');
+ await expect(page.locator('[data-fallback-slot]')).toHaveCount(0);
+ await expect(page.locator('.costume-equipped-layer[data-layer="lower"] [fill="#131313"]')).toHaveCount(0);
+ await page.locator('.reconstruction-stage').screenshot({path:'test-results/reconstruction-white-lower.png',animations:'disabled'});
+ await select('hat','mu-tron');await select('robe','ao-co-vuong');await select('belt','dai-mem');await select('front','dai-buong');await select('lower','ha-y-vien-vang');await select('shoes','guoc-moc');
+ await expect(page.locator('[data-testid="reconstruction-base"] > svg')).toHaveCount(0);
+ await expect(page.locator('.costume-equipped-layer[data-layer="lower"] [fill="#131313"]')).toHaveCount(0);
+ await page.locator('.reconstruction-stage').screenshot({path:'test-results/reconstruction-mixed-lower.png',animations:'disabled'});
+ await select('hat','khan-xep');await select('sleeves','tay-thien-thanh');await select('lower','ha-y-trang');await select('shoes','sneaker');
+ for(const width of [1440,390]){
+  await page.setViewportSize({width,height:1000});
+  const scarf=await page.locator('.costume-equipped-layer[data-layer="hat"]').boundingBox();
+  const eyes=await page.locator('.costume-base path[d^="M169.545 88.4824"]').boundingBox();
+  if(!scarf||!eyes)throw Error('Missing scarf or eyes');
+  expect(scarf.y+scarf.height).toBeLessThan(eyes.y);
+  await expect(page.locator('[data-fallback-slot]')).toHaveCount(0);
+  await page.locator('.reconstruction-stage').screenshot({path:`test-results/reconstruction-scarf-${width}.png`,animations:'disabled'});
+ }
+ expect(errors).toEqual([]);
+});
+
 test('headwear stays attached for actual male and female regular costume rigs',async({page})=>{
  await serveBuild(page);await page.goto('/');await page.evaluate(key=>localStorage.setItem(key,JSON.stringify({version:2,completed:['giao-linh','nhat-binh']})),STORAGE_KEY);await page.reload();
  for(const [gender,hat] of [['female','non-la'],['male','non-la'],['male','khan-xep']]){
