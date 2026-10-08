@@ -26,12 +26,34 @@ export function LevelSidebar({level,onSelect}:{level:Challenge;onSelect:(id:stri
   </aside>;
 }
 export function CostumeInfoPanel({level}:{level:Challenge}) {
+  const instructions:Record<Challenge['type'],string[]>={
+    assemble:[
+      'Kéo từng mảnh trang phục vào vùng tương ứng trên nhân vật. Mảnh đúng sẽ tự khớp vào vị trí.',
+      'Nếu thả chưa đúng, kéo lại để thử tiếp. Bấm Gợi ý khi cần xem vị trí của một mảnh.',
+      'Ghép đủ các mảnh để nhận phần thưởng và mở màn tiếp theo.',
+    ],
+    'image-grid':[
+      'Ghi nhớ hình mẫu trước khi bảng ảnh được trộn.',
+      'Kéo một ô lên ô khác để đổi chỗ. Bạn cũng có thể chạm lần lượt hai ô. Ô đúng vị trí có viền xanh lá.',
+      'Dùng Xem lại mẫu khi cần; số lượt còn lại hiện trên nút. Xếp đúng cả 9 ô để mở khóa phần thưởng.',
+    ],
+    detective:[
+      'Chạm vào vùng đầu, thân trước hoặc giày trên nhân vật để mở các lựa chọn thay thế.',
+      'Chọn một món để kiểm tra ngay. Lựa chọn sai có viền đỏ; vùng đã sửa đúng có viền xanh lá.',
+      'Thử lại các vùng còn sai. Sửa đúng cả 3 vùng để nhận phần thưởng.',
+    ],
+    reconstruction:[
+      'Chọn lần lượt 7 nhóm cấu kiện, rồi chọn món bạn muốn mặc trong từng nhóm. Bản phối cập nhật trên nhân vật.',
+      'Chọn đủ 7 món và bấm Nộp phục dựng để chấm đáp án. Nhóm đúng có viền xanh lá, nhóm sai có viền đỏ.',
+      'Mở nhóm có viền đỏ, đổi món rồi nộp lại. Đạt 7/7 để hoàn thành và nhận phần thưởng.',
+    ],
+  };
   return <aside className="puzzle-info">
-    <span className="puzzle-eyebrow"><BookOpen size={14}/> CÂU CHUYỆN BỘ ĐỒ</span>
-    <h2>{level.name}</h2><span className="puzzle-period">{level.period}</span>
-    <p>{level.description}</p><h3>Nhìn đâu để nhận ra?</h3>
-    <ul>{level.features.map(f=><li key={f}>{f}</li>)}</ul>
-    <h3>Khám phá & sử dụng</h3><div className="puzzle-tags">{level.usage.map(u=><span key={u}>{u}</span>)}</div>
+    <span className="puzzle-eyebrow"><BookOpen size={16}/> PHỤC DỰNG BỘ ĐỒ</span>
+    <h2>{level.name}</h2>
+    <h3>Cách chơi</h3>
+    <ol className="puzzle-howto">{instructions[level.type].map(step=><li key={step}>{step}</li>)}</ol>
+    <p className="puzzle-howto-note">Phần thưởng đã mở sẽ được giữ khi bạn chơi lại. Trang phục nằm ở tab Trang phục; các món đội đầu và giày nằm ở tab Phụ kiện.</p>
     {level.type==='assemble'&&<details className="puzzle-reference"><summary>Xem bộ hoàn chỉnh <Sparkles size={14}/></summary><img src={level.thumbnail} alt={`Bộ ${level.name} hoàn chỉnh`}/></details>}
   </aside>;
 }

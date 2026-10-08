@@ -218,7 +218,7 @@ export const HEADWEAR: Headwear[] = [
   },
   {
     id: 'non-dau',
-    name: 'Nón dấu',
+    name: 'Nón Dâu',
     gender: 'Nam & Nữ',
     description: 'Loại nón chóp nhọn nhỏ có chỏm kim loại bằng đồng sáng bóng trên đỉnh, đặc trưng cho binh lính, lính lệ và các thị vệ nha môn thời phong kiến.',
     matchWith: 'Viên Lĩnh, Ngũ thân tay chẽn nam',

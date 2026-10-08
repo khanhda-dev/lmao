@@ -75,8 +75,17 @@ npm.cmd run test:e2e
 ```
 
 - 12 kiểm tra logic: migration, giữ thưởng/kỷ lục, family và giới tính, điểm phục dựng, đổi ô, điều kiện mở chặng.
-- 11 kiểm tra Chrome: chơi hết bốn màn; sai/thử lại; lưu giữa chừng; mobile touch/keyboard; ô đúng đổi trạng thái; chọn model thật cả hai giới; phụ kiện và thao tác Trang 1; mọi lựa chọn phục dựng; chuyển từ phần thưởng sang tủ đồ; fresh-user bảo vệ save thật.
+- 14 kiểm tra Chrome: chơi hết bốn màn; sai/thử lại; lưu giữa chừng; mobile touch/keyboard; ô đúng đổi trạng thái; chọn model thật cả hai giới; phụ kiện và thao tác Trang 1; mọi lựa chọn phục dựng; chuyển từ phần thưởng sang tủ đồ; fresh-user bảo vệ save thật; phân loại/mở khóa phụ kiện; font và hướng dẫn của từng màn; viền đúng/sai khi dùng bàn phím và chơi lại.
 - Kiểm tra responsive ở 1440, 1024, 800, 390 và 360 px; kiểm tra không tràn ngang. Đã xem ảnh render nhân vật nền, phối đủ, đai, giày, lựa chọn máy ảnh/túi và mũ nam/nữ.
 - Build còn cảnh báo bundle trên 500 kB và cấu hình Vite cũ dùng `__dirname`; không phải lỗi build. Chưa tối ưu tải các model lớn của dự án trong phạm vi này.
 
 Giới hạn: chưa thay Nón lá/Trâm cài bằng bản Figma chưa xác định; kiểm tra thuật ngữ lịch sử chuyên sâu không thuộc kiểm chứng kỹ thuật. Các ảnh QA và báo cáo kiểm tra là bằng chứng cho bản local; không đồng nghĩa đã đưa commit lên GitHub.
+
+## Cập nhật giao diện và phản hồi đáp án — 08/10/2026
+
+- Khăn vành dây, Khăn xếp và Guốc mộc chỉ xuất hiện trong **Phụ kiện**. Các món chưa kiếm được hiển thị khóa; thưởng vẫn dùng cùng ID và tiến trình đã lưu. Khăn xếp giữ điều kiện model nam hiện có.
+- Tên hiển thị đổi thành **Nón Dâu**, giữ ID `non-dau` để không ảnh hưởng lưu lựa chọn và SVG.
+- Trang 2 dùng `--font` của Trang 1 cho toàn bộ chữ, kể cả hộp chúc mừng. Tăng cỡ tiêu đề, tên màn, tên lựa chọn, phần thưởng và thông tin nhân vật/bối cảnh; kiểm tra các chiều rộng 1440, 1024, 800, 390 và 360 px.
+- Màn 3 đánh dấu vùng/lựa chọn sai bằng viền đỏ và dấu ×, vùng đã sửa đúng bằng viền xanh và dấu ✓. Màn 4 chỉ chấm sau **Nộp phục dựng**: từng nhóm cấu kiện cùng thẻ đang chọn có viền xanh/đỏ, không đánh dấu những đáp án chưa chọn. Kết quả màn 4 giữ khi tải lại; đổi món/chơi lại xóa viền chấm cũ. Phản hồi màu vẫn rõ khi dùng bàn phím.
+- Khung bên phải thành **Phục dựng bộ đồ**, với hướng dẫn riêng cho từng trò chơi và nơi nhận thưởng. Bỏ các phần mô tả, nhãn và tag không liên quan đến cách chơi.
+- Khi chuyển từ bộ đặc biệt sang phụ kiện thường, bấm một món đã lưu sẽ mặc đúng món đó; trạng thái nút và thông tin phụ kiện phản ánh những món đang hiển thị.

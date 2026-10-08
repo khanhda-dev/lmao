@@ -79,9 +79,14 @@ test('four distinct games, failure/retry, rewards, persistence and unchanged war
     if(level.type==='detective'){
       await page.getByTestId('detective-zone-head').click();await page.getByTestId('detective-option-head-glasses').click();
       await expect(page.getByTestId('detective-progress')).toHaveText('0/3');await expect(page.getByTestId('detective-feedback')).toContainText('chưa phù hợp');
+      await expect(page.getByTestId('detective-option-head-glasses')).toHaveAttribute('data-answer','incorrect');
+      await expect(page.getByTestId('detective-zone-head')).toHaveAttribute('data-answer','incorrect');
+      await expect(page.getByTestId('detective-option-head-original')).not.toHaveAttribute('data-answer');
       await page.getByTestId('detective-option-head-original').click();await expect(page.getByTestId('detective-zone-head')).toBeDisabled();
+      await expect(page.getByTestId('detective-zone-head')).toHaveAttribute('data-answer','correct');
       await page.reload();await openGame(page);await expect(page.getByTestId('detective-progress')).toHaveText('1/3');
       await page.getByRole('button',{name:'Chơi lại',exact:true}).click();await expect(page.getByTestId('detective-progress')).toHaveText('0/3');
+      await expect(page.locator('.detective-challenge [data-answer]')).toHaveCount(0);
       await page.getByTestId('detective-zone-head').click();await page.getByTestId('detective-option-head-original').click();
       await page.getByTestId('detective-zone-chest').click();await page.screenshot({path:'test-results/detective-desktop.png',fullPage:true,animations:'disabled'});
       for(const error of level.errors.slice(1)){await page.getByTestId(`detective-zone-${error.id}`).click();await page.getByTestId(`detective-option-${error.correctOption}`).click();}
@@ -94,12 +99,24 @@ test('four distinct games, failure/retry, rewards, persistence and unchanged war
         await page.getByTestId(`reconstruction-slot-${slot.id}`).click();
         await page.getByTestId(`reconstruction-choice-${i<2?slot.choices.find(choice=>choice.id!==slot.correctChoice)!.id:slot.correctChoice}`).click();
       }
+      await expect(page.locator('.reconstruction-challenge [data-answer]')).toHaveCount(0);
       await page.getByRole('button',{name:'Nộp phục dựng'}).click();await expect(page.getByTestId('reconstruction-feedback')).toContainText('5/7');
       await expect(page.getByTestId('reconstruction-feedback')).toContainText('Có 2 chi tiết chưa phù hợp');await expect(page.getByRole('dialog')).toBeHidden();
+      await expect(page.locator('.reconstruction-slots [data-answer="incorrect"]')).toHaveCount(2);
+      await expect(page.locator('.reconstruction-slots [data-answer="correct"]')).toHaveCount(5);
       await page.reload();await openGame(page);await expect(page.getByTestId('reconstruction-feedback')).toContainText('5/7');
+      await expect(page.locator('.reconstruction-slots [data-answer="incorrect"]')).toHaveCount(2);
+      const firstSlot=level.slots[0];await page.getByTestId(`reconstruction-slot-${firstSlot.id}`).click();
+      const wrongChoice=page.getByTestId(`reconstruction-choice-${firstSlot.choices.find(c=>c.id!==firstSlot.correctChoice)!.id}`);
+      await expect(wrongChoice).toHaveAttribute('data-answer','incorrect');
+      await expect(page.getByTestId(`reconstruction-choice-${firstSlot.correctChoice}`)).not.toHaveAttribute('data-answer');
+      await page.keyboard.press('Tab');await wrongChoice.focus();
+      await expect(wrongChoice).toHaveCSS('outline-color','rgb(196, 59, 59)');
+      await expect(wrongChoice).toHaveCSS('outline-width','4px');
       await page.screenshot({path:'test-results/reconstruction-desktop.png',fullPage:true,animations:'disabled'});
-      for(const slot of level.slots.slice(0,2)){await page.getByTestId(`reconstruction-slot-${slot.id}`).click();await page.getByTestId(`reconstruction-choice-${slot.correctChoice}`).click();}
+      for(const slot of level.slots.slice(0,2)){await page.getByTestId(`reconstruction-slot-${slot.id}`).click();await page.getByTestId(`reconstruction-choice-${slot.correctChoice}`).click();await expect(page.locator('.reconstruction-challenge [data-answer]')).toHaveCount(0);}
       await page.getByRole('button',{name:'Nộp phục dựng'}).click();
+      await expect(page.locator('.reconstruction-slots [data-answer="correct"]')).toHaveCount(7);
     }
     await expect(page.getByRole('dialog')).toBeVisible();
     await expect(page.getByRole('dialog')).toContainText(level.name);
@@ -304,7 +321,80 @@ test('reward handoff keeps a valid regular model and usable footwear when leavin
  await page.evaluate(({key,choices})=>localStorage.setItem(key,JSON.stringify({version:3,completed:['giao-linh','nhat-binh','hoang-bao','con-phuc'],activeLevel:'con-phuc',runs:{'con-phuc':{type:'reconstruction',choices,submissions:1,lastAccuracy:7}}})),{key:STORAGE_KEY,choices});await page.reload();await openGame(page);
  await page.getByRole('button',{name:'Xem phần thưởng',exact:true}).click();await page.getByRole('button',{name:'Thử ngay trong tủ đồ',exact:true}).click();
  const model=page.locator('.page.active .model');await expect(model).toHaveAttribute('data-costume','special-quan-phuc-nam');
- await page.locator('[data-wardrobe-id="guoc-moc"]').click();await expect(model).toHaveAttribute('data-costume','special-quan-phuc-nam');await expect(model.locator('[data-footwear]')).toHaveCount(2);
- await page.locator('[data-wardrobe-id="khan-xep"]').click();await expect(model).toHaveAttribute('data-costume','male-ao-tac');await expect(model.locator('[data-accessory="khan-xep"]').last()).toBeVisible();
+ await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();
+ await page.locator('[data-accessory-option="guoc-moc"]').click();await expect(model).toHaveAttribute('data-costume','special-quan-phuc-nam');await expect(model.locator('[data-footwear]')).toHaveCount(2);
+ await page.locator('[data-accessory-option="khan-xep"]').click();await expect(model).toHaveAttribute('data-costume','male-ao-tac');await expect(model.locator('[data-accessory="khan-xep"]').last()).toBeVisible();
+ for(const name of ['Khăn xếp','Kiềng cổ','Quạt']){
+  const accessory=page.getByRole('button',{name,exact:true});
+  if(await accessory.getAttribute('aria-pressed')!=='true')await accessory.click();
+  await page.getByRole('button',{name:'Trang phục',exact:true}).click();await page.getByRole('button',{name:'Cổn Phục (Tế Nam Giao)',exact:true}).click();
+  await expect(model).toHaveAttribute('data-costume','special-quan-phuc-nam');await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();
+  await expect(accessory).toHaveAttribute('aria-pressed','false');await accessory.click();await expect(accessory).toHaveAttribute('aria-pressed','true');await expect(model).toHaveAttribute('data-costume','male-ao-tac');
+  if(name==='Khăn xếp')await expect(model.locator('[data-accessory="khan-xep"]').last()).toBeVisible();
+  else if(name==='Kiềng cổ')await expect(model.locator('[data-accessory^="kieng-co-"]').last()).toBeVisible();
+  else await expect(model.locator('[data-accessory="quat"]').last()).toBeVisible();
+ }
  await page.getByRole('button',{name:'Đang chọn nam (M). Bấm để chuyển sang nữ (F)',exact:true}).click();await expect(model).toHaveAttribute('data-costume','female-ao-tac');expect(errors).toEqual([]);
+});
+
+test('earned headwear and clogs live only in Accessories and preserve their unlock gates',async({page})=>{
+ await serveBuild(page);await page.goto('/');
+ const accessories=['khan-vanh-day','khan-xep','guoc-moc'];
+ for(const id of accessories)await expect(page.locator(`[data-wardrobe-id="${id}"]`)).toHaveCount(0);
+ await page.getByRole('button',{name:/Đang chọn nữ/}).click();
+ await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();
+ for(const id of accessories)await expect(page.locator(`[data-accessory-option="${id}"]`)).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Nón Dâu',exact:true})).toBeEnabled();
+ await expect(page.getByRole('button',{name:/Nón [dD]ấu/,exact:true})).toHaveCount(0);
+ await page.evaluate(key=>localStorage.setItem(key,JSON.stringify({version:3,completed:['giao-linh']})),STORAGE_KEY);await page.reload();
+ await page.getByRole('button',{name:/Đang chọn nữ/}).click();
+ await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();
+ await expect(page.locator('[data-accessory-option="guoc-moc"]')).toBeEnabled();
+ for(const id of accessories.slice(0,2))await expect(page.locator(`[data-accessory-option="${id}"]`)).toBeDisabled();
+ await page.evaluate(key=>localStorage.setItem(key,JSON.stringify({version:3,completed:['giao-linh','nhat-binh']})),STORAGE_KEY);await page.reload();
+ await page.getByRole('button',{name:/Đang chọn nữ/}).click();
+ for(const id of accessories)await expect(page.locator(`[data-wardrobe-id="${id}"]`)).toHaveCount(0);
+ await page.getByRole('button',{name:'Phụ kiện',exact:true}).click();
+ for(const id of accessories){await expect(page.locator(`[data-accessory-option="${id}"]`)).toBeEnabled();await expect(page.locator(`[data-accessory-option="${id}"] .accessory-status.earned`)).toHaveText('Đã mở khóa');}
+ await page.getByRole('button',{name:'Nón Dâu',exact:true}).click();await expect(page.locator('.page.active [data-accessory="non-dau"]').last()).toBeVisible();
+ await expect(page.locator('.page.active .piece-info')).toContainText('Nón Dâu');
+ await page.screenshot({path:'test-results/accessories-correct-tab.png',fullPage:true,animations:'disabled'});
+});
+
+test('Page 2 shares the Page 1 font and provides readable names and game instructions in every chapter',async({page})=>{
+ await serveBuild(page);await page.goto('/');const font=await page.locator('body').evaluate(el=>getComputedStyle(el).fontFamily);
+ await page.evaluate(key=>localStorage.setItem(key,JSON.stringify({version:3,completed:['giao-linh','nhat-binh','hoang-bao','con-phuc'],activeLevel:'giao-linh'})),STORAGE_KEY);await page.reload();await openGame(page);
+ for(const [index,level] of CHALLENGES.entries()){
+  await page.getByRole('button',{name:new RegExp(`Màn ${index+1}:`)}).click();
+  const panel=page.locator('.puzzle-info');await expect(panel).toContainText('PHỤC DỰNG BỘ ĐỒ');await expect(panel.getByRole('heading',{name:'Cách chơi',exact:true})).toBeVisible();
+  await expect(panel.locator('.puzzle-howto li')).toHaveCount(3);
+  await expect(panel).not.toContainText(/CÂU CHUYỆN BỘ ĐỒ|Nhìn đâu để nhận ra|Khám phá & sử dụng|Cảm hứng/);
+  const fonts=await page.locator('.puzzle-page h1,.puzzle-page h2,.puzzle-page h3,.puzzle-page button,.puzzle-page p,.puzzle-page li,.puzzle-page small,.puzzle-page strong').evaluateAll(els=>els.map(el=>getComputedStyle(el).fontFamily));
+  expect(fonts.length).toBeGreaterThan(20);expect(fonts.every(f=>f===font)).toBe(true);
+ }
+ await expect(page.locator('.challenge-heading h2')).toHaveCSS('font-size','32px');await expect(page.locator('.reconstruction-context strong').first()).toHaveCSS('font-size','20px');
+ for(const width of [1440,1024,800,390,360]){
+  await page.setViewportSize({width,height:1000});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  const sizes=await page.locator('.puzzle-level strong,.reconstruction-options strong').evaluateAll(els=>els.map(el=>parseFloat(getComputedStyle(el).fontSize)));expect(sizes.every(size=>size>=14)).toBe(true);
+  await page.screenshot({path:`test-results/page2-fonts-instructions-${width}.png`,fullPage:true,animations:'disabled'});
+ }
+});
+
+test('answer outlines remain visible during keyboard use and clear on replay',async({page})=>{
+ await serveBuild(page);await page.goto('/');
+ const level=CHALLENGES[3];if(level.type!=='reconstruction')throw Error();
+ const choices=Object.fromEntries(level.slots.map(slot=>[slot.id,slot.id==='shoes'?slot.choices.find(c=>c.id!==slot.correctChoice)!.id:slot.correctChoice]));
+ await page.evaluate(({key,choices})=>localStorage.setItem(key,JSON.stringify({version:3,completed:['giao-linh','nhat-binh','hoang-bao'],activeLevel:'con-phuc',runs:{'con-phuc':{type:'reconstruction',choices,submissions:1,lastAccuracy:6}}})),{key:STORAGE_KEY,choices});await page.reload();await openGame(page);
+ const wrong=page.getByTestId('reconstruction-slot-shoes');await page.keyboard.press('Tab');await wrong.focus();
+ await expect(wrong).toHaveCSS('outline-color','rgb(196, 59, 59)');await expect(wrong).toHaveCSS('outline-width','4px');
+ const correct=page.getByTestId('reconstruction-slot-hat');await correct.focus();await expect(correct).toHaveCSS('outline-color','rgb(41, 132, 69)');await expect(correct).toHaveCSS('outline-width','4px');
+ await wrong.click();await expect(page.getByTestId(`reconstruction-choice-${choices.shoes}`)).toHaveAttribute('data-answer','incorrect');
+ await page.locator('.reconstruction-challenge').screenshot({path:'test-results/reconstruction-answer-outlines.png',animations:'disabled'});
+ await page.getByRole('button',{name:'Chơi lại',exact:true}).click();await expect(page.locator('.reconstruction-challenge [data-answer]')).toHaveCount(0);await expect(page.getByRole('button',{name:'Nộp phục dựng'})).toBeDisabled();
+ await page.getByRole('button',{name:/Màn 3:/}).click();await page.getByTestId('detective-zone-head').click();await page.getByTestId('detective-option-head-glasses').click();
+ await page.keyboard.press('Tab');await page.getByTestId('detective-option-head-glasses').focus();await expect(page.getByTestId('detective-option-head-glasses')).toHaveCSS('outline-color','rgb(196, 59, 59)');
+ await page.getByTestId('detective-zone-chest').click();await page.getByTestId('detective-option-chest-original').click();
+ await page.getByTestId('detective-zone-head').click();await expect(page.getByTestId('detective-zone-head')).toHaveAttribute('data-answer','incorrect');await expect(page.getByTestId('detective-zone-chest')).toHaveAttribute('data-answer','correct');
+ await page.locator('.detective-challenge').screenshot({path:'test-results/detective-answer-outlines.png',animations:'disabled'});
+ await page.getByRole('button',{name:'Chơi lại',exact:true}).click();await expect(page.locator('.detective-challenge [data-answer]')).toHaveCount(0);
 });

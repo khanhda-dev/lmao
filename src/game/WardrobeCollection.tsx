@@ -1,18 +1,15 @@
 import {Lock,Check,ArrowRight} from 'lucide-react';
-import {GARMENTS,SPECIAL_GARMENTS,HEADWEAR,FOOTWEAR} from '../data/costumeData';
+import {GARMENTS,SPECIAL_GARMENTS} from '../data/costumeData';
 import {compatibleCostume,type Gender} from './wardrobeFamilies';
 import {usePuzzleProgress} from './PuzzleProgress';
-import SvgArtwork from './SvgArtwork';
-import type {UnlockKind} from './types';
 const costumes=import.meta.glob('../assets/costumes/*.svg',{query:'?url',import:'default',eager:true}) as Record<string,string>;
-type Item={id:string;name:string;kind:UnlockKind;image?:string};
+type Item={id:string;name:string;kind:'costumes';image?:string};
 export default function WardrobeCollection({gender,selected,onSelect,onExplore}:{gender:Gender;selected:string;onSelect:(item:Item)=>void;onExplore:()=>void}){
  const {isUnlocked,progress}=usePuzzleProgress();
  const outfits:Item[]=[...GARMENTS,...SPECIAL_GARMENTS].filter(g=>compatibleCostume(g.id,gender)).map(g=>({id:g.id,name:g.name,kind:'costumes',image:costumes[`../assets/costumes/${g.id.startsWith('special-')?g.id:`${gender}-${g.id}`}.svg`]}));
- const extras:Item[]=[...HEADWEAR.filter(h=>['khan-xep','khan-vanh-day'].includes(h.id)&&(!h.allowedGender||h.allowedGender===gender)).map(h=>({id:h.id,name:h.name,kind:'headwear' as const,image:`/puzzle/items/${h.id}.svg`})),...FOOTWEAR.filter(f=>f.id==='guoc-moc').map(f=>({id:f.id,name:f.name,kind:'accessories' as const,image:'/puzzle/items/special-quan-phuc-nam-guoc-moc.svg'}))];
- const all=[...outfits,...extras],available=all.filter(i=>isUnlocked(i.kind,i.id)),locked=all.filter(i=>!isUnlocked(i.kind,i.id));
+ const available=outfits.filter(i=>isUnlocked(i.kind,i.id)),locked=outfits.filter(i=>!isUnlocked(i.kind,i.id));
  const card=(item:Item,locked=false)=><button key={item.id} type="button" className={`wardrobe-item ${locked?'locked':''} ${selected===item.id?'selected':''}`} disabled={locked} aria-label={item.name} title={locked?'Hoàn thành thử thách để mở khóa':item.name} onClick={()=>onSelect(item)} data-wardrobe-id={item.id}>
-   <span className="wardrobe-art">{item.image?(item.image.startsWith('/puzzle/')?<SvgArtwork asset={item.image}/>:<img src={item.image} alt=""/>):<span className="wardrobe-scarf">◉</span>}{locked&&<span className="wardrobe-lock"><Lock size={18}/></span>}</span>
+   <span className="wardrobe-art">{item.image&&<img src={item.image} alt=""/>}{locked&&<span className="wardrobe-lock"><Lock size={18}/></span>}</span>
    <strong>{item.name}</strong>{!locked&&progress.unlockedItems[item.kind].includes(item.id)&&<small><Check size={11}/>Đã mở khóa</small>}
  </button>;
  return <div className="wardrobe-collection">
