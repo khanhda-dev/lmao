@@ -2,7 +2,7 @@ import {useId,useMemo} from 'react';
 import metadata from './artworkBounds.json';
 import {prepareCostumeSvg} from '../components/costumeSvg';
 
-const sources=import.meta.glob(['/public/puzzle/con-phuc/*.svg','/public/puzzle/giao-linh/*.svg','/public/puzzle/nhat-binh/*.svg','/public/puzzle/items/khan-*.svg','/public/puzzle/items/special-*.svg','!/public/puzzle/**/full.svg','!/public/puzzle/**/base.svg','!/public/puzzle/**/base-front.svg'],{query:'?raw',import:'default',eager:true}) as Record<string,string>;
+const sources=import.meta.glob(['/public/puzzle/*.svg','/public/puzzle/con-phuc/*.svg','/public/puzzle/giao-linh/*.svg','/public/puzzle/nhat-binh/*.svg','/public/puzzle/items/khan-*.svg','/public/puzzle/items/special-*.svg','!/public/puzzle/**/full.svg','!/public/puzzle/**/base.svg','!/public/puzzle/**/base-front.svg'],{query:'?raw',import:'default',eager:true}) as Record<string,string>;
 export function artBounds(asset:string):[number,number,number,number]{
  const m=metadata[asset as keyof typeof metadata];
  return (m?.bounds??[0,0,100,100]) as [number,number,number,number];

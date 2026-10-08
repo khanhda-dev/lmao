@@ -13,6 +13,20 @@
       519
     ]
   },
+  "/puzzle/current-co-bo.svg": {
+    "bounds": [
+      0.500000536441803,
+      0.40001487731933594,
+      338.4338073730469,
+      536.802978515625
+    ],
+    "viewport": [
+      0,
+      0,
+      340,
+      538
+    ]
+  },
   "/puzzle/current-long-bao.svg": {
     "bounds": [
       -51.25,
@@ -25,6 +39,20 @@
       0,
       288,
       602
+    ]
+  },
+  "/puzzle/current-phuong-bao.svg": {
+    "bounds": [
+      -40,
+      1,
+      378,
+      567.0089721679688
+    ],
+    "viewport": [
+      0,
+      0,
+      300,
+      568
     ]
   },
   "/puzzle/hoang-bao.svg": {

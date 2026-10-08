@@ -268,12 +268,13 @@ test('accessory rewards gate fresh looks, backfill saved stages and equip on mal
   const rewards=page.getByRole('region',{name:'Phần thưởng của màn'});
   for(const id of stages[stage]){
    const card=rewards.locator('.puzzle-reward').filter({hasText:names[id]});
-   // A restored completion without a solved replay still conceals the final illustration.
-   if(stage===3){await expect(card).toContainText('Nam & Nữ');continue;}
    await expect(card.locator('.svg-artwork')).toBeVisible();
    const bbox=await card.locator('.svg-artwork > g').evaluate(group=>(group as SVGGElement).getBBox().width);
    expect(bbox).toBeGreaterThan(0);
   }
+  await expect(rewards.locator('.lucide-gift')).toHaveCount(1);
+  for(const image of await rewards.locator('img').all())expect(await image.evaluate(img=>(img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await rewards.screenshot({path:`test-results/rewards-stage-${stage+1}.png`,animations:'disabled'});
   if(stage===2)await rewards.screenshot({path:'test-results/accessory-rewards-desktop.png',animations:'disabled'});
  }
  await page.getByRole('tab',{name:'Trang 1',exact:true}).click();

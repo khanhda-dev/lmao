@@ -19,7 +19,7 @@ export const CHALLENGES:Challenge[]=[
     features:['Tìm chi tiết trước khi chọn món thay','Mỗi vùng có ba phương án','Chọn sai vẫn có thể thử lại'],usage:['Quan sát chi tiết','Phân biệt kiểu phối'],
     learning:'Bạn đã bỏ kính râm, máy ảnh và sneaker để hiện lại bản Long Bào gốc. Đây là mục tiêu của thử thách; phòng thử đồ vẫn cho phép bạn phối Gen Z tự do.',
     thumbnail:'/puzzle/current-long-bao.svg',prerequisites:['nhat-binh'],outfitId:'special-long-bao-nam',modelId:'special-long-bao-nam',dimensions:[308,622],
-    rewards:[{kind:'costumes',id:'special-long-bao-nam',name:'Long Bào Hoàng Đế',image:'/puzzle/current-long-bao.svg'},{kind:'costumes',id:'special-phuong-bao-nu',name:'Phượng Bào Hoàng Hậu'},{kind:'accessories',id:'o-du',name:'Ô (Dù) · Nam & Nữ'},{kind:'accessories',id:'tram-cai',name:'Trâm cài · Nữ'},palette('kim-sa-hoang-toc','Kim Sa Hoàng Tộc')],
+    rewards:[{kind:'costumes',id:'special-long-bao-nam',name:'Long Bào Hoàng Đế',image:'/puzzle/current-long-bao.svg'},{kind:'costumes',id:'special-phuong-bao-nu',name:'Phượng Bào Hoàng Hậu',image:'/puzzle/current-phuong-bao.svg'},{kind:'accessories',id:'o-du',name:'Ô (Dù) · Nam & Nữ'},{kind:'accessories',id:'tram-cai',name:'Trâm cài · Nữ'},palette('kim-sa-hoang-toc','Kim Sa Hoàng Tộc')],
     initialLook:{headwear:'none',footwear:'sneaker',jewelry:[],handheld:'none',genz:['kinh-ram','may-anh']},
     errors:[
       {id:'head',label:'Vùng đầu',bounds:[89,40,110,91],genzKeys:['kinh-ram','tai-nghe-trum-dau'],correctOption:'head-original',learning:'Đã bỏ kính râm để hiện lại gương mặt và phần đội đầu của mẫu gốc.',options:[
@@ -39,7 +39,7 @@ export const CHALLENGES:Challenge[]=[
     difficulty:'Cao nhất · tự chọn cấu kiện',prerequisites:['hoang-bao'],
     description:'Dựa vào bối cảnh, chọn và phối bảy cấu kiện trong tủ đồ. Nộp bản phục dựng để biết tổng số chi tiết phù hợp.',
     features:['Không có hình mẫu hoặc bóng mờ','Các lựa chọn đều đến từ bộ sưu tập','Chấm tổng thể, tự kiểm tra và sửa'],usage:['Ghi nhớ & lựa chọn','Phục dựng bản minh họa'],
-    rewards:[{kind:'costumes',id:'special-quan-phuc-nam',name:'Cổn Phục (Tế Nam Giao)',image:corn.thumbnail},{kind:'costumes',id:'special-bach-y-nu',name:'Giá Cô Bơ'},{kind:'accessories',id:'dan-nguyet',name:'Đàn nguyệt · Nam & Nữ'},palette('thuy-mac-giay-do','Thủy Mặc Giấy Dó')],
+    rewards:[{kind:'costumes',id:'special-quan-phuc-nam',name:'Cổn Phục (Tế Nam Giao)',image:corn.thumbnail},{kind:'costumes',id:'special-bach-y-nu',name:'Giá Cô Bơ',image:'/puzzle/current-co-bo.svg'},{kind:'accessories',id:'dan-nguyet',name:'Đàn nguyệt · Nam & Nữ'},palette('thuy-mac-giay-do','Thủy Mặc Giấy Dó')],
     scenario:{character:'Hoàng đế',occasion:'Đại lễ Tế Nam Giao',mission:'Phục dựng mẫu lễ phục phù hợp với bối cảnh từ bộ sưu tập Việt Phục Remix.'},slots:RECONSTRUCTION_SLOTS},
 ];
 export const rewardLevel=(kind:UnlockKind,id:string)=>CHALLENGES.find(c=>c.rewards.some(r=>r.kind===kind&&r.id===id));
