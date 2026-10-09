@@ -4,7 +4,7 @@ import { PIECE_INFO } from '../data/pieceInfo';
 type Props = { item?: { id: string; name: string; description: string } };
 
 // Only emphasis is supported in the checked-in copy; React escapes every text segment.
-function emphasizedText(text: string) {
+export function emphasizedText(text: string) {
   return text.split(/\*\*(.*?)\*\*/g).map((part, index) =>
     index % 2 ? <strong key={index}>{part}</strong> : part);
 }

@@ -46,7 +46,17 @@
 .puzzle-modal-backdrop{position:fixed;inset:0;background:#1b1b25ad;backdrop-filter:blur(5px);z-index:60;display:flex;align-items:center;justify-content:center;padding:20px}
 .puzzle-modal{position:relative;max-width:540px;width:100%;max-height:90vh;overflow:auto;background:#fffcf6;border:1px solid #d5bb87;border-radius:24px;padding:30px;text-align:center;box-shadow:0 30px 100px #0004;animation:puzzle-reveal .3s ease-out}
 .puzzle-modal-close{position:absolute;top:16px;right:16px;cursor:pointer;color:#948b7e;border-radius:50%;padding:7px;background:#f3eee4}.puzzle-modal h2{font-family:var(--font);font-size:36px;color:#873c37;line-height:1.2;margin:13px 0 8px}.puzzle-modal h3{font-size:18px;margin-bottom:13px;color:#67594b}
-.puzzle-completion-count{display:inline-flex;align-items:center;gap:5px;background:#e8f0e3;border-radius:20px;padding:6px 10px;font-size:12px;color:#547148}.puzzle-modal p{margin:19px 0;font-size:14px;color:#7b6c5b;line-height:1.8}.puzzle-modal-rewards{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-bottom:24px}.puzzle-modal-rewards span{font-size:12px;display:flex;align-items:center;gap:4px;padding:8px;background:#f0e7d6;color:#88642d;border-radius:8px;animation:puzzle-reveal .45s ease-out}.puzzle-modal-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.puzzle-modal>small{display:block;font-size:12px;color:#9b9082;margin-top:17px}
+.puzzle-modal-unlocked{font-size:16px;color:#695746;margin:18px 0 0}
+.puzzle-modal-rewards{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:18px 0 28px}
+.puzzle-modal-reward{width:100px;animation:puzzle-reveal .45s ease-out}
+.puzzle-modal-reward-art{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:96px;border:1px solid #c1d2bd;border-radius:12px;background:#faf5eb}
+.puzzle-modal-reward-art>.svg-artwork{width:84%;height:84%}.puzzle-modal-reward-art>img{max-width:84%;max-height:84%;object-fit:contain}
+.puzzle-modal-reward-art>.puzzle-reward-status{display:flex;background:#e6f0e3;color:#4c7846}
+.puzzle-modal-reward>strong{display:block;font-size:12px;font-weight:600;line-height:1.5;color:#695746;margin-top:7px}
+.puzzle-reward-outfit-pair{display:flex;align-items:center;justify-content:center;gap:2px;width:100%;height:100%;padding:7px 4px}
+:is(.puzzle-reward,.puzzle-modal-reward-art) .puzzle-reward-outfit-pair>:is(img,.svg-artwork){width:calc(50% - 1px);max-width:calc(50% - 1px);height:100%;max-height:100%;object-fit:contain;padding:0}
+.puzzle-finish-row>.puzzle-button{margin-left:auto}
+.puzzle-modal-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
 .puzzle-celebration{color:#bc8e36;display:flex;justify-content:center;padding:14px;margin-bottom:16px;position:relative}.puzzle-celebration i{position:absolute;top:0;width:5px;height:10px;border-radius:2px;animation:puzzle-confetti 1.8s ease-out both;pointer-events:none}
 @keyframes puzzle-confetti{from{transform:translateY(-20px) rotate(0deg);opacity:0}25%{opacity:1}to{transform:translateY(110px) rotate(200deg);opacity:0}}
 @keyframes puzzle-reveal{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes puzzle-snap{50%{filter:drop-shadow(0 0 8px #d6b14b)}}@keyframes puzzle-hint{50%{filter:drop-shadow(0 0 8px #c9992e);opacity:.75}}
@@ -87,6 +97,8 @@
 @media(max-width:600px){.detective-layout,.reconstruction-layout{grid-template-columns:minmax(0,1fr);gap:16px;padding:15px}.detective-stage,.reconstruction-stage{width:180px;justify-self:center}.detective-tray{width:100%}.reconstruction-options,.detective-options{grid-template-columns:repeat(3,minmax(0,1fr))}.detective-option-art{width:100%}.reconstruction-options>button>span{width:100%;height:100px}.reconstruction-options strong,.detective-options strong{font-size:12px}.reconstruction-slots button{font-size:12px;padding:9px}.puzzle-chapter{flex-wrap:wrap}.challenge-heading{align-items:flex-start}.puzzle-page{max-width:100%}.puzzle-sidebar nav{padding-bottom:4px}}
 
 /* Both pages share the font defined in index.css, including completion dialogs. */
+.puzzle-sidebar-progress{margin:18px 3px 16px}.puzzle-sidebar-progress>div{margin-top:0}
+.puzzle-toolbar h2,.challenge-heading h2{margin-top:0}
 .puzzle-page,.puzzle-modal{font-family:var(--font);font-size:14px}
 .puzzle-sidebar h1,.puzzle-toolbar h2,.challenge-heading h2,.puzzle-info h2,.puzzle-modal h2{font-weight:700;letter-spacing:-.02em}
 .puzzle-howto{list-style:decimal;padding-left:22px;font-size:14px;line-height:1.7;color:#6f645b}
@@ -96,3 +108,131 @@
 .puzzle-reward .svg-artwork{width:calc(100% - 16px);height:calc(100% - 16px)}
 .puzzle-level strong{font-size:16px}.detective-options strong,.reconstruction-options strong{font-size:14px}
 @media(max-width:600px){.puzzle-sidebar nav .puzzle-level{min-width:205px}.reconstruction-context strong{font-size:18px}.puzzle-info h2{font-size:26px}.puzzle-piece-caption{font-size:10px}.puzzle-board-label{font-size:8px}}
+
+.puzzle-sidebar>.puzzle-sidebar-subtitle{display:block;margin:0 0 16px;color:#d0c8bd;font-size:14px;line-height:1.6}
+.puzzle-info{background:#282a32;color:#f7f0e5}
+.puzzle-info h2,.puzzle-info h3{color:#f7f0e5}
+.puzzle-info .puzzle-eyebrow,.puzzle-info li::marker{color:#d6b875}
+.puzzle-info .puzzle-howto,.puzzle-info>p,.puzzle-info ul{color:#d0c8bd}
+.puzzle-info .puzzle-reference{background:#ffffff08;border-color:#ffffff1a}
+.puzzle-info .puzzle-reference summary{color:#d6b875}
+.puzzle-info .puzzle-reference img{background:var(--paper)}
+
+/* Real image elements keep the nine crops available in the offline preview too. */
+.image-grid-tile,.image-grid-drag-ghost{overflow:hidden}
+.image-grid-tile-art{position:absolute;max-width:none;max-height:none;object-fit:fill;pointer-events:none;user-select:none}
+.image-grid-tile::after{content:'';position:absolute;inset:0;box-shadow:inherit;pointer-events:none;z-index:1}
+
+/* Fit the playing area to the available height, keeping the source geometry intact. */
+.page2-challenges .puzzle-page{--play-height:clamp(220px,calc(100dvh - 324px),560px);gap:12px}
+.page2-challenges .puzzle-toolbar,.page2-challenges .challenge-heading{padding:10px 14px;min-height:48px}
+.page2-challenges .puzzle-toolbar h2,.page2-challenges .challenge-heading h2{font-size:25px}
+.page2-challenges .puzzle-button{padding:8px 11px;font-size:12px}
+.page2-challenges .puzzle-game{background:var(--paper)}
+.page2-challenges .puzzle-board{width:min(100%,calc(var(--play-height) * 800 / 650));margin:0 auto}
+.page2-challenges .image-grid-stage{padding:10px}
+.page2-challenges .image-grid-board{width:min(100%,calc(var(--play-height) * var(--image-aspect)));max-width:none}
+.page2-challenges .puzzle-sidebar,.page2-challenges .puzzle-info{padding:16px 12px;border-radius:15px}
+.page2-challenges .puzzle-sidebar h1{font-size:25px;margin:0 0 8px}
+.page2-challenges .puzzle-sidebar-subtitle{font-size:12px;margin-bottom:10px}
+.page2-challenges .puzzle-sidebar-progress{margin:12px 2px}
+.page2-challenges .puzzle-level{grid-template-columns:34px 1fr 15px;padding:7px;gap:8px;margin:6px 0}
+.page2-challenges .puzzle-level-art{height:43px}
+.page2-challenges .puzzle-level strong{font-size:13px;line-height:1.4}
+.page2-challenges .puzzle-badge{margin-top:16px;padding:12px 2px 0}
+.page2-challenges .puzzle-badge strong,.page2-challenges .puzzle-badge p{font-size:11px}
+.page2-challenges .puzzle-info h2{font-size:23px;margin:10px 0}
+.page2-challenges .puzzle-info h3{font-size:15px;margin:12px 0 8px}
+.page2-challenges .puzzle-info .puzzle-outfit-description{font-size:12px;line-height:1.6;color:#d0c8bd;margin:10px 0 16px}
+.page2-challenges .puzzle-outfit-description strong{font-weight:700;color:#f7f0e5}
+.page2-challenges .puzzle-eyebrow{font-size:10px}
+.page2-challenges .puzzle-howto{font-size:12px;line-height:1.6;padding-left:18px}
+.page2-challenges .puzzle-howto li+li{margin-top:10px}
+.page2-challenges .puzzle-reference{margin-top:14px}
+.page2-challenges .puzzle-reference summary{padding:10px;font-size:11px}
+.page2-challenges .puzzle-reference img{height:180px}
+.page2-challenges .puzzle-rewards{padding:10px 12px;margin-top:8px}
+.page2-challenges .puzzle-rewards h3{font-size:12px;margin-bottom:7px}
+.page2-challenges .puzzle-reward-grid{gap:8px;flex-wrap:nowrap}
+.page2-challenges .puzzle-reward{width:auto;flex:1 1 0;min-width:0;max-width:120px}
+.page2-challenges .puzzle-reward>div{height:58px}
+.page2-challenges .puzzle-reward img{height:50px;max-width:100%;padding:3px}
+.page2-challenges .puzzle-reward strong{font-size:11px;line-height:1.4;margin-top:4px}
+.page2-challenges .puzzle-reward-outfit-pair{padding:4px 3px}
+.page2-challenges .puzzle-reward .puzzle-reward-outfit-pair>img{height:100%;max-width:calc(50% - 1px);padding:0}
+.page2-challenges .puzzle-reward-status{padding:3px}
+.page2-challenges .puzzle-color-reward i{width:13px;height:29px}
+.page2-challenges .puzzle-finish-row{margin:8px 0 0}
+.page2-challenges .puzzle-finish-row>span{font-size:11px}
+.page2-challenges .puzzle-journey-complete{padding:7px;font-size:12px}
+.page2-challenges .detective-layout{grid-template-columns:min(180px,calc(var(--play-height) * 288 / 602)) minmax(0,1fr);gap:12px;padding:10px 14px}
+.page2-challenges .detective-options{grid-template-columns:repeat(3,minmax(0,1fr))}
+.page2-challenges .detective-options>button{display:block;text-align:center;padding:6px}
+.page2-challenges .detective-option-art{width:100%}
+.page2-challenges .detective-options strong{font-size:12px;margin-top:5px}
+.page2-challenges .detective-tray h3{font-size:15px}
+.page2-challenges .detective-empty p{font-size:12px}
+.page2-challenges .reconstruction-context{padding:8px 14px;gap:8px 16px}
+.page2-challenges .reconstruction-context small{font-size:10px}
+.page2-challenges .reconstruction-context strong{font-size:16px}
+.page2-challenges .reconstruction-context p{font-size:12px;line-height:1.4}
+.page2-challenges .reconstruction-layout{--figure-height:max(280px,calc(var(--play-height) + 12px));grid-template-columns:minmax(0,.82fr) minmax(0,1fr);gap:18px;padding:10px 14px;align-items:start}
+.page2-challenges .reconstruction-stage{width:100%;height:min(calc(var(--figure-height) + 12px),426px);padding:6px;display:flex;align-items:center;justify-content:center}
+/* The source canvas has extra space on the right; center the character's axis. */
+.page2-challenges .reconstruction-stage>.costume-layers{flex:none;width:min(100%,calc(var(--figure-height) * 360 / 654));max-width:228px;transform:translateX(6.7%)}
+.page2-challenges .reconstruction-wardrobe{width:100%;max-width:480px;justify-self:end;align-self:start}
+.page2-challenges .reconstruction-slots{gap:14px;padding:4px;margin:0 0 8px}
+.page2-challenges .reconstruction-slots button{min-height:30px;padding:5px 7px;font-size:11px}
+.page2-challenges .reconstruction-wardrobe h3{font-size:14px;margin:6px 0}
+.page2-challenges .reconstruction-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}
+.page2-challenges .reconstruction-options>button{display:block;text-align:center;padding:5px}
+.page2-challenges .reconstruction-options>button>span{width:100%;height:58px}
+.page2-challenges .reconstruction-options strong{font-size:11px;line-height:1.4;margin-top:5px}
+.page2-challenges .reconstruction-submit{padding:8px 14px;gap:8px}
+.page2-challenges .reconstruction-submit small{font-size:10px}
+.page2-challenges .reconstruction-submit strong{font-size:20px;margin:0}
+.page2-challenges .reconstruction-submit p{font-size:11px;line-height:1.4}
+
+@media(min-width:1100px){
+  .page2-challenges .puzzle-page{display:grid;grid-template-columns:180px minmax(0,1fr) 210px;align-items:start}
+  .page2-challenges .puzzle-info{grid-column:auto;position:sticky;top:4px;max-height:calc(100dvh - 84px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#ffffff40 transparent}
+  @supports(height:1cqh){
+    .page2-challenges{container-type:size}
+    .page2-challenges .puzzle-page{--play-height:clamp(220px,calc(100cqh - 248px),560px)}
+    .page2-challenges .puzzle-info{max-height:calc(100cqh - 8px)}
+  }
+}
+@media(min-width:1500px){.page2-challenges .puzzle-page{grid-template-columns:195px minmax(0,1fr) 225px}}
+@media(max-width:1099px){
+  .page2-challenges .puzzle-page{display:grid;grid-template-columns:minmax(0,1fr);--play-height:clamp(240px,calc(100dvh - 360px),460px)}
+  .page2-challenges .puzzle-sidebar{position:static;width:100%;padding:10px 12px}
+  .page2-challenges .puzzle-sidebar h1{font-size:20px;display:inline-block;margin:0 10px 8px 0}
+  .page2-challenges .puzzle-sidebar-subtitle{display:inline-block;margin:0}
+  .page2-challenges .puzzle-sidebar-progress,.page2-challenges .puzzle-badge{display:none}
+  .page2-challenges .puzzle-sidebar nav{display:flex;gap:7px;overflow-x:auto}
+  .page2-challenges .puzzle-level{min-width:155px;flex:1;margin:0}
+  .page2-challenges .puzzle-level-art{height:34px}
+  .page2-challenges .puzzle-main,.page2-challenges .puzzle-info{width:100%;grid-column:auto}
+  .page2-challenges .puzzle-info{position:static}
+}
+@media(max-width:600px){
+  .page2-challenges .puzzle-page{gap:8px;--play-height:clamp(230px,calc(100dvh - 370px),350px)}
+  .page2-challenges .puzzle-toolbar h2,.page2-challenges .challenge-heading h2{font-size:21px}
+  .page2-challenges .image-grid-game .puzzle-toolbar{flex-direction:row;align-items:center;flex-wrap:wrap}
+  .page2-challenges .image-grid-game .puzzle-tools{margin-left:auto}
+  .page2-challenges .puzzle-reward-grid{flex-wrap:wrap}
+  .page2-challenges .puzzle-reward{min-width:calc(25% - 8px);max-width:none;flex-grow:0}
+  .page2-challenges .detective-layout,.page2-challenges .reconstruction-layout{grid-template-columns:min(110px,30%) minmax(0,1fr);gap:8px;padding:8px}
+  .page2-challenges .reconstruction-layout{grid-template-columns:minmax(0,.82fr) minmax(0,1fr)}
+  .page2-challenges .detective-stage,.page2-challenges .reconstruction-stage{width:100%}
+  .page2-challenges .detective-options{grid-template-columns:1fr}
+  .page2-challenges .detective-options>button{display:flex;gap:8px;align-items:center;text-align:left}
+  .page2-challenges .detective-option-art{width:40px;flex-shrink:0}
+  .page2-challenges .reconstruction-options{grid-template-columns:1fr}
+  .page2-challenges .reconstruction-options>button{display:grid;grid-template-columns:42px minmax(0,1fr);gap:6px;align-items:center;text-align:left}
+  .page2-challenges .reconstruction-options>button>span{height:44px;width:42px}
+  .page2-challenges .reconstruction-options strong{margin:0}
+  .page2-challenges .reconstruction-options .answer-status{grid-column:2;margin:0;justify-content:flex-start}
+  .page2-challenges .reconstruction-submit{flex-wrap:nowrap}
+  .page2-challenges .reconstruction-submit .puzzle-button{width:auto;flex-shrink:0}
+}

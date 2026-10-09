@@ -3,24 +3,23 @@ import { CHALLENGES } from './challenges';
 import { canPlay } from './progress';
 import { usePuzzleProgress } from './PuzzleProgress';
 import type { Challenge } from './types';
-import AccessoryPreview from './AccessoryPreview';
-import SvgArtwork from './SvgArtwork';
-import {JEWELRY,HANDHELD} from '../data/costumeData';
+import RewardArtwork from './RewardArtwork';
+import { PIECE_INFO } from '../data/pieceInfo';
+import { emphasizedText } from '../components/PieceInfoCard';
 
 export function LevelSidebar({level,onSelect}:{level:Challenge;onSelect:(id:string)=>void}) {
   const {progress}=usePuzzleProgress();
   return <aside className="puzzle-sidebar">
-    <span className="puzzle-eyebrow">VIỆT PHỤC CHALLENGE</span>
-    <h1>Hành trình<br/>{' '}Việt phục</h1>
-    <p>Mỗi chặng, một cách khám phá.<br/>Tủ đồ của bạn sẽ lớn dần!</p>
-    <div className="puzzle-sidebar-progress"><span>{progress.completed.length}/{CHALLENGES.length} màn hoàn thành</span><div><i style={{width:`${progress.completed.length/CHALLENGES.length*100}%`}}/></div></div>
+    <h1>Việt phục game</h1>
+    <p className="puzzle-sidebar-subtitle">Chơi để mở khóa đồ</p>
+    <div className="puzzle-sidebar-progress" role="progressbar" aria-label="Tiến trình các thử thách" aria-valuemin={0} aria-valuemax={CHALLENGES.length} aria-valuenow={progress.completed.length}><div><i style={{width:`${progress.completed.length/CHALLENGES.length*100}%`}}/></div></div>
     <nav aria-label="Các thử thách Việt phục">
       {CHALLENGES.map((item,index)=>{
         const completed=progress.completed.includes(item.id),locked=!canPlay(progress,item);
         return <button type="button" key={item.id} className={`puzzle-level ${item.id===level.id?'active':''} ${locked?'locked':''}`} aria-current={item.id===level.id?'step':undefined} disabled={locked}
           aria-label={`Màn ${index+1}: ${item.name}${locked?' · khóa':completed?' · hoàn thành':''}`} onClick={()=>onSelect(item.id)}>
           <span className="puzzle-level-art">{item.type==='reconstruction'?<Crown size={28}/>:<img src={item.thumbnail} alt=""/>}</span>
-          <span><small>MÀN {String(index+1).padStart(2,'0')}</small><strong>{item.name}</strong><em>{item.title}</em><em>{locked?'Hoàn thành màn trước':item.difficulty}</em>{item.type!=='assemble'&&progress.best[item.id]&&<em>Kỷ lục: {progress.best[item.id].actions} {item.type==='reconstruction'?'lượt nộp':item.type==='detective'?'lượt chọn':'lượt đổi'}</em>}</span>
+          <span><strong>{item.name}</strong></span>
           {completed?<Check size={17}/>:locked?<Lock size={15}/>:<ChevronRight size={17}/>}
         </button>;
       })}
@@ -29,6 +28,7 @@ export function LevelSidebar({level,onSelect}:{level:Challenge;onSelect:(id:stri
   </aside>;
 }
 export function CostumeInfoPanel({level}:{level:Challenge}) {
+  const description = PIECE_INFO[level.outfitId]?.description ?? level.description;
   const instructions:Record<Challenge['type'],string[]>={
     assemble:[
       'Kéo từng mảnh trang phục vào vùng tương ứng trên nhân vật. Mảnh đúng sẽ tự khớp vào vị trí.',
@@ -54,6 +54,7 @@ export function CostumeInfoPanel({level}:{level:Challenge}) {
   return <aside className="puzzle-info">
     <span className="puzzle-eyebrow"><BookOpen size={16}/> PHỤC DỰNG BỘ ĐỒ</span>
     <h2>{level.name}</h2>
+    <p className="puzzle-outfit-description">{emphasizedText(description)}</p>
     <h3>Cách chơi</h3>
     <ol className="puzzle-howto">{instructions[level.type].map(step=><li key={step}>{step}</li>)}</ol>
     {level.type==='assemble'&&<details className="puzzle-reference"><summary>Xem bộ hoàn chỉnh <Sparkles size={14}/></summary><img src={level.thumbnail} alt={`Bộ ${level.name} hoàn chỉnh`}/></details>}
@@ -65,7 +66,7 @@ export function RewardPreview({level,conceal=false}:{level:Challenge;conceal?:bo
   return <section className="puzzle-rewards" aria-label="Phần thưởng của màn">
     <h3><Gift size={19}/>{earned?'Đã thêm vào tủ đồ của bạn':'Hoàn thành màn này để mở khóa'}</h3>
     <div className="puzzle-reward-grid">{level.rewards.map(reward=><div className={`puzzle-reward ${earned?'earned':''}`} key={`${reward.kind}-${reward.id}`}>
-      <div>{conceal&&!earned?<Gift size={26}/>:reward.image?<SvgArtwork asset={reward.image}/>:reward.kind==='headwear'?<SvgArtwork asset={`/puzzle/items/${reward.id}.svg`}/>:reward.kind==='colors'?<span className="puzzle-color-reward"><i/><i/><i/></span>:reward.kind==='accessories'&&[...JEWELRY,...HANDHELD].some(item=>item.id===reward.id)?<AccessoryPreview id={reward.id}/>:<Gift size={26}/>}<span className="puzzle-reward-status">{earned?<Check size={12}/>:<Lock size={12}/>}</span></div>
+      <div>{conceal&&!earned?<Gift size={26}/>:<RewardArtwork reward={reward}/>}<span className="puzzle-reward-status">{earned?<Check size={12}/>:<Lock size={12}/>}</span></div>
       <strong>{reward.name}</strong>
     </div>)}</div>
   </section>;

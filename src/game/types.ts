@@ -1,6 +1,6 @@
 export type Point = { x: number; y: number };
 export type UnlockKind = 'costumes' | 'headwear' | 'accessories' | 'colors';
-export type UnlockReward = { kind: UnlockKind; id: string; name: string; image?: string };
+export type UnlockReward = { kind: UnlockKind; id: string; name: string; image?: string; images?: string[] };
 export type PuzzlePiece = {
   id: string; label: string; note: string; asset: string;
   bounds: [number, number, number, number]; initialPosition: Point; zIndex: number;

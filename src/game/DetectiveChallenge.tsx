@@ -1,6 +1,7 @@
 import { useEffect,useRef,useState } from 'react';
-import { Check,MousePointer2,RotateCcw,Search,X } from 'lucide-react';
+import { Check,RotateCcw,Search,X } from 'lucide-react';
 import { CostumeModel } from '../components/CostumeModel';
+import { CeremonialHatPreview } from '../components/CeremonialHeadwear';
 import SvgArtwork from './SvgArtwork';
 import AccessoryPreview from './AccessoryPreview';
 import { applyDetectiveOption,detectiveLook } from './challengeLogic';
@@ -9,7 +10,7 @@ import './answer-feedback.css';
 
 function WardrobeFigure({level,look}:{level:DetectiveChallengeData;look:WardrobeLook}){
   return <div className="detective-figure" style={{aspectRatio:level.dimensions[0]/level.dimensions[1]}}>
-    <CostumeModel gender="male" garmentId="giao-linh" garmentName={level.name} specialId={level.modelId} headwearId={look.headwear==='none'?undefined:look.headwear} footwearId={look.footwear} jewelry={look.jewelry} handheldId={look.handheld} genZ={look.genz}/>
+    <CostumeModel gender="male" garmentId="giao-linh" garmentName={level.name} specialId={level.modelId} headwearId={look.headwear==='none'?undefined:look.headwear} ceremonialHeadwearOverride footwearId={look.footwear} jewelry={look.jewelry} handheldId={look.handheld} genZ={look.genz}/>
   </div>;
 }
 export default function DetectiveChallenge({level,run,onInitialize,onAnswer,onReset,onComplete}:{level:DetectiveChallengeData;run:DetectiveRun|undefined;onInitialize:()=>void;onAnswer:(error:string,option:string)=>void;onReset:()=>void;onComplete:()=>void}){
@@ -22,9 +23,8 @@ export default function DetectiveChallenge({level,run,onInitialize,onAnswer,onRe
   const error=level.errors.find(error=>error.id===active),look=detectiveLook(level,run),fixed=run?.fixed??[];
   const complete=fixed.length===level.total;
   return <section className="challenge-card detective-challenge">
-    <div className="challenge-heading"><div><span className="puzzle-eyebrow"><Search size={14}/> TÌM · CHỌN · SỬA</span><h2>Bắt lỗi Việt phục</h2></div><button className="puzzle-button light" onClick={()=>{onReset();setActive(null);setCheckedOptions({});setFeedback('Bản phối đã trở về trạng thái ban đầu.');}}><RotateCcw size={15}/>Chơi lại</button></div>
-    <div className="challenge-stats"><span>ĐÃ SỬA <strong data-testid="detective-progress">{fixed.length}/{level.total}</strong></span><span>LƯỢT CHỌN <strong>{run?.attempts??0}</strong></span></div>
-    <p className="challenge-instructions"><MousePointer2 size={15}/>Tìm ba phụ kiện cần đổi để khôi phục bản phối cổ phong. Chạm một vùng trên nhân vật để xem lựa chọn.</p>
+    <div className="challenge-heading"><div><h2>Bắt lỗi Việt phục</h2></div><button className="puzzle-button light" onClick={()=>{onReset();setActive(null);setCheckedOptions({});setFeedback('Bản phối đã trở về trạng thái ban đầu.');}}><RotateCcw size={15}/>Chơi lại</button></div>
+    <div className="sr-only"><strong data-testid="detective-progress">{fixed.length}/{level.total}</strong></div>
     <div className="detective-layout">
       <div className={`detective-stage ${complete?'challenge-solved':''}`} onClick={()=>setFeedback('Vùng này chưa cần sửa. Hãy quan sát phụ kiện trên nhân vật.')}>
         <WardrobeFigure level={level} look={look}/>
@@ -44,11 +44,10 @@ export default function DetectiveChallenge({level,run,onInitialize,onAnswer,onRe
               if(fixed.length+1===level.total)onComplete();
             }
             else setFeedback('Chi tiết này chưa phù hợp với bản phối đang phục hồi. Thử phương án khác nhé.');
-          }}><span className={`detective-option-art preview-category-${error.id}`} style={{aspectRatio:error.bounds[2]/error.bounds[3]}}>{error.id==='feet'?<SvgArtwork asset={`/puzzle/items/special-long-bao-nam-${item.look.footwear==='hai-theu'?'hai':item.look.footwear}.svg`}/>:accessory?<AccessoryPreview id={accessory}/>:<span className="detective-option-crop" style={{width:`${level.dimensions[0]/error.bounds[2]*100}%`,left:`${-error.bounds[0]/error.bounds[2]*100}%`,top:`${-error.bounds[1]/error.bounds[3]*100}%`}}><WardrobeFigure level={level} look={preview}/></span>}</span><strong>{item.label}</strong>{answer&&<small className="answer-status">{answer==='correct'?<Check size={14}/>:<X size={14}/>} {answer==='correct'?'Đúng':'Chưa đúng'}</small>}</button>;
-        })}</div></>:<div className="detective-empty"><Search size={28}/><h3>{complete?'Bản phối đã được phục hồi':'Bạn phát hiện chi tiết nào?'}</h3><p>{complete?'Ba chi tiết đã được thay. Phần thưởng đang chờ trong tủ đồ.':'Chạm vào nhân vật để mở khay thay đồ. Chọn sai vẫn có thể thử tiếp.'}</p></div>}
+          }}><span className={`detective-option-art preview-category-${error.id}`} style={{aspectRatio:error.bounds[2]/error.bounds[3]}}>{error.id==='feet'?<SvgArtwork asset={`/puzzle/items/special-long-bao-nam-${item.look.footwear==='hai-theu'?'hai':item.look.footwear}.svg`}/>:error.id==='head'&&(item.look.headwear==='mu-cuu-long'||item.look.headwear==='mu-phuong')?<CeremonialHatPreview id={item.look.headwear}/>:accessory?<AccessoryPreview id={accessory}/>:<span className="detective-option-crop" style={{width:`${level.dimensions[0]/error.bounds[2]*100}%`,left:`${-error.bounds[0]/error.bounds[2]*100}%`,top:`${-error.bounds[1]/error.bounds[3]*100}%`}}><WardrobeFigure level={level} look={preview}/></span>}</span><strong>{item.label}</strong>{answer&&<small className="answer-status">{answer==='correct'?<Check size={14}/>:<X size={14}/>} {answer==='correct'?'Đúng':'Chưa đúng'}</small>}</button>;
+        })}</div></>:<div className="detective-empty"><Search size={28}/><h3>{complete?'Bản phối đã được phục hồi':'Bạn phát hiện chi tiết nào sai?'}</h3><p>{complete?'Ba chi tiết đã được thay. Phần thưởng đang chờ trong tủ đồ.':'Chạm vào bộ phận để bắt lỗi.'}</p></div>}
       </div>
     </div>
-    <p className="challenge-feedback" role="status" data-testid="detective-feedback">{feedback}</p>
-    <small className="challenge-scope">Mục tiêu là bản phối cổ phong của trò chơi. Trong tủ đồ, bạn vẫn có thể phối phụ kiện Gen Z theo ý thích.</small>
+    <p className="sr-only" role="status" aria-live="polite" data-testid="detective-feedback">{feedback}</p>
   </section>;
 }

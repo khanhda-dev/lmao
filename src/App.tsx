@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Shuffle, Search, Sun, Moon, Lock, Check, ArrowRight, Palette, X } from 'lucide-react';
+import { Shuffle, Search, Sun, Moon, Lock, Check, ArrowRight, Palette, Gem, X } from 'lucide-react';
 import { 
   GARMENTS, 
   HEADWEAR, 
@@ -29,7 +29,7 @@ import './game/wardrobe.css';
 
 export default function App() {
   const {isUnlocked,freshUser,unlockedItems}=usePuzzleProgress();
-  // Navigation: 1 = Trang 1 (Phối đồ), 2 = Trang 2 (Cẩm nang thông tin)
+  // Navigation: 1 = Tủ đồ, 2 = Thử thách.
   const [activePage, setActivePage] = useState<number>(1);
 
   // Model Gender: 'male' (Nam) | 'female' (Nữ)
@@ -253,11 +253,11 @@ export default function App() {
     <button
       type="button"
       className={`gender-toggle${inline ? ' gender-toggle-inline' : ''}`}
-      aria-label={modelGender === 'male' ? 'Đang chọn nam (M). Bấm để chuyển sang nữ (F)' : 'Đang chọn nữ (F). Bấm để chuyển sang nam (M)'}
-      title={modelGender === 'male' ? 'Chuyển sang nữ (F)' : 'Chuyển sang nam (M)'}
+      aria-label={modelGender === 'male' ? 'Đang chọn nam. Bấm để chuyển sang nữ' : 'Đang chọn nữ. Bấm để chuyển sang nam'}
+      title={modelGender === 'male' ? 'Chuyển sang nữ' : 'Chuyển sang nam'}
       onClick={handleToggleGender}
     >
-      {modelGender === 'male' ? 'M' : 'F'}
+      {modelGender === 'male' ? 'Nam' : 'Nữ'}
     </button>
   );
 
@@ -267,7 +267,7 @@ export default function App() {
       <header className="topbar">
         <div className="brand">
           <span className="text-amber-600">✦</span>
-          <span>Việt Phục Remix</span>
+          <span>Viêtelier</span>
         </div>
         <nav className="tabs" role="tablist">
           <button 
@@ -276,7 +276,7 @@ export default function App() {
             aria-selected={activePage === 1}
             onClick={() => setActivePage(1)}
           >
-            Trang 1
+            Tủ đồ
           </button>
           <button 
             role="tab" 
@@ -284,7 +284,7 @@ export default function App() {
             aria-selected={activePage === 2}
             onClick={() => setActivePage(2)}
           >
-            Trang 2
+            Thử thách
           </button>
         </nav>
       </header>
@@ -426,9 +426,15 @@ export default function App() {
                 )}
 
                 {/* 3. TAB PHỤ KIỆN */}
-                {builderTab === 'accessory' && (
+                {builderTab === 'accessory' && selectedSpecialId && (
+                  <div className="color-unavailable" role="status">
+                    <Gem size={36} aria-hidden="true" />
+                    <h3>Chưa hỗ trợ phụ kiện</h3>
+                    <p>{garmentInfo?.name} hiện giữ phụ kiện nguyên bản. Chọn trang phục khác để sử dụng các phụ kiện.</p>
+                  </div>
+                )}
+                {builderTab === 'accessory' && !selectedSpecialId && (
                   <div className="space-y-6">
-                    {selectedSpecialId&&<p className="accessory-outfit-note">Đồ đội đầu, trang sức và đồ cầm tay dùng với trang phục thường. Chọn một món sẽ chuyển về trang phục thường của bạn.</p>}
                     {/* Phân nhóm 1: Đồ đội đầu */}
                     <div className="sub-section">
                       <h3 className="sub-section-title">Đồ đội đầu</h3>

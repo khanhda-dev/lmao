@@ -7,6 +7,7 @@ import { HeadwearArt, HairpinArt } from './TraditionalAccessories';
 import { HandheldArt, handheldPlacement } from './HandheldSVG';
 import { footwearBottom, type CustomFootwear } from './FootwearSVG';
 import { headwearBounds } from './HeadwearSVG';
+import { CeremonialHatArt, withoutCourtHat } from './CeremonialHeadwear';
 
 const sources = import.meta.glob('../assets/costumes/*.svg', {
   query: '?raw', import: 'default', eager: true,
@@ -16,14 +17,16 @@ type Props = {
   gender: 'male' | 'female'; garmentId: string; garmentName: string;
   specialId: string | null; isLightbox?: boolean; headwearId?: string;
   handheldId: string; jewelry: string[]; genZ: string[]; footwearId: string;
+  ceremonialHeadwearOverride?: boolean;
 };
 
 export function CostumeModel({ gender, garmentId, garmentName, specialId, isLightbox = false,
-  headwearId, handheldId, jewelry, genZ, footwearId }: Props) {
+  headwearId, handheldId, jewelry, genZ, footwearId, ceremonialHeadwearOverride = false }: Props) {
   const key = (specialId || `${gender}-${garmentId}`) as keyof typeof assets;
   const asset = assets[key];
   const original = sources[`../assets/costumes/${key}.svg`];
-  const customHeadwear = !specialId && headwearId ? { id: headwearId, x: asset.headX, female: gender === 'female',costumeKey:key } : undefined;
+  const overrideCourtHat = ceremonialHeadwearOverride && specialId === 'special-long-bao-nam';
+  const customHeadwear = headwearId && (!specialId || (overrideCourtHat && headwearId === 'non-la')) ? { id: headwearId, x: asset.headX, female: gender === 'female',costumeKey:key } : undefined;
   const hatBounds = customHeadwear ? headwearBounds(customHeadwear) : undefined;
   const handheldSelection = { id: handheldId, costumeKey: key };
   const itemBounds = !specialId ? handheldPlacement(handheldSelection) : undefined;
@@ -31,7 +34,8 @@ export function CostumeModel({ gender, garmentId, garmentName, specialId, isLigh
   const customFootwear: CustomFootwear | undefined = footwearId === 'guoc-moc' || footwearId === 'sneaker'
     ? { id: footwearId, costumeKey: key } : undefined;
   const { markup, hatStraps } = useMemo(() => {
-    const rendered = prepareCostumeSvg(original, `costume-${instance}`, !specialId, customFootwear, customHeadwear);
+    const source = overrideCourtHat && headwearId !== 'mu-cuu-long' ? withoutCourtHat(original) : original;
+    const rendered = prepareCostumeSvg(source, `costume-${instance}`, !specialId, customFootwear, customHeadwear);
     if (specialId || !handheldPlacement({ id: handheldId, costumeKey: key }) ||
       !['non-ba-tam', 'non-dau'].includes(headwearId || '')) return { markup: rendered, hatStraps: '' };
     // Holding the instrument/fan raises the sleeve over the grip. Keep the
@@ -41,7 +45,7 @@ export function CostumeModel({ gender, garmentId, garmentName, specialId, isLigh
     const hatStraps = front?.outerHTML || '';
     front?.remove();
     return { markup: doc.documentElement.innerHTML, hatStraps };
-  }, [original, instance, specialId, footwearId, key, headwearId, gender, handheldId]);
+  }, [original, instance, specialId, footwearId, key, headwearId, gender, handheldId, overrideCourtHat]);
   const hand = useMemo(() => {
     if (specialId) return '';
     const doc = new DOMParser().parseFromString(original, 'image/svg+xml');
@@ -65,7 +69,7 @@ export function CostumeModel({ gender, garmentId, garmentName, specialId, isLigh
     return prepareCostumeSvg(`<svg xmlns="http://www.w3.org/2000/svg">${layers.map(el => el.outerHTML).join('')}</svg>`, `collar-${instance}`, true);
   }, [original, instance, specialId, gender, garmentId]);
   const female = gender === 'female';
-  const headphonesAtNeck = !!specialId || !!headwearId;
+  const headphonesAtNeck = overrideCourtHat ? false : !!specialId || !!headwearId;
   const visibleJewelry = specialId ? [] : jewelry;
   const hasHairpin = !specialId && female && jewelry.includes('tram-cai');
   const isQuanVien = specialId === 'special-quan-phuc-nam';
@@ -98,6 +102,8 @@ export function CostumeModel({ gender, garmentId, garmentName, specialId, isLigh
         <RearExistingAccessories female={female} selectedGenZ={genZ} selectedJewelry={visibleJewelry} headphonesAtNeck={headphonesAtNeck} />
       </g>
       <g data-original-costume={asset.nodeId} dangerouslySetInnerHTML={{ __html: markup }} />
+      {overrideCourtHat && headwearId === 'non-la' && <HeadwearArt id={headwearId} x={asset.headX} female={false} costumeKey={key} />}
+      {overrideCourtHat && headwearId === 'mu-phuong' && <CeremonialHatArt id="mu-phuong" transform={`translate(${asset.headX - assets['special-phuong-bao-nu'].headX} ${(60.4683 + asset.handY - 293.498) - (46.9872 + assets['special-phuong-bao-nu'].handY - 261.079)})`} />}
       {!specialId && <>
         <HeadwearArt id={headwearId} x={asset.headX} female={female} costumeKey={key}/>
         {hasHandheld && <>

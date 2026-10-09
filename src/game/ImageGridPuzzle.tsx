@@ -1,4 +1,4 @@
-import { useEffect,useRef,useState,type PointerEvent } from 'react';
+import { useEffect,useRef,useState,type CSSProperties,type PointerEvent } from 'react';
 import { Check,Eye,RotateCcw } from 'lucide-react';
 import { correctTiles,isSolved,swapTiles } from './imageGrid';
 import type { GridRun } from './types';
@@ -23,7 +23,8 @@ export default function ImageGridPuzzle({image,gridSize,title,aspectRatio,previe
   useEffect(()=>()=>window.clearTimeout(completionTimer.current),[]);
   if(!run)return <section className="puzzle-game challenge-loading" aria-live="polite">Đang xếp bàn chơi…</section>;
   const solved=isSolved(run.tiles),correct=correctTiles(run.tiles);
-  const background=(tile:number)=>({backgroundImage:`url("${image}")`,backgroundSize:`${gridSize*100}% ${gridSize*100}%`,backgroundPosition:`${tile%gridSize/(gridSize-1)*100}% ${Math.floor(tile/gridSize)/(gridSize-1)*100}%`});
+  const tileArtwork=(tile:number)=><img className="image-grid-tile-art" src={image} alt="" draggable={false} aria-hidden="true"
+    style={{width:`${gridSize*100}%`,height:`${gridSize*100}%`,left:`${-(tile%gridSize)*100}%`,top:`${-Math.floor(tile/gridSize)*100}%`}}/>;
   function swap(a:number,b:number){
     if(preview||solved||a===b)return;
     const next=swapTiles(run!.tiles,a,b);onSwap(a,b);setSelected(null);
@@ -52,23 +53,22 @@ export default function ImageGridPuzzle({image,gridSize,title,aspectRatio,previe
     if(target!==null)swap(drag.index,target);else setMessage('Thả vào một ô trong bảng để đổi chỗ. Các mảnh vẫn ở vị trí cũ.');
   }
   return <section className="puzzle-game image-grid-game" aria-label={`Ghép hình ${title}`}>
-    <div className="puzzle-toolbar"><div><span className="puzzle-eyebrow">NHỚ HÌNH · ĐỔI CHỖ · KHÔI PHỤC</span><h2>Ghép lại {title}</h2></div>
+    <div className="puzzle-toolbar"><div><h2>Ghép lại {title}</h2></div>
       <div className="puzzle-tools"><button className="puzzle-button light" disabled={preview||solved||run.previewsUsed>=previewLimit} onClick={()=>{onPreview();setSelected(null);setPreview(true);setPreviewRound(n=>n+1);}}><Eye size={16}/>Xem lại mẫu ({previewLimit-run.previewsUsed})</button>
       <button className="puzzle-icon-button" aria-label="Xếp lại bảng ảnh" onClick={()=>{window.clearTimeout(completionTimer.current);pointer.current=null;setDrag(null);setSelected(null);setPreview(false);onReset();setMessage('Bảng đã xếp lại. Phần thưởng và kỷ lục vẫn được giữ.');}}><RotateCcw size={16}/></button></div>
     </div>
-    <div className="challenge-stats"><span>MẢNH ĐÚNG <strong data-testid="grid-progress">{correct}/{gridSize*gridSize}</strong></span><span>SỐ LƯỢT <strong data-testid="grid-moves">{run.moves}</strong></span><span>{solved?<><Check size={14}/> Đã khôi phục</>:preview?'Đang xem mẫu':'Đổi chỗ hai ô bất kỳ'}</span></div>
+    <div className="sr-only"><span>MẢNH ĐÚNG <strong data-testid="grid-progress">{correct}/{gridSize*gridSize}</strong></span><span>SỐ LƯỢT <strong data-testid="grid-moves">{run.moves}</strong></span><span>{solved?<><Check size={14}/> Đã khôi phục</>:preview?'Đang xem mẫu':'Đổi chỗ hai ô bất kỳ'}</span></div>
     <div className="image-grid-stage">
-      <div ref={board} className={`image-grid-board ${solved?'solved':''}`} data-testid="image-grid-board" role="group" aria-label="Bảng ảnh 3×3" style={{aspectRatio,gridTemplateColumns:`repeat(${gridSize},1fr)`,gridTemplateRows:`repeat(${gridSize},1fr)`}}>
+      <div ref={board} className={`image-grid-board ${solved?'solved':''}`} data-testid="image-grid-board" role="group" aria-label="Bảng ảnh 3×3" style={{aspectRatio,'--image-aspect':aspectRatio,gridTemplateColumns:`repeat(${gridSize},1fr)`,gridTemplateRows:`repeat(${gridSize},1fr)`} as CSSProperties}>
         {run.tiles.map((tile,index)=><button type="button" key={index} data-testid={`grid-cell-${index}`} data-tile-id={tile} disabled={preview||solved}
           data-correct={tile===index} aria-label={`Ô ${index+1}${tile===index?' · đúng vị trí':''}`} aria-pressed={selected===index} className={`image-grid-tile ${tile===index?'correct':''} ${selected===index?'selected':''} ${drag?.index===index?'held':''} ${drag&&drag.over===index&&drag.index!==index?'drop-target':''}`}
-          style={background(tile)} onPointerDown={e=>start(e,index)} onPointerMove={e=>{if(pointer.current===e.pointerId&&drag)setDrag({...drag,x:e.clientX,y:e.clientY,over:cell(e.clientX,e.clientY)});}}
+          onPointerDown={e=>start(e,index)} onPointerMove={e=>{if(pointer.current===e.pointerId&&drag)setDrag({...drag,x:e.clientX,y:e.clientY,over:cell(e.clientX,e.clientY)});}}
           onPointerUp={end} onPointerCancel={()=>{pointer.current=null;setDrag(null);}} onLostPointerCapture={()=>{pointer.current=null;setDrag(null);}}
-          onClick={e=>{if(e.detail===0)select(index);}} onKeyDown={e=>{if(e.key==='Escape')setSelected(null);}}/>) }
-        {preview&&<div className="image-grid-preview" data-testid="grid-preview"><img src={image} alt={`Hình mẫu ${title}`}/><span>Nhìn kỹ hình — bảng sẽ trộn sau một chút</span></div>}
+          onClick={e=>{if(e.detail===0)select(index);}} onKeyDown={e=>{if(e.key==='Escape')setSelected(null);}}>{tileArtwork(tile)}</button>) }
+        {preview&&<div className="image-grid-preview" data-testid="grid-preview"><img src={image} alt={`Hình mẫu ${title}`}/></div>}
       </div>
-      {drag&&Math.hypot(drag.x-drag.startX,drag.y-drag.startY)>=6&&<div aria-hidden="true" className="image-grid-drag-ghost" style={{...background(run.tiles[drag.index]),left:drag.x,top:drag.y,width:board.current!.clientWidth/gridSize,height:board.current!.clientHeight/gridSize}}/>}
+      {drag&&Math.hypot(drag.x-drag.startX,drag.y-drag.startY)>=6&&<div aria-hidden="true" className="image-grid-drag-ghost" style={{left:drag.x,top:drag.y,width:board.current!.clientWidth/gridSize,height:board.current!.clientHeight/gridSize}}>{tileArtwork(run.tiles[drag.index])}</div>}
     </div>
-    <div className="puzzle-feedback" role="status" aria-live="polite">{message}</div>
-    <p className="puzzle-keyboard-help">Kéo ô này lên ô khác, hoặc chọn hai ô bằng cách chạm / Tab và Enter. Không có ô trống.</p>
+    <div className="sr-only" role="status" aria-live="polite">{message}</div>
   </section>;
 }

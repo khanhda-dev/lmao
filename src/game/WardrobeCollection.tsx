@@ -14,6 +14,6 @@ export default function WardrobeCollection({gender,selected,onSelect,onExplore}:
  </button>;
  return <div className="wardrobe-collection">
   <section aria-label="Tủ đồ của bạn"><h3 className="wardrobe-title">Tủ đồ của bạn</h3><p>Bộ khởi đầu và những món bạn đã khám phá.</p><div className="wardrobe-grid">{available.map(i=>card(i))}</div></section>
-  {locked.length>0&&<section className="wardrobe-locked-collection" aria-label="Bộ sưu tập chưa mở khóa"><h3>BỘ SƯU TẬP CHƯA MỞ KHÓA</h3><div className="wardrobe-grid">{locked.map(i=>card(i,true))}</div><div className="wardrobe-invitation"><strong>Kho báu Việt phục vẫn đang chờ bạn khám phá!</strong><p>Hoàn thành thử thách ở Trang 2 để mở khóa thêm trang phục và phụ kiện.</p><button type="button" onClick={onExplore}>KHÁM PHÁ THỬ THÁCH <ArrowRight size={15}/></button></div></section>}
+  {locked.length>0&&<section className="wardrobe-locked-collection" aria-label="Bộ sưu tập chưa mở khóa"><h3>BỘ SƯU TẬP CHƯA MỞ KHÓA</h3><div className="wardrobe-grid">{locked.map(i=>card(i,true))}</div><div className="wardrobe-invitation"><strong>Kho báu Việt phục vẫn đang chờ bạn khám phá!</strong><p>Hoàn thành thử thách ở mục Thử thách để mở khóa thêm trang phục và phụ kiện.</p><button type="button" onClick={onExplore}>KHÁM PHÁ THỬ THÁCH <ArrowRight size={15}/></button></div></section>}
  </div>;
 }

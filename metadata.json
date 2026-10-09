@@ -1,5 +1,5 @@
 {
-  "name": "Việt Phục Remix",
+  "name": "Viêtelier",
   "description": "Ứng dụng phối đồ và khám phá Việt Phục truyền thống kết hợp phong cách Gen Z",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

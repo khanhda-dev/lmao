@@ -60,7 +60,7 @@ export default function PuzzleCanvas({level,placed,onPlace,onReset}:{
   const complete=placed.length===level.pieces.length;
   return <section className="puzzle-game" aria-label={`Ghép trang phục ${level.name}`}>
     <div className="puzzle-toolbar">
-      <div><span className="puzzle-eyebrow">GHÉP MỘT BỘ ĐỒ · MỞ MỘT CÂU CHUYỆN</span><h2>{level.name}</h2></div>
+      <div><h2>{level.name}</h2></div>
       <div className="puzzle-tools">
         <button className="puzzle-button light" disabled={complete} onClick={()=>{
           const piece=level.pieces.find(p=>!placed.includes(p.id));
@@ -72,10 +72,9 @@ export default function PuzzleCanvas({level,placed,onPlace,onReset}:{
         }}><RotateCcw size={16}/></button>
       </div>
     </div>
-    <div className="puzzle-progress-row"><span>{complete?'Đủ bộ rồi!': 'Kéo mảnh ghép về đúng vị trí trên nhân vật'}</span><strong data-testid="piece-progress">{placed.length}/{level.pieces.length} mảnh</strong></div>
+    <div className="sr-only"><strong data-testid="piece-progress">{placed.length}/{level.pieces.length} mảnh</strong></div>
     <div className="puzzle-progress-track" role="progressbar" aria-label="Tiến trình ghép" aria-valuemin={0} aria-valuemax={level.pieces.length} aria-valuenow={placed.length}><span style={{width:`${placed.length/level.pieces.length*100}%`}}/></div>
     <div ref={board} className="puzzle-board" data-testid="puzzle-board">
-      <span className="puzzle-board-label">PHÒNG GHÉP VIỆT PHỤC</span>
       <div className="puzzle-character" style={{left:`${level.figure.x/WIDTH*100}%`,top:`${level.figure.y/HEIGHT*100}%`,width:`${level.dimensions[0]*level.scale/WIDTH*100}%`,height:`${level.dimensions[1]*level.scale/HEIGHT*100}%`}}>
         <img src={level.base} alt="Nhân vật nền" draggable={false}/>
       </div>
@@ -110,12 +109,10 @@ export default function PuzzleCanvas({level,placed,onPlace,onReset}:{
           onClick={e=>{if (e.detail===0) {setSelected(piece.id);setMessage(`Đã chọn ${piece.label}. Chọn bóng mờ tương ứng.`);}}}
           onKeyDown={e=>{if(e.key==='Escape'){setSelected(null);setMessage('Đã bỏ chọn mảnh.');}}}>
           <img src={piece.asset} alt="" draggable={false}/>
-          {!isPlaced && <span className="puzzle-piece-caption">{piece.label}</span>}
         </button>;
       })}
       {complete && <span className="puzzle-board-complete"><Check size={14}/>Bộ trang phục đã hoàn chỉnh</span>}
     </div>
-    <div className="puzzle-feedback" aria-live="polite" role="status">{message}</div>
-    <p className="puzzle-keyboard-help">Bạn cũng có thể chọn một mảnh, rồi chọn bóng mờ. Dùng Tab và Enter trên bàn phím.</p>
+    <div className="sr-only" aria-live="polite" role="status">{message}</div>
   </section>;
 }
